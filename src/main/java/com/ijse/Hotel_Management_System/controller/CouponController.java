@@ -1,8 +1,8 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.controller;
+package com.ijse.Hotel_Management_System.controller;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.CouponRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Coupon;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.CouponService;
+import com.ijse.Hotel_Management_System.dto.request.CouponRequest;
+import com.ijse.Hotel_Management_System.entity.Coupon;
+import com.ijse.Hotel_Management_System.service.CouponService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
