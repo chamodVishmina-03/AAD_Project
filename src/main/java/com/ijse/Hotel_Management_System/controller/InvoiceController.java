@@ -1,7 +1,7 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.controller;
+package com.ijse.Hotel_Management_System.controller;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.response.InvoiceResponse;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.InvoiceService;
+import com.ijse.Hotel_Management_System.dto.response.InvoiceResponse;
+import com.ijse.Hotel_Management_System.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
