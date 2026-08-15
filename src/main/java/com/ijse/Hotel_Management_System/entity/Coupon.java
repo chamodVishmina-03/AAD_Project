@@ -1,6 +1,7 @@
 package com.ijse.Hotel_Management_System.entity;
 
 
+import com.ijse.Hotel_Management_System.enumeration.DiscountType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

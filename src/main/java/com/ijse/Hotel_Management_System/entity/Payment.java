@@ -1,7 +1,7 @@
 package com.ijse.Hotel_Management_System.entity;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.PaymentMethod;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.PaymentStatus;
+import com.ijse.Hotel_Management_System.enumeration.PaymentMethod;
+import com.ijse.Hotel_Management_System.enumeration.PaymentStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
