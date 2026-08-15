@@ -1,4 +1,12 @@
 package com.ijse.Hotel_Management_System.dto.request;
 
-public class ReviewRequest {
-}
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+
+public record ReviewRequest(
+        @NotNull Long hotelId,
+        @NotNull @Min(1) @Max(5) Integer rating,
+        String comment
+) {}
+
