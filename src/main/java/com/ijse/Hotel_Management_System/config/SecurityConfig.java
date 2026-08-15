@@ -1,7 +1,7 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.config;
+package com.ijse.Hotel_Management_System.config;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.security.CustomUserDetailsService;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.security.JwtAuthenticationFilter;
+import com.ijse.Hotel_Management_System.security.CustomUserDetailsService;
+import com.ijse.Hotel_Management_System.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
