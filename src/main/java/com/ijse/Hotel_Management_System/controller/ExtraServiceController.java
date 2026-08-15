@@ -1,8 +1,8 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.controller;
+package com.ijse.Hotel_Management_System.controller;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.ExtraServiceRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.ExtraService;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.ExtraServiceService;
+import com.ijse.Hotel_Management_System.dto.request.ExtraServiceRequest;
+import com.ijse.Hotel_Management_System.entity.ExtraService;
+import com.ijse.Hotel_Management_System.service.ExtraServiceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
