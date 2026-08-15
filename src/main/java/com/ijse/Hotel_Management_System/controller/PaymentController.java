@@ -1,9 +1,9 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.controller;
+package com.ijse.Hotel_Management_System.controller;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.PaymentRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.response.PaymentResponse;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.security.UserPrincipal;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.PaymentService;
+import com.ijse.Hotel_Management_System.dto.request.PaymentRequest;
+import com.ijse.Hotel_Management_System.dto.response.PaymentResponse;
+import com.ijse.Hotel_Management_System.security.UserPrincipal;
+import com.ijse.Hotel_Management_System.service.PaymentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
