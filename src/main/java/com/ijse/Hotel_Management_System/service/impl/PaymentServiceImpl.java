@@ -1,20 +1,20 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.impl;
+package com.ijse.Hotel_Management_System.service.impl;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.PaymentRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.response.PaymentResponse;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Booking;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Invoice;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Payment;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.User;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.BookingStatus;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.PaymentStatus;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.BadRequestException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.ResourceNotFoundException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.BookingRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.InvoiceRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.PaymentRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.UserRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.PaymentService;
+import com.ijse.Hotel_Management_System.dto.request.PaymentRequest;
+import com.ijse.Hotel_Management_System.dto.response.PaymentResponse;
+import com.ijse.Hotel_Management_System.entity.Booking;
+import com.ijse.Hotel_Management_System.entity.Invoice;
+import com.ijse.Hotel_Management_System.entity.Payment;
+import com.ijse.Hotel_Management_System.entity.User;
+import com.ijse.Hotel_Management_System.enumeration.BookingStatus;
+import com.ijse.Hotel_Management_System.enumeration.PaymentStatus;
+import com.ijse.Hotel_Management_System.exception.BadRequestException;
+import com.ijse.Hotel_Management_System.exception.ResourceNotFoundException;
+import com.ijse.Hotel_Management_System.repository.BookingRepository;
+import com.ijse.Hotel_Management_System.repository.InvoiceRepository;
+import com.ijse.Hotel_Management_System.repository.PaymentRepository;
+import com.ijse.Hotel_Management_System.repository.UserRepository;
+import com.ijse.Hotel_Management_System.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,11 +25,7 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/**
- * Simulates a payment-gateway integration. In production this would call out to a real
- * provider (Stripe, PayHere, etc); here we synchronously mark the payment SUCCESS,
- * confirm the booking, and generate an invoice - enough to demonstrate the full flow.
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
