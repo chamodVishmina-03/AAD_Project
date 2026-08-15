@@ -1,7 +1,7 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service;
+package com.ijse.Hotel_Management_System.service;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.ReviewRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.response.ReviewResponse;
+import com.ijse.Hotel_Management_System.dto.request.ReviewRequest;
+import com.ijse.Hotel_Management_System.dto.response.ReviewResponse;
 
 import java.util.List;
 
