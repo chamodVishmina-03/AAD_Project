@@ -1,8 +1,8 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.config;
+package com.ijse.Hotel_Management_System.config;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.User;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.Role;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.UserRepository;
+import com.ijse.Hotel_Management_System.entity.User;
+import com.ijse.Hotel_Management_System.enumeration.Role;
+import com.ijse.Hotel_Management_System.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -11,10 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-/**
- * Seeds a default ADMIN account on first startup so the API is usable immediately.
- * Safe to run repeatedly - it only inserts when the account does not already exist.
- */
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
