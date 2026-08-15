@@ -1,4 +1,5 @@
 package com.ijse.Hotel_Management_System.dto.request;
 
-public class RoomTypeRequest {
-}
+import jakarta.validation.constraints.NotBlank;
+
+public record RoomTypeRequest(@NotBlank String name, String description, Integer maxOccupancy) {}
