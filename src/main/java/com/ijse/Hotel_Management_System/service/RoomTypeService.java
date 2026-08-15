@@ -1,7 +1,7 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service;
+package com.ijse.Hotel_Management_System.service;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.RoomTypeRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.RoomType;
+import com.ijse.Hotel_Management_System.dto.request.RoomTypeRequest;
+import com.ijse.Hotel_Management_System.entity.RoomType;
 
 import java.util.List;
 
