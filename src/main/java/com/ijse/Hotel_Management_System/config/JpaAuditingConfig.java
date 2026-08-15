@@ -1,4 +1,4 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.config;
+package com.ijse.Hotel_Management_System.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
