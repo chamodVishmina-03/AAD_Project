@@ -1,6 +1,6 @@
 package com.ijse.Hotel_Management_System.dto.request;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.DiscountType;
+import com.ijse.Hotel_Management_System.enumeration.DiscountType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

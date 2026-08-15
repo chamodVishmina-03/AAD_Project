@@ -1,5 +1,5 @@
 package com.ijse.Hotel_Management_System.dto.response;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.RoomStatus;
+import com.ijse.Hotel_Management_System.enumeration.RoomStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

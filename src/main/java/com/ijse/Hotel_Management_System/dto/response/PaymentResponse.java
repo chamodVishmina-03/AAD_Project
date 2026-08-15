@@ -1,8 +1,8 @@
 package com.ijse.Hotel_Management_System.dto.response;
 
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.PaymentMethod;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.PaymentStatus;
+import com.ijse.Hotel_Management_System.enumeration.PaymentMethod;
+import com.ijse.Hotel_Management_System.enumeration.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
