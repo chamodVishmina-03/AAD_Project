@@ -1,14 +1,14 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.impl;
+package com.ijse.Hotel_Management_System.service.impl;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.ai.AiClient;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.response.ChatResponse;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.response.ReviewSummaryResponse;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Hotel;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Review;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.ResourceNotFoundException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.HotelRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.ReviewRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.AiService;
+import com.ijse.Hotel_Management_System.ai.AiClient;
+import com.ijse.Hotel_Management_System.dto.response.ChatResponse;
+import com.ijse.Hotel_Management_System.dto.response.ReviewSummaryResponse;
+import com.ijse.Hotel_Management_System.entity.Hotel;
+import com.ijse.Hotel_Management_System.entity.Review;
+import com.ijse.Hotel_Management_System.exception.ResourceNotFoundException;
+import com.ijse.Hotel_Management_System.repository.HotelRepository;
+import com.ijse.Hotel_Management_System.repository.ReviewRepository;
+import com.ijse.Hotel_Management_System.service.AiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,14 +18,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-/**
- * Two bonus-mark AI features (see coursework brief section 5.4):
- *  1) summarizeHotelReviews — condenses a hotel's guest reviews into a short blurb.
- *  2) chat — a lightweight "concierge" assistant grounded on the current hotel catalogue.
- *
- * Both are intentionally simple (single-turn, no persisted conversation, no tool-calling
- * loop) to keep the integration reliable and easy to demo — see README for the trade-offs.
- */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
