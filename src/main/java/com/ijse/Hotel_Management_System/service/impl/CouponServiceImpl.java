@@ -1,11 +1,11 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.impl;
+package com.ijse.Hotel_Management_System.service.impl;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.CouponRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Coupon;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.DuplicateResourceException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.ResourceNotFoundException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.CouponRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.CouponService;
+import com.ijse.Hotel_Management_System.dto.request.CouponRequest;
+import com.ijse.Hotel_Management_System.entity.Coupon;
+import com.ijse.Hotel_Management_System.exception.DuplicateResourceException;
+import com.ijse.Hotel_Management_System.exception.ResourceNotFoundException;
+import com.ijse.Hotel_Management_System.repository.CouponRepository;
+import com.ijse.Hotel_Management_System.service.CouponService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
