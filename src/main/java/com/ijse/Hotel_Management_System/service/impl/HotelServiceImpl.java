@@ -1,14 +1,14 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.impl;
+package com.ijse.Hotel_Management_System.service.impl;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.HotelRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.ImageRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.response.HotelResponse;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.City;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Hotel;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.HotelImage;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.ResourceNotFoundException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.CityRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.HotelRepository;
+import com.ijse.Hotel_Management_System.dto.request.HotelRequest;
+import com.ijse.Hotel_Management_System.dto.request.ImageRequest;
+import com.ijse.Hotel_Management_System.dto.response.HotelResponse;
+import com.ijse.Hotel_Management_System.entity.City;
+import com.ijse.Hotel_Management_System.entity.Hotel;
+import com.ijse.Hotel_Management_System.entity.HotelImage;
+import com.ijse.Hotel_Management_System.exception.ResourceNotFoundException;
+import com.ijse.Hotel_Management_System.repository.CityRepository;
+import com.ijse.Hotel_Management_System.repository.HotelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class HotelServiceImpl implements com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.HotelService {
+public class HotelServiceImpl implements com.ijse.Hotel_Management_System.service.HotelService {
 
     private final HotelRepository hotelRepository;
     private final CityRepository cityRepository;
