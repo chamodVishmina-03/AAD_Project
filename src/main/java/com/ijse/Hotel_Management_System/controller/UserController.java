@@ -1,10 +1,10 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.controller;
+package com.ijse.Hotel_Management_System.controller;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.UpdateUserRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.response.UserResponse;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.Role;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.security.UserPrincipal;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.UserService;
+import com.ijse.Hotel_Management_System.dto.request.UpdateUserRequest;
+import com.ijse.Hotel_Management_System.dto.response.UserResponse;
+import com.ijse.Hotel_Management_System.enumeration.Role;
+import com.ijse.Hotel_Management_System.security.UserPrincipal;
+import com.ijse.Hotel_Management_System.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
