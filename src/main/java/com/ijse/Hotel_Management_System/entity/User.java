@@ -1,6 +1,6 @@
 package com.ijse.Hotel_Management_System.entity;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.Role;
+import com.ijse.Hotel_Management_System.enumeration.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

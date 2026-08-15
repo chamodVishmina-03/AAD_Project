@@ -1,6 +1,6 @@
 package com.ijse.Hotel_Management_System.entity;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.RoomStatus;
+import com.ijse.Hotel_Management_System.enumeration.RoomStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
