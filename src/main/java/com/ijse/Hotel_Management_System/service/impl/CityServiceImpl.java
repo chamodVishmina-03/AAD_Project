@@ -1,10 +1,10 @@
 package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.impl;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.CityRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.City;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.ResourceNotFoundException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.CityRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.CityService;
+import com.ijse.Hotel_Management_System.dto.request.CityRequest;
+import com.ijse.Hotel_Management_System.entity.City;
+import com.ijse.Hotel_Management_System.exception.ResourceNotFoundException;
+import com.ijse.Hotel_Management_System.repository.CityRepository;
+import com.ijse.Hotel_Management_System.service.CityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
