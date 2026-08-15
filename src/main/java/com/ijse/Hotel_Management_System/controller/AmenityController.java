@@ -1,8 +1,8 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.controller;
+package com.ijse.Hotel_Management_System.controller;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.AmenityRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Amenity;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.AmenityService;
+import com.ijse.Hotel_Management_System.dto.request.AmenityRequest;
+import com.ijse.Hotel_Management_System.entity.Amenity;
+import com.ijse.Hotel_Management_System.service.AmenityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
