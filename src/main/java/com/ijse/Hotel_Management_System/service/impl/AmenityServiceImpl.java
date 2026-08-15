@@ -1,11 +1,11 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.impl;
+package com.ijse.Hotel_Management_System.service.impl;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.AmenityRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Amenity;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.DuplicateResourceException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.ResourceNotFoundException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.AmenityRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.AmenityService;
+import com.ijse.Hotel_Management_System.dto.request.AmenityRequest;
+import com.ijse.Hotel_Management_System.entity.Amenity;
+import com.ijse.Hotel_Management_System.exception.DuplicateResourceException;
+import com.ijse.Hotel_Management_System.exception.ResourceNotFoundException;
+import com.ijse.Hotel_Management_System.repository.AmenityRepository;
+import com.ijse.Hotel_Management_System.service.AmenityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
