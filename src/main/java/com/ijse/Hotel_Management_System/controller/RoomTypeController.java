@@ -1,8 +1,8 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.controller;
+package com.ijse.Hotel_Management_System.controller;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.RoomTypeRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.RoomType;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.RoomTypeService;
+import com.ijse.Hotel_Management_System.dto.request.RoomTypeRequest;
+import com.ijse.Hotel_Management_System.entity.RoomType;
+import com.ijse.Hotel_Management_System.service.RoomTypeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
