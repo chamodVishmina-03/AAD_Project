@@ -1,11 +1,11 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.impl;
+package com.ijse.Hotel_Management_System.service.impl;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.RoomTypeRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.RoomType;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.DuplicateResourceException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.ResourceNotFoundException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.RoomTypeRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.RoomTypeService;
+import com.ijse.Hotel_Management_System.dto.request.RoomTypeRequest;
+import com.ijse.Hotel_Management_System.entity.RoomType;
+import com.ijse.Hotel_Management_System.exception.DuplicateResourceException;
+import com.ijse.Hotel_Management_System.exception.ResourceNotFoundException;
+import com.ijse.Hotel_Management_System.repository.RoomTypeRepository;
+import com.ijse.Hotel_Management_System.service.RoomTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
