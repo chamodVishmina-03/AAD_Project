@@ -1,15 +1,15 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.impl;
+package com.ijse.Hotel_Management_System.service.impl;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.BookingRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.response.BookingResponse;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.*;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.BookingStatus;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.enumeration.DiscountType;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.BadRequestException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.ResourceNotFoundException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.RoomNotAvailableException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.*;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.ReservationService;
+import com.ijse.Hotel_Management_System.dto.request.BookingRequest;
+import com.ijse.Hotel_Management_System.dto.response.BookingResponse;
+import com.ijse.Hotel_Management_System.entity.*;
+import com.ijse.Hotel_Management_System.enumeration.BookingStatus;
+import com.ijse.Hotel_Management_System.enumeration.DiscountType;
+import com.ijse.Hotel_Management_System.exception.BadRequestException;
+import com.ijse.Hotel_Management_System.exception.ResourceNotFoundException;
+import com.ijse.Hotel_Management_System.exception.RoomNotAvailableException;
+import com.ijse.Hotel_Management_System.repository.*;
+import com.ijse.Hotel_Management_System.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
