@@ -1,10 +1,10 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.impl;
+package com.ijse.Hotel_Management_System.service.impl;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.response.InvoiceResponse;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Invoice;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.ResourceNotFoundException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.InvoiceRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.InvoiceService;
+import com.ijse.Hotel_Management_System.dto.response.InvoiceResponse;
+import com.ijse.Hotel_Management_System.entity.Invoice;
+import com.ijse.Hotel_Management_System.exception.ResourceNotFoundException;
+import com.ijse.Hotel_Management_System.repository.InvoiceRepository;
+import com.ijse.Hotel_Management_System.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
