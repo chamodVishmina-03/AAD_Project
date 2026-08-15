@@ -1,12 +1,12 @@
-package com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.impl;
+package com.ijse.Hotel_Management_System.service.impl;
 
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.dto.request.ExtraServiceRequest;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.ExtraService;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.entity.Hotel;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.exception.ResourceNotFoundException;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.ExtraServiceRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.repository.HotelRepository;
-import com.ijse.HOTEL_MANAGEMENT_SYSTEM.service.ExtraServiceService;
+import com.ijse.Hotel_Management_System.dto.request.ExtraServiceRequest;
+import com.ijse.Hotel_Management_System.entity.ExtraService;
+import com.ijse.Hotel_Management_System.entity.Hotel;
+import com.ijse.Hotel_Management_System.exception.ResourceNotFoundException;
+import com.ijse.Hotel_Management_System.repository.ExtraServiceRepository;
+import com.ijse.Hotel_Management_System.repository.HotelRepository;
+import com.ijse.Hotel_Management_System.service.ExtraServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
