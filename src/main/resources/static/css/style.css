@@ -78,3 +78,10 @@ header{
     padding:0 32px;
     justify-content:space-between;
 }
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+}
