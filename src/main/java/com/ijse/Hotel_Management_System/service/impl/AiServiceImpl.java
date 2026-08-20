@@ -1,6 +1,7 @@
 package com.ijse.Hotel_Management_System.service.impl;
 
 import com.ijse.Hotel_Management_System.ai.ChatClient;
+import com.ijse.Hotel_Management_System.constant.CommonResponse;
 import com.ijse.Hotel_Management_System.dto.response.ChatResponse;
 import com.ijse.Hotel_Management_System.dto.response.ReviewSummaryResponse;
 import com.ijse.Hotel_Management_System.entity.Hotel;
@@ -45,28 +46,30 @@ public class AiServiceImpl implements AiService {
     private final ConcurrentHashMap<Long, String> reviewSummaryCache = new ConcurrentHashMap<>();
 
     @Override
-    public ReviewSummaryResponse summarizeHotelReviews(Long hotelId, boolean forceRegenerate) {
+    public CommonResponse summarizeHotelReviews(Long hotelId, boolean forceRegenerate) {
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
 
         List<Review> reviews = reviewRepository.findByHotelId(hotelId);
 
         if (reviews.isEmpty()) {
-            return ReviewSummaryResponse.builder()
+            ReviewSummaryResponse.builder()
                     .hotelId(hotelId)
                     .summary("No reviews yet for this hotel.")
                     .reviewCount(0)
                     .cached(false)
                     .build();
+            return;
         }
 
         if (!forceRegenerate && reviewSummaryCache.containsKey(hotelId)) {
-            return ReviewSummaryResponse.builder()
+            ReviewSummaryResponse.builder()
                     .hotelId(hotelId)
                     .summary(reviewSummaryCache.get(hotelId))
                     .reviewCount(reviews.size())
                     .cached(true)
                     .build();
+            return;
         }
 
         String reviewLines = reviews.stream()
@@ -79,7 +82,7 @@ public class AiServiceImpl implements AiService {
         reviewSummaryCache.put(hotelId, summary);
         log.info("Generated AI review summary for hotel id={} ({} reviews)", hotelId, reviews.size());
 
-        return ReviewSummaryResponse.builder()
+        ReviewSummaryResponse.builder()
                 .hotelId(hotelId)
                 .summary(summary)
                 .reviewCount(reviews.size())
