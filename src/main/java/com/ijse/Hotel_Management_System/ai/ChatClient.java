@@ -47,13 +47,7 @@ public class ChatClient {
         this.objectMapper = objectMapper;
     }
 
-    /**
-     * Sends a single-turn request to the Anthropic API and returns the assistant's text reply.
-     *
-     * @param systemPrompt instructions that set the assistant's behaviour
-     * @param userPrompt   the actual message/content to respond to
-     * @return the model's text response, trimmed
-     */
+
     public String complete(String systemPrompt, String userPrompt) {
         if (!enabled) {
             throw new AiServiceException("AI features are currently disabled.");
