@@ -3,11 +3,11 @@
     --primary-dark:#4338CA;
     --primary-light:#EEF2FF;
     --violet:#7C3AED;
-    --bg:#F8FAFC;
+    --bg: #f8f8ff;
     --surface:#FFFFFF;
     --border:#E2E8F0;
     --border-soft:#EDF1F7;
-    --text:#0F172A;
+    --text: #263c72;
     --text-muted:#64748B;
     --text-faint:#94A3B8;
     --success:#059669; --success-bg:#ECFDF5;
@@ -28,4 +28,14 @@
 
 html{
     scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',-apple-system,sans-serif;
+    font-weight:400;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
 }
