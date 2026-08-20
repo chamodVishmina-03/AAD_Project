@@ -34,6 +34,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 
@@ -44,10 +45,12 @@ public class SecurityConfig {
         return provider;
     }
 
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -70,18 +73,28 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/index.html", "/favicon.ico",
                                 "/css/**", "/js/**", "/assets/**").permitAll()
+
                         .requestMatchers("/api/auth/**").permitAll()
+
                         .requestMatchers("/api/public/**").permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/api/hotels/**", "/api/rooms/**",
                                 "/api/room-types/**", "/api/amenities/**", "/api/reviews/**",
                                 "/api/cities/**", "/api/extra-services/**").permitAll()
                         .requestMatchers("/api/ai/**").permitAll()
                         .requestMatchers("/actuator/health").permitAll()
                         .anyRequest().authenticated()
+
                 )
+
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
+
         return http.build();
     }
+
+
 }
+
+
