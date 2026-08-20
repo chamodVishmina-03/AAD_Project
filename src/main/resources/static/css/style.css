@@ -58,3 +58,7 @@ img{
 button{
     font-family:inherit;
 }
+
+::selection{
+    background:var(--primary-light);
+}
