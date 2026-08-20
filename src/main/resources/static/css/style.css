@@ -220,6 +220,65 @@ nav a.pill-flag{
 }
 
 
+.user-menu{
+    position:absolute;
+    top:46px;
+    right:0;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    box-shadow:var(--shadow-lg);
+    min-width:190px;
+    padding:8px;
+    display:none;
+    z-index:60;
+}
+
+.user-menu.open{
+    display:block;
+}
+.user-menu .who{
+    padding:10px 12px;
+    border-bottom:1px solid var(--border-soft);
+    margin-bottom:6px;
+}
+.user-menu .who .n{
+    font-weight:600;
+    font-size:13.5px;
+}
+
+.user-menu .who .r{
+    font-size:11px;
+    color:var(--text-faint);
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    font-weight:600;
+    margin-top:2px;
+}
+.user-menu button{
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    padding:9px 12px;
+    font-size:13.5px;
+    border-radius:7px;
+    cursor:pointer;
+    color:var(--text);
+}
+
+.user-menu button:hover{
+    background:var(--bg);
+}
+.user-menu button.danger{
+    color:var(--danger);
+}
+
+.icon{
+    width:16px;
+    height:16px;
+    stroke-width:2;
+}
 
 
 
