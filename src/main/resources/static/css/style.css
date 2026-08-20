@@ -173,6 +173,12 @@ nav a.pill-flag{
     background:var(--bg);
 }
 
+.btn-primary{
+    background:var(--primary);
+    color:#fff;
+    box-shadow:var(--shadow-sm);
+}
+
 
 
 
