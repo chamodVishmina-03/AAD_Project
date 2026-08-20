@@ -105,3 +105,14 @@ header{
     letter-spacing:-0.02em;
 }
 
+.brand-sub{
+    font-size:10.5px;
+    color:var(--text-faint);
+    font-weight:600;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    margin-top:-1px;
+}
+
+
+
