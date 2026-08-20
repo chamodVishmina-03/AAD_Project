@@ -1,5 +1,6 @@
 package com.ijse.Hotel_Management_System.controller;
 
+import com.ijse.Hotel_Management_System.constant.CommonResponse;
 import com.ijse.Hotel_Management_System.dto.request.AmenityRequest;
 import com.ijse.Hotel_Management_System.entity.Amenity;
 import com.ijse.Hotel_Management_System.service.AmenityService;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.ijse.Hotel_Management_System.constant.ResponseCode.OPERATION_SUCCESS;
+import static com.ijse.Hotel_Management_System.constant.ResponseMessage.SUCCESS_MESSAGE;
+
 @RestController
 @RequestMapping("/api/amenities")
 @RequiredArgsConstructor
@@ -20,26 +24,30 @@ public class AmenityController {
     private final AmenityService amenityService;
 
     @GetMapping
-    public ResponseEntity<List<Amenity>> findAll() {
-        return ResponseEntity.ok(amenityService.findAll());
+    public CommonResponse findAll() {
+        amenityService.findAll();
+        return new CommonResponse(SUCCESS_MESSAGE,OPERATION_SUCCESS);
     }
+
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
-    public ResponseEntity<Amenity> create(@Valid @RequestBody AmenityRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(amenityService.create(request));
+    public CommonResponse create(@Valid @RequestBody AmenityRequest request) {
+        amenityService.create(request);
+        return new CommonResponse(SUCCESS_MESSAGE,OPERATION_SUCCESS);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
-    public ResponseEntity<Amenity> update(@PathVariable Long id, @Valid @RequestBody AmenityRequest request) {
-        return ResponseEntity.ok(amenityService.update(id, request));
+    public CommonResponse update(@PathVariable Long id, @Valid @RequestBody AmenityRequest request) {
+        amenityService.update(id,request);
+        return new CommonResponse(SUCCESS_MESSAGE,OPERATION_SUCCESS);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public CommonResponse delete(@PathVariable Long id) {
         amenityService.delete(id);
-        return ResponseEntity.noContent().build();
+        return  new CommonResponse(SUCCESS_MESSAGE,OPERATION_SUCCESS);
     }
 }
