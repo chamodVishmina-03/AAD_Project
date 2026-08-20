@@ -52,89 +52,92 @@
 
 <div class="toast" id="toast"></div>
 
-<div class="view active" id="view-home">
+<main>
 
-    <section class="hero">
-        <div class="hero-inner">
-            <div class="eyebrow">Sri Lanka · 5 properties</div>
-            <h1>Find your stay, anywhere in the island.</h1>
-            <p>One system managing five boutique hotels — search by city and open live room availability.</p>
-        </div>
-        <div class="search-card">
-            <div class="search-field">
-                <label>Destination</label>
-                <select id="search-city"><option value="">All cities</option></select>
-            </div>
-            <div class="search-field">
-                <label>Check-in</label>
-                <input type="date" id="search-checkin" />
-            </div>
-            <div class="search-field">
-                <label>Check-out</label>
-                <input type="date" id="search-checkout" />
-            </div>
-            <div class="search-field">
-                <label>Guests</label>
-                <input type="number" id="search-guests" min="1" value="2" />
-            </div>
-            <button class="btn btn-primary search-btn" id="search-btn">Search</button>
-        </div>
-    </section>
+    <div class="view active" id="view-home">
 
-    <div class="stats-row">
-        <div class="stat-card">
-            <div class="stat-icon" style="background:var(--primary-light);color:var(--primary);">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+        <section class="hero">
+            <div class="hero-inner">
+                <div class="eyebrow">Sri Lanka · 5 properties</div>
+                <h1>Find your stay, anywhere in the island.</h1>
+                <p>One system managing five boutique hotels — search by city and open live room availability.</p>
             </div>
-            <div><div class="n" id="stat-hotels">5</div><div class="l">Hotels</div></div>
+            <div class="search-card">
+                <div class="search-field">
+                    <label>Destination</label>
+                    <select id="search-city"><option value="">All cities</option></select>
+                </div>
+                <div class="search-field">
+                    <label>Check-in</label>
+                    <input type="date" id="search-checkin" />
+                </div>
+                <div class="search-field">
+                    <label>Check-out</label>
+                    <input type="date" id="search-checkout" />
+                </div>
+                <div class="search-field">
+                    <label>Guests</label>
+                    <input type="number" id="search-guests" min="1" value="2" />
+                </div>
+                <button class="btn btn-primary search-btn" id="search-btn">Search</button>
+            </div>
+        </section>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon" style="background:var(--primary-light);color:var(--primary);">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+                </div>
+                <div><div class="n" id="stat-hotels">5</div><div class="l">Hotels</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:var(--info-bg);color:var(--info);">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 18v-7a2 2 0 012-2h14a2 2 0 012 2v7M3 18h18M3 18v2M21 18v2M7 9V6a2 2 0 012-2h6a2 2 0 012 2v3"/></svg>
+                </div>
+                <div><div class="n" id="stat-rooms">0</div><div class="l">Rooms tracked</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background:var(--success-bg);color:var(--success);">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5"/></svg>
+                </div>
+                <div><div class="n" id="stat-available">0</div><div class="l">Available now</div></div>
+            </div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon" style="background:var(--info-bg);color:var(--info);">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 18v-7a2 2 0 012-2h14a2 2 0 012 2v7M3 18h18M3 18v2M21 18v2M7 9V6a2 2 0 012-2h6a2 2 0 012 2v3"/></svg>
+
+        <div class="section-head">
+            <div>
+                <h2>Choose a property</h2>
+                <p>Click a hotel to open its live room inventory.</p>
             </div>
-            <div><div class="n" id="stat-rooms">0</div><div class="l">Rooms tracked</div></div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon" style="background:var(--success-bg);color:var(--success);">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5"/></svg>
+        <div class="hotel-grid" id="hotel-grid"></div>
+        <div class="empty-state" id="hotel-grid-empty" style="display:none;margin-top:16px;">No hotels match that city — try clearing the search.</div>
+
+        <div class="section-head" id="contact-home">
+            <div>
+                <h2>Have a quick question?</h2>
+                <p>Try the concierge chat in the bottom-right corner.</p>
             </div>
-            <div><div class="n" id="stat-available">0</div><div class="l">Available now</div></div>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-card">
+                <div class="ci"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                <div class="ct">Head office</div>
+                <div class="cv">12 Galle Face Terrace, Colombo 03</div>
+            </div>
+            <div class="contact-card">
+                <div class="ci"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+                <div class="ct">Reservations</div>
+                <div class="cv">+94 11 234 5678</div>
+            </div>
+            <div class="contact-card">
+                <div class="ci"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+                <div class="ct">Standard hours</div>
+                <div class="cv">Check-in 2 PM · Check-out 11 AM</div>
+            </div>
         </div>
     </div>
-
-    <div class="section-head">
-        <div>
-            <h2>Choose a property</h2>
-            <p>Click a hotel to open its live room inventory.</p>
-        </div>
-    </div>
-    <div class="hotel-grid" id="hotel-grid"></div>
-    <div class="empty-state" id="hotel-grid-empty" style="display:none;margin-top:16px;">No hotels match that city — try clearing the search.</div>
-
-    <div class="section-head" id="contact-home">
-        <div>
-            <h2>Have a quick question?</h2>
-            <p>Try the concierge chat in the bottom-right corner.</p>
-        </div>
-    </div>
-    <div class="contact-grid">
-        <div class="contact-card">
-            <div class="ci"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-            <div class="ct">Head office</div>
-            <div class="cv">12 Galle Face Terrace, Colombo 03</div>
-        </div>
-        <div class="contact-card">
-            <div class="ci"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg></div>
-            <div class="ct">Reservations</div>
-            <div class="cv">+94 11 234 5678</div>
-        </div>
-        <div class="contact-card">
-            <div class="ci"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-            <div class="ct">Standard hours</div>
-            <div class="cv">Check-in 2 PM · Check-out 11 AM</div>
-        </div>
-    </div>
-</div>
+</main>
 
 </body>
 
