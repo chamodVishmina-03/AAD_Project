@@ -169,6 +169,9 @@ nav a.pill-flag{
     border-color:var(--border);
 }
 
+.btn-ghost:hover{
+    background:var(--bg);
+}
 
 
 
