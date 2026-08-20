@@ -158,7 +158,12 @@ nav a.pill-flag{
     border-radius:9px;
     border:1px solid transparent;
     cursor:pointer;
+    transition:all .15s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
 }
+
 
 
 
