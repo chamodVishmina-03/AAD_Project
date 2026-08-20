@@ -22,6 +22,7 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+
         if (userRepository.existsByEmailIgnoreCase("admin@hotel.com")) {
             return;
         }
@@ -36,6 +37,6 @@ public class DataSeeder implements CommandLineRunner {
                 .build();
 
         userRepository.save(admin);
-        log.info("Seeded default admin account -> email: admin@hotel.com / password: Admin@123 (CHANGE THIS after first login)");
+
     }
 }
