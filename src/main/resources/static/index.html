@@ -265,6 +265,7 @@
 
 
 
+
 <div class="modal-overlay" id="login-overlay">
 
     <div class="modal-box">
@@ -283,8 +284,22 @@
 
 
 <div class="modal-overlay" id="register-overlay">
-
+    <div class="modal-box">
+        <button class="modal-close" data-close>×</button>
+        <div class="modal-eyebrow">New guest account</div>
+        <h3>Sign up</h3>
+        <form id="register-form">
+            <div class="modal-error" id="register-error"></div>
+            <div class="field"><label>Full name</label><input type="text" id="reg-name" required autocomplete="name" /></div>
+            <div class="field"><label>Email</label><input type="email" id="reg-email" required autocomplete="username" /></div>
+            <div class="field"><label>Phone</label><input type="tel" id="reg-phone" autocomplete="tel" /></div>
+            <div class="field"><label>Password (min 6 characters)</label><input type="password" id="reg-password" required minlength="6" autocomplete="new-password" /></div>
+            <button type="submit" class="btn btn-primary btn-block modal-submit">Create account</button>
+        </form>
+        <div class="modal-switch">Already have an account? <a id="switch-to-login">Log in</a></div>
+    </div>
 </div>
+
 
 
 </body>
