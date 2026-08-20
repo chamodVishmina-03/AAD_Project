@@ -178,6 +178,10 @@ nav a.pill-flag{
     color:#fff;
     box-shadow:var(--shadow-sm);
 }
+.btn-primary:hover{
+    background:var(--primary-dark);
+}
+
 
 
 
