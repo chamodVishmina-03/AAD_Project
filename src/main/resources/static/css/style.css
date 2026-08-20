@@ -54,3 +54,7 @@ img{
     max-width:100%;
     display:block;
 }
+
+button{
+    font-family:inherit;
+}
