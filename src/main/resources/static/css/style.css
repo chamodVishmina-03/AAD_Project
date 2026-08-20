@@ -191,6 +191,17 @@ nav a.pill-flag{
     background:var(--danger-bg);
 }
 
+.btn-block{
+    width:100%;
+    justify-content:center;
+}
+.btn-sm{
+    padding:6px 12px;
+    font-size:12.5px;
+}
+
+
+
 
 
 
