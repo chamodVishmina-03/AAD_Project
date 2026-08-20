@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,34 +7,29 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-
 </head>
-
 <body>
-<header class="header">
+
+<header>
     <div class="brand" id="brand-home">
         <div class="logo">CC</div>
         <div>
             <div class="brand-name">Ceylon Collection</div>
             <div class="brand-sub">Hotel Management</div>
         </div>
-
-        <div class="nav-right">
-            <nav>
-                <ul>
-                    <li><a id="nav-hotels">Hotels</a></li>
-                    <li><a id="nav-contact">Contact</a></li>
-                    <li><a id="nav-admin" class="pill-flag" style="display:none;">Admin panel</a></li>
-                </ul>
-            </nav>
-        </div>
-
+    </div>
+    <div class="nav-right">
+        <nav>
+            <ul>
+                <li><a id="nav-hotels">Hotels</a></li>
+                <li><a id="nav-contact">Contact</a></li>
+                <li><a id="nav-admin" class="pill-flag" style="display:none;">Admin panel</a></li>
+            </ul>
+        </nav>
         <div class="auth-buttons" id="auth-buttons">
             <button class="btn btn-ghost" id="open-login">Log in</button>
             <button class="btn btn-primary" id="open-register">Sign up</button>
         </div>
-
-
         <div class="user-chip" id="user-chip">
             <div class="avatar" id="user-avatar">?</div>
             <div class="user-menu" id="user-menu">
@@ -44,16 +38,16 @@
                 <button id="logout-btn" class="danger">Log out</button>
             </div>
         </div>
-
     </div>
-
-
 </header>
 
 <div class="toast" id="toast"></div>
 
 <main>
 
+    <!-- ============================================================
+         HOME VIEW
+    ============================================================ -->
     <div class="view active" id="view-home">
 
         <section class="hero">
@@ -138,11 +132,9 @@
         </div>
     </div>
 
-
-
-
-
-
+    <!-- ============================================================
+         DETAIL VIEW
+    ============================================================ -->
     <div class="view" id="view-detail">
         <button class="back-btn" id="back-link"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> All hotels</button>
 
@@ -154,7 +146,6 @@
                 <div class="rating-chip" id="d-rating">★ 4.5 rating</div>
             </div>
         </div>
-
 
         <div class="chip-row">
             <div class="info-chip">
@@ -171,7 +162,6 @@
             </div>
         </div>
 
-
         <section class="card-section">
             <div class="section-head" style="margin-top:0;">
                 <div><h2>Room inventory</h2><p>Live rooms for this hotel.</p></div>
@@ -184,7 +174,6 @@
             </div>
         </section>
 
-
         <section class="card-section">
             <div class="section-head" style="margin-top:0;">
                 <div><h2>Room categories</h2><p>Base configuration for this hotel.</p></div>
@@ -193,11 +182,9 @@
         </section>
     </div>
 
-
-
-
-
-
+    <!-- ============================================================
+         ADMIN VIEW
+    ============================================================ -->
     <div class="view" id="view-admin">
         <button class="back-btn" id="admin-back-link"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to site</button>
 
@@ -257,17 +244,13 @@
 
 </main>
 
-
 <footer>
     <span>© Ceylon Collection — Management System Demo UI</span>
     <span>Sample data for demonstration</span>
 </footer>
 
-
-
-
+<!-- ===== Login modal ===== -->
 <div class="modal-overlay" id="login-overlay">
-
     <div class="modal-box">
         <button class="modal-close" data-close>×</button>
         <div class="modal-eyebrow">Guest account</div>
@@ -282,7 +265,7 @@
     </div>
 </div>
 
-
+<!-- ===== Register modal ===== -->
 <div class="modal-overlay" id="register-overlay">
     <div class="modal-box">
         <button class="modal-close" data-close>×</button>
@@ -300,7 +283,7 @@
     </div>
 </div>
 
-
+<!-- ===== Hotel add/edit modal ===== -->
 <div class="modal-overlay" id="hotel-modal-overlay">
     <div class="modal-box wide">
         <button class="modal-close" data-close>×</button>
@@ -323,11 +306,9 @@
             <button type="submit" class="btn btn-primary btn-block modal-submit">Save hotel</button>
         </form>
     </div>
-
 </div>
 
-
-
+<!-- ===== Room add/edit modal ===== -->
 <div class="modal-overlay" id="room-modal-overlay">
     <div class="modal-box">
         <button class="modal-close" data-close>×</button>
@@ -345,14 +326,13 @@
             <button type="submit" class="btn btn-primary btn-block modal-submit">Save room</button>
         </form>
     </div>
-
 </div>
 
-
-
+<!-- ===== Chat widget ===== -->
 <button id="chat-toggle" aria-label="Open concierge chat">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H8l-4 4V5z"/></svg>
 </button>
+
 <div id="chat-panel">
     <div class="chat-head">
         <div>
@@ -367,12 +347,9 @@
         <input id="chat-input" type="text" placeholder="Ask about check-in, price, wifi..." autocomplete="off" />
         <button type="submit">Send</button>
     </form>
-
 </div>
-
 
 <script src="js/app.js"></script>
 
 </body>
-
 </html>
