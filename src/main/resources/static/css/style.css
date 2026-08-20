@@ -39,3 +39,9 @@ body{
     line-height:1.55;
     -webkit-font-smoothing:antialiased;
 }
+h1,h2,h3{
+    margin:0;
+    font-weight:700;
+    letter-spacing:-0.02em;
+    color:var(--text);
+}
