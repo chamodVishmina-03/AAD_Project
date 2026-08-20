@@ -151,6 +151,14 @@ nav a.pill-flag{
     display:flex;
     gap:10px;
 }
+.btn{
+    font-size:14px;
+    font-weight:600;
+    padding:9px 18px;
+    border-radius:9px;
+    border:1px solid transparent;
+    cursor:pointer;
+}
 
 
 
