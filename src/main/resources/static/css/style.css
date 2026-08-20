@@ -163,6 +163,12 @@ nav a.pill-flag{
     align-items:center;
     gap:7px;
 }
+.btn-ghost{
+    background:transparent;
+    color:var(--text);
+    border-color:var(--border);
+}
+
 
 
 
