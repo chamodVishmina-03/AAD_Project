@@ -182,6 +182,16 @@ nav a.pill-flag{
     background:var(--primary-dark);
 }
 
+.btn-danger-outline{
+    background:transparent;
+    color:var(--danger);
+    border-color:#FECACA;
+}
+.btn-danger-outline:hover{
+    background:var(--danger-bg);
+}
+
+
 
 
 
