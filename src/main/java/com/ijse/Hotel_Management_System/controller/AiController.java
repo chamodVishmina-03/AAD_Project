@@ -18,12 +18,21 @@ public class AiController {
 
     @GetMapping("/hotels/{id}/review-summary")
     public ResponseEntity<ReviewSummaryResponse> reviewSummary(@PathVariable Long id,
-                                                                 @RequestParam(defaultValue = "false") boolean force) {
+                                                               @RequestParam(defaultValue = "false") boolean force) {
         return ResponseEntity.ok(aiService.summarizeHotelReviews(id, force));
+
     }
+
 
     @PostMapping("/chat")
     public ResponseEntity<ChatResponse> chat(@Valid @RequestBody ChatRequest request) {
         return ResponseEntity.ok(aiService.chat(request.message()));
+
     }
+
+
 }
+
+
+
+
