@@ -120,6 +120,15 @@ header{
     gap:20px;
 }
 
+nav ul{
+    display:flex;
+    gap:8px;
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+
+
 
 
 
