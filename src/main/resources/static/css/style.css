@@ -137,6 +137,11 @@ nav a{
     cursor:pointer;
 }
 
+nav a:hover{
+    background:var(--bg);
+    color:var(--text);
+}
+
 
 
 
