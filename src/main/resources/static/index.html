@@ -199,13 +199,61 @@
 
 
     <div class="view" id="view-admin">
+        <button class="back-btn" id="admin-back-link"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back to site</button>
 
+        <div class="admin-shell">
+            <aside class="admin-sidebar">
+                <div class="title">Manage</div>
+                <button class="sidebar-link active" id="tab-hotels">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg> Hotels
+                </button>
+                <button class="sidebar-link" id="tab-rooms">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 18v-7a2 2 0 012-2h14a2 2 0 012 2v7M3 18h18M3 18v2M21 18v2M7 9V6a2 2 0 012-2h6a2 2 0 012 2v3"/></svg> Rooms
+                </button>
+                <div class="sidebar-divider"></div>
+                <div class="title">Signed in as</div>
+                <div style="padding:6px 10px; font-size:13px; font-weight:600;" id="admin-whoami">—</div>
+            </aside>
 
+            <div class="admin-main">
+                <div class="admin-topbar">
+                    <h2 id="admin-panel-title">Hotels</h2>
+                </div>
 
+                <div class="admin-panel active" id="panel-hotels">
+                    <div class="admin-toolbar">
+                        <p style="color:var(--text-muted);font-size:13.5px;margin:0;">Every hotel in the <code>hotels</code> table.</p>
+                        <button class="btn btn-primary" id="add-hotel-btn" type="button">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg> Add hotel
+                        </button>
+                    </div>
+                    <div class="table-card">
+                        <table id="admin-hotels-table">
+                            <thead><tr><th>Name</th><th>City</th><th>Address</th><th>Rating</th><th>Phone</th><th></th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state" id="admin-hotels-empty" style="display:none;margin-top:14px;">No hotels yet — add the first one above.</div>
+                </div>
+
+                <div class="admin-panel" id="panel-rooms">
+                    <div class="admin-toolbar">
+                        <select class="admin-select" id="room-hotel-select"><option value="">Select a hotel…</option></select>
+                        <button class="btn btn-primary" id="add-room-btn" type="button" disabled>
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg> Add room
+                        </button>
+                    </div>
+                    <div class="table-card">
+                        <table id="admin-rooms-table">
+                            <thead><tr><th>Room No.</th><th>Floor</th><th>Type</th><th>Price / night</th><th>Status</th><th></th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state" id="admin-rooms-empty" style="display:block;margin-top:14px;">Pick a hotel above to see and manage its rooms.</div>
+                </div>
+            </div>
+        </div>
     </div>
-
-
-
 
 </main>
 
