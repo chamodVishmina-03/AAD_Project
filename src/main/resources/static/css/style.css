@@ -99,3 +99,9 @@ header{
     font-size:15px;
 }
 
+.brand-name{
+    font-weight:800;
+    font-size:17px;
+    letter-spacing:-0.02em;
+}
+
