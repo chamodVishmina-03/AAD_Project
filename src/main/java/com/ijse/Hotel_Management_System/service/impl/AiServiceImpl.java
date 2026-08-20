@@ -1,6 +1,6 @@
 package com.ijse.Hotel_Management_System.service.impl;
 
-import com.ijse.Hotel_Management_System.ai.AiClient;
+import com.ijse.Hotel_Management_System.ai.ChatClient;
 import com.ijse.Hotel_Management_System.dto.response.ChatResponse;
 import com.ijse.Hotel_Management_System.dto.response.ReviewSummaryResponse;
 import com.ijse.Hotel_Management_System.entity.Hotel;
@@ -38,7 +38,7 @@ public class AiServiceImpl implements AiService {
             "to open the hotel's page and use the date search there. Keep replies under 120 words and do not " +
             "use markdown formatting.\n\nCurrent hotel catalogue:\n";
 
-    private final AiClient aiClient;
+    private final ChatClient aiClient;
     private final HotelRepository hotelRepository;
     private final ReviewRepository reviewRepository;
 
