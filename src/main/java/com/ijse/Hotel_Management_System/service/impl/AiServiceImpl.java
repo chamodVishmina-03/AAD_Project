@@ -1,7 +1,6 @@
 package com.ijse.Hotel_Management_System.service.impl;
 
 import com.ijse.Hotel_Management_System.ai.ChatClient;
-import com.ijse.Hotel_Management_System.constant.CommonResponse;
 import com.ijse.Hotel_Management_System.dto.response.ChatResponse;
 import com.ijse.Hotel_Management_System.dto.response.ReviewSummaryResponse;
 import com.ijse.Hotel_Management_System.entity.Hotel;
@@ -46,7 +45,7 @@ public class AiServiceImpl implements AiService {
     private final ConcurrentHashMap<Long, String> reviewSummaryCache = new ConcurrentHashMap<>();
 
     @Override
-    public CommonResponse summarizeHotelReviews(Long hotelId, boolean forceRegenerate) {
+    public void summarizeHotelReviews(Long hotelId, boolean forceRegenerate) {
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
 
