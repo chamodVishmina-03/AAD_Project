@@ -318,7 +318,11 @@ main{
     radial-gradient(circle at 85% 70%, rgba(255,255,255,0.10), transparent 45%);
 }
 
-
+.hero-inner{
+    position:relative;
+    max-width:640px;
+    margin:0 auto;
+}
 
 
 
