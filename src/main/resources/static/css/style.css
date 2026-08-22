@@ -1,5 +1,5 @@
 :root{
-    --primary:#4F46E5;
+    --primary: #6760d6;
     --primary-dark:#4338CA;
     --primary-light:#EEF2FF;
     --violet:#7C3AED;
@@ -296,6 +296,18 @@ main{
 }
 
 
+/*hero section*/
+
+.hero{
+    background:linear-gradient(120deg,var(--primary) 0%,var(--violet) 100%);
+    border-radius:0 0 32px 32px;
+    padding:64px 32px 100px;
+    margin:0 -32px;
+    color:#fff;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+}
 
 
 
