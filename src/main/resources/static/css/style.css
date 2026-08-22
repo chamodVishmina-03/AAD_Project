@@ -372,3 +372,28 @@ main{
     letter-spacing:0.05em;
     margin-bottom:6px;
 }
+
+.search-field select, .search-field input{
+    width:100%;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:11px 12px;
+    font-size:14px;
+    color:var(--text);
+    background:var(--bg);
+    outline:none;
+    font-family:inherit;
+}
+
+.search-field select:focus, .search-field input:focus{
+    border-color:var(--primary);
+    background:#fff;
+}
+
+.search-btn{
+    padding:12px 20px;
+}
+
+
+
+
