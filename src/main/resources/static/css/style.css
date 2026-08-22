@@ -310,6 +310,16 @@ main{
 }
 
 
+.hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12), transparent 40%),
+    radial-gradient(circle at 85% 70%, rgba(255,255,255,0.10), transparent 45%);
+}
+
+
+
 
 
 
