@@ -9,6 +9,7 @@ const gradients = {
 };
 
 
+const gradientList = Object.values(gradients);
 
 
 
