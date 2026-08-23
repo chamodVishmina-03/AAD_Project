@@ -12,4 +12,5 @@ const gradients = {
 const gradientList = Object.values(gradients);
 
 
-
+let hotels = [];
+let roomTypesCache = [];
