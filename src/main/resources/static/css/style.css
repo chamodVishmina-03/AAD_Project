@@ -880,3 +880,160 @@ tbody tr:hover {
     font-weight: 700;
     color: var(--primary);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* admin layout*/
+
+#view-admin main-wrap {
+}
+
+.admin-shell {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 24px;
+    margin: 28px 0 60px;
+    align-items: start;
+}
+
+.admin-sidebar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    position: sticky;
+    top: 88px;
+}
+
+.admin-sidebar .title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8px 10px;
+}
+
+.sidebar-link {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 11px 12px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2px;
+}
+
+.sidebar-link:hover {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.sidebar-link.active {
+    background: var(--primary-light);
+    color: var(--primary);
+}
+
+.sidebar-divider {
+    height: 1px;
+    background: var(--border-soft);
+    margin: 10px 0;
+}
+
+.admin-main {
+    min-width: 0;
+}
+
+.admin-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.admin-topbar h2 {
+    font-size: 20px;
+}
+
+.admin-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.admin-select {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 13.5px;
+    border-radius: 9px;
+    min-width: 220px;
+    font-family: inherit;
+}
+
+.admin-panel {
+    display: none;
+}
+
+.admin-panel.active {
+    display: block;
+}
+
+.row-actions {
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.icon-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.icon-btn:hover {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.icon-btn.danger:hover {
+    background: var(--danger-bg);
+    color: var(--danger);
+    border-color: #FECACA;
+}
+
+
+
+
+
+
+
+
