@@ -1393,3 +1393,66 @@ footer {
     cursor: pointer;
     font-size: 13px;
 }
+
+
+
+
+
+
+
+
+@media (max-width: 900px) {
+
+    header {
+        padding: 0 18px;
+    }
+
+    nav {
+        display: none;
+    }
+
+    main {
+        padding: 0 18px;
+    }
+
+    .hero {
+        margin: 0 -18px;
+        padding: 48px 18px 90px;
+        border-radius: 0 0 24px 24px;
+    }
+
+    .search-card {
+        grid-template-columns: 1fr 1fr;
+        margin: 24px auto -110px;
+    }
+
+    .search-btn {
+        grid-column: 1 / -1;
+    }
+
+    .stats-row {
+        grid-template-columns: 1fr;
+        margin-top: 120px;
+    }
+
+    .admin-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-sidebar {
+        position: static;
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+    }
+
+    #chat-panel {
+        right: 12px;
+        left: 12px;
+        width: auto;
+    }
+
+    #chat-toggle {
+        right: 18px;
+    }
+}
