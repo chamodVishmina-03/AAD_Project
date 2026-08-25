@@ -610,3 +610,81 @@ function openHotel(id) {
 
 
 
+
+
+
+//========= page navigation ========
+
+function showView(name) {
+
+    document
+        .getElementById("view-home")
+        .classList.toggle(
+        "active",
+        name === "home"
+    );
+
+    document
+        .getElementById("view-detail")
+        .classList.toggle(
+        "active",
+        name === "detail"
+    );
+
+    document
+        .getElementById("view-admin")
+        .classList.toggle(
+        "active",
+        name === "admin"
+    );
+
+    if (name === "home") {
+        currentHotel = null;
+    }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+document
+    .getElementById("back-link")
+    .addEventListener(
+        "click",
+        () => showView("home")
+    );
+
+document
+    .getElementById("brand-home")
+    .addEventListener(
+        "click",
+        () => showView("home")
+    );
+
+document
+    .getElementById("nav-hotels")
+    .addEventListener(
+        "click",
+        () => showView("home")
+    );
+
+document
+    .getElementById("nav-contact")
+    .addEventListener(
+        "click",
+        () => {
+
+            showView("home");
+
+            document
+                .getElementById("contact-home")
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+        }
+    );
+
+
+
+
