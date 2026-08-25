@@ -182,3 +182,14 @@ document.getElementById("search-btn").addEventListener("click", () => {
 
 
 
+// update search bar status
+function renderStats(){
+    document.getElementById("stat-hotels").textContent = hotels.length;
+    const allRooms = hotels.flatMap(h => h.rooms);
+    document.getElementById("stat-rooms").textContent = allRooms.length;
+    document.getElementById("stat-available").textContent = allRooms.filter(r => r.status === "AVAILABLE").length;
+}
+
+
+
+
