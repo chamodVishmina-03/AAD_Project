@@ -74,3 +74,18 @@ function openModal(id) {
 function closeModal(id) {
     document.getElementById(id).classList.remove("open");
 }
+
+
+//  get room data from backend endpoint
+async function loadPublicRoomTypes() {
+    try {
+        const res = await fetch(`${API_BASE}/api/room-types`);
+
+        roomTypesCache = res.ok
+            ? await res.json()
+            : [];
+
+    } catch (e) {
+        roomTypesCache = [];
+    }
+}
