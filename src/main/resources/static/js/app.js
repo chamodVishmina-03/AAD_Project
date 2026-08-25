@@ -738,4 +738,19 @@ function saveSession(data) {
 
 
 
+function clearSession() {
+
+    session = null;
+
+    localStorage.removeItem(
+        "ceylon_session"
+    );
+
+    renderAuthState();
+}
+
+
+
+
+
 
