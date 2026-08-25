@@ -164,3 +164,10 @@ function renderHotelGrid(){
     });
 }
 
+
+// create unique city name list
+function populateCitySelect(){
+    const cities = [...new Set(hotels.map(h => h.city).filter(Boolean))];
+    const sel = document.getElementById("search-city");
+    sel.innerHTML = `<option value="">All cities</option>` + cities.map(c => `<option value="${c}">${c}</option>`).join("");
+}
