@@ -34,3 +34,11 @@ function roomTypeInfo(name){
 }
 
 
+// icon shape
+function typeIconSvg(){
+    return `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+<path d="M3 18v-7a2 2 0 012-2h14a2 2 0 012 2v7M3 18h18M3 18v2M21 18v2M7 9V6a2 2 0 012-2h6a2 2 0 012 2v3"/></svg>`;
+}
+
+
+
