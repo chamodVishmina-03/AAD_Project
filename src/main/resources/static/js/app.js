@@ -89,3 +89,106 @@ async function loadPublicRoomTypes() {
         roomTypesCache = [];
     }
 }
+
+
+
+
+
+//  get hotels and rooms from back end show that details on frontend
+async function loadPublicHotels() {
+
+    const grid = document.getElementById("hotel-grid");
+    const empty = document.getElementById("hotel-grid-empty");
+
+    empty.style.display = "none";
+
+    grid.innerHTML = `
+        <div class="empty-state">
+            Loading hotels…
+        </div>
+    `;
+
+    try {
+
+        const res = await fetch(`${API_BASE}/api/hotels`);
+
+        if (!res.ok) {
+            throw new Error("Could not load hotels.");
+        }
+
+        const raw = await res.json();
+
+        hotels = await Promise.all(
+            raw.map(async (h, i) => {
+
+                let rooms = [];
+
+                try {
+
+                    const rRes = await fetch(
+                        `${API_BASE}/api/rooms/hotel/${h.id}`
+                    );
+
+                    rooms = rRes.ok
+                        ? await rRes.json()
+                        : [];
+
+                } catch (e) {
+                    rooms = [];
+                }
+
+                return {
+                    id: h.id,
+                    name: h.name,
+                    city: h.cityName,
+                    country: h.country,
+                    address: h.address,
+                    phone: h.phone,
+                    email: h.email,
+                    starRating: h.starRating,
+                    description: h.description,
+
+                    grad: gradientList[
+                    i % gradientList.length
+                        ],
+
+                    rooms: rooms.map(r => ({
+                        id: r.id,
+                        roomNumber: r.roomNumber,
+                        floorNo: r.floorNo,
+                        roomType: r.roomType,
+                        pricePerNight: r.pricePerNight,
+                        status: r.status,
+                        amenities: r.amenities
+                            ? Array.from(r.amenities)
+                            : []
+                    }))
+                };
+            })
+        );
+
+    } catch (e) {
+
+        hotels = [];
+
+        grid.innerHTML = "";
+
+        empty.style.display = "block";
+
+        empty.textContent =
+            "Could not reach the server. Is the backend running?";
+
+        renderStats();
+
+        return;
+    }
+
+    populateCitySelect();
+    renderHotelGrid();
+    renderStats();
+}
+
+
+
+
+
