@@ -109,3 +109,58 @@ async function loadPublicHotels(){
     renderHotelGrid();
     renderStats();
 }
+
+
+
+
+
+
+// search city
+let currentCityFilter = "";
+
+
+// create view frontend cards hotels
+function renderHotelGrid(){
+    const grid = document.getElementById("hotel-grid");
+    const empty = document.getElementById("hotel-grid-empty");
+    const filtered = currentCityFilter ? hotels.filter(h => h.city === currentCityFilter) : hotels;
+
+    if (filtered.length === 0) {
+        grid.innerHTML = "";
+        empty.textContent = hotels.length === 0
+            ? "No hotels yet — check back soon."
+            : "No hotels match that city — try clearing the search.";
+        empty.style.display = "block";
+        return;
+    }
+    empty.style.display = "none";
+
+    grid.innerHTML = filtered.map(h => {
+        const cheapest = h.rooms.length ? Math.min(...h.rooms.map(r => r.pricePerNight)) : null;
+        const initials = h.name.split(" ").map(w => w[0]).slice(0,2).join("");
+        return `
+    <div class="hotel-card" data-id="${h.id}">
+      <div class="hotel-banner" style="background:${h.grad};">
+        <span class="monogram">${initials}</span>
+        <span class="rating-badge">★ ${h.starRating != null ? h.starRating : "—"}</span>
+      </div>
+      <div class="hotel-body">
+        <div class="hotel-name">${h.name}</div>
+        <div class="hotel-city">
+          <svg class="icon" style="width:12px;height:12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          ${h.city || "—"}${h.country ? ", " + h.country : ""}
+        </div>
+        <div class="hotel-desc">${h.description || ""}</div>
+        <div class="hotel-footer">
+          <div class="price">${cheapest != null ? fmtLKR(cheapest) : "No rooms yet"}${cheapest != null ? "<span> / night</span>" : ""}</div>
+          <div class="view-btn">View rooms →</div>
+        </div>
+      </div>
+    </div>`;
+    }).join("");
+
+    grid.querySelectorAll(".hotel-card").forEach(card => {
+        card.addEventListener("click", () => openHotel(Number(card.dataset.id)));
+    });
+}
+
