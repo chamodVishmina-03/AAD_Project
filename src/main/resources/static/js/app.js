@@ -695,3 +695,28 @@ Promise.all([
     loadPublicHotels()
 ]);
 
+
+//============= sesion ==============
+
+
+function loadSession() {
+
+    try {
+
+        const raw =
+            localStorage.getItem(
+                "ceylon_session"
+            );
+
+        if (raw) {
+            session = JSON.parse(raw);
+        }
+
+    } catch (e) {
+
+        session = null;
+
+    }
+
+    renderAuthState();
+}
