@@ -326,6 +326,54 @@ function renderHotelGrid() {
 }
 
 
+// ============  filter cities===============
+
+function populateCitySelect() {
+
+    const cities = [
+        ...new Set(
+            hotels
+                .map(h => h.city)
+                .filter(Boolean)
+        )
+    ];
+
+    const select =
+        document.getElementById("search-city");
+
+    select.innerHTML =
+        `<option value="">All cities</option>` +
+        cities
+            .map(
+                c =>
+                    `<option value="${c}">
+                        ${c}
+                    </option>`
+            )
+            .join("");
+}
+
+document
+    .getElementById("search-btn")
+    .addEventListener("click", () => {
+
+        currentCityFilter =
+            document.getElementById(
+                "search-city"
+            ).value;
+
+        renderHotelGrid();
+
+        document
+            .getElementById("hotel-grid")
+            .scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+    });
+
+
+
 
 
 
