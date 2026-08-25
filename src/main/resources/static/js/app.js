@@ -24,6 +24,9 @@ function fmtLKR(n){
 
 
 
+
+//===============================================  ROOM   ========================================
+
 // room type
 function roomTypeInfo(name){
     return roomTypesCache.find(t => t.name === name)
@@ -40,5 +43,10 @@ function typeIconSvg(){
 <path d="M3 18v-7a2 2 0 012-2h14a2 2 0 012 2v7M3 18h18M3 18v2M21 18v2M7 9V6a2 2 0 012-2h6a2 2 0 012 2v3"/></svg>`;
 }
 
-
-
+// load rooms types from backend , wait work using async
+async function loadPublicRoomTypes(){
+    try {
+        const res = await fetch(`${API_BASE}/api/room-types`);
+        roomTypesCache = res.ok ? await res.json() : [];
+    } catch (e) { roomTypesCache = []; }
+}
