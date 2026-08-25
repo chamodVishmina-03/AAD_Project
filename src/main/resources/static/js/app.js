@@ -456,7 +456,7 @@ function openHotel(id) {
         hotel.email || "—";
 
 
-    /* ---------- Room Table ---------- */
+    /* Room Table  */
 
     const tbody =
         document.querySelector(
@@ -526,7 +526,7 @@ function openHotel(id) {
             `;
 
 
-    /* ---------- Room Categories ---------- */
+    /* Room Categories  */
 
     const usedTypes = [
         ...new Set(
