@@ -17,10 +17,12 @@ let roomTypesCache = [];// rooms cache
 
 
 
-// rupees format
+// rupees format and check input value larger than 1000 after add , for money
 function fmtLKR(n){
     return "LKR " + Number(n).toLocaleString("en-LK");
 }
+
+
 
 
 
