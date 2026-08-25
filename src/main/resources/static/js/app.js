@@ -17,6 +17,11 @@ let roomTypesCache = [];// rooms cache
 
 
 
+// rupees format
+function fmtLKR(n){
+    return "LKR " + Number(n).toLocaleString("en-LK");
+}
+
 
 
 
