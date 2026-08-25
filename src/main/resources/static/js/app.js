@@ -402,3 +402,211 @@ function renderStats() {
 
 
 
+//==========   hotel detail view =========
+
+function openHotel(id) {
+
+    const hotel =
+        hotels.find(h => h.id === id);
+
+    if (!hotel) return;
+
+    currentHotel = hotel;
+
+    document.getElementById(
+        "d-banner"
+    ).style.background = hotel.grad;
+
+    document.getElementById(
+        "d-eyebrow"
+    ).textContent =
+        `${hotel.city || "—"} · ${hotel.country || "—"}`;
+
+    document.getElementById(
+        "d-name"
+    ).textContent = hotel.name;
+
+    document.getElementById(
+        "d-desc"
+    ).textContent =
+        hotel.description || "";
+
+    document.getElementById(
+        "d-rating"
+    ).innerHTML =
+        `★ ${
+            hotel.starRating != null
+                ? hotel.starRating
+                : "—"
+        } rating`;
+
+    document.getElementById(
+        "d-address"
+    ).textContent =
+        hotel.address || "—";
+
+    document.getElementById(
+        "d-phone"
+    ).textContent =
+        hotel.phone || "—";
+
+    document.getElementById(
+        "d-email"
+    ).textContent =
+        hotel.email || "—";
+
+
+    /* ---------- Room Table ---------- */
+
+    const tbody =
+        document.querySelector(
+            "#rooms-table tbody"
+        );
+
+    tbody.innerHTML =
+        hotel.rooms.length
+
+            ? hotel.rooms.map(room => `
+                <tr>
+
+                    <td class="mono-cell">
+                        ${room.roomNumber}
+                    </td>
+
+                    <td class="mono-cell">
+                        ${
+                room.floorNo != null
+                    ? room.floorNo
+                    : "—"
+            }
+                    </td>
+
+                    <td>
+                        ${room.roomType}
+                    </td>
+
+                    <td class="mono-cell">
+                        ${fmtLKR(
+                room.pricePerNight
+            )}
+                    </td>
+
+                    <td>
+                        <span class="badge badge-${
+                room.status.toLowerCase()
+            }">
+                            ${room.status}
+                        </span>
+                    </td>
+
+                    <td>
+                        ${room.amenities
+                .map(
+                    a =>
+                        `<span class="amenity-tag">
+                                        ${a}
+                                    </span>`
+                )
+                .join("")}
+                    </td>
+
+                </tr>
+            `).join("")
+
+            : `
+                <tr>
+                    <td colspan="6"
+                        style="
+                            text-align:center;
+                            color:var(--text-muted);
+                        ">
+                        No rooms added for this hotel yet.
+                    </td>
+                </tr>
+            `;
+
+
+    /* ---------- Room Categories ---------- */
+
+    const usedTypes = [
+        ...new Set(
+            hotel.rooms.map(
+                r => r.roomType
+            )
+        )
+    ];
+
+    const typeWrap =
+        document.getElementById(
+            "type-cards"
+        );
+
+    typeWrap.innerHTML =
+        usedTypes.length
+
+            ? usedTypes.map(typeName => {
+
+                const type =
+                    roomTypeInfo(typeName);
+
+                const priced =
+                    hotel.rooms.filter(
+                        r =>
+                            r.roomType === typeName
+                    );
+
+                const min =
+                    Math.min(
+                        ...priced.map(
+                            r => r.pricePerNight
+                        )
+                    );
+
+                const maxGuests =
+                    type.maxOccupancy || 1;
+
+                return `
+                    <div class="type-card">
+
+                        <div class="icon-wrap">
+                            ${typeIconSvg()}
+                        </div>
+
+                        <div class="tname">
+                            ${type.name}
+                        </div>
+
+                        <div class="tdesc">
+                            ${type.description || ""}
+                        </div>
+
+                        <div class="tfoot">
+
+                            <span class="cap">
+                                Max ${maxGuests}
+                                guest${
+                    maxGuests > 1
+                        ? "s"
+                        : ""
+                }
+                            </span>
+
+                            <span class="price">
+                                from ${fmtLKR(min)}
+                            </span>
+
+                        </div>
+
+                    </div>
+                `;
+
+            }).join("")
+
+            : "";
+
+    showView("detail");
+}
+
+
+
+
