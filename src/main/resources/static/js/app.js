@@ -240,3 +240,19 @@ function openHotel(id){
 }
 
 
+function showView(name){
+    document.getElementById("view-home").classList.toggle("active", name === "home");
+    document.getElementById("view-detail").classList.toggle("active", name === "detail");
+    document.getElementById("view-admin").classList.toggle("active", name === "admin");
+    if (name === "home") currentHotel = null;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// page navigation
+function showView(name){
+    document.getElementById("view-home").classList.toggle("active", name === "home");
+    document.getElementById("view-detail").classList.toggle("active", name === "detail");
+    document.getElementById("view-admin").classList.toggle("active", name === "admin");
+    if (name === "home") currentHotel = null;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
