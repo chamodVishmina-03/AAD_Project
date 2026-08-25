@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,4 +27,11 @@ public class City {
     @NotBlank
     @Column(nullable = false)
     private String country;
+
 }
+
+
+
+
+
+

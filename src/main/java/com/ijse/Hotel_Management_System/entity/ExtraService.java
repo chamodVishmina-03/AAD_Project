@@ -38,4 +38,9 @@ public class ExtraService {
     @NotNull
     @Column(nullable = false)
     private BigDecimal price;
+
+
 }
+
+
+

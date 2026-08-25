@@ -10,6 +10,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,9 +18,8 @@ import java.time.LocalDate;
 @Builder
 @Entity
 @Table(name = "coupons",
-        uniqueConstraints = @UniqueConstraint(columnNames = "code"))
-
-
+        uniqueConstraints = @UniqueConstraint(columnNames = "code")
+)
 public class Coupon {
 
     @Id
@@ -45,4 +45,12 @@ public class Coupon {
 
     @Builder.Default
     private boolean active = true;
+
+
+
 }
+
+
+
+
+
