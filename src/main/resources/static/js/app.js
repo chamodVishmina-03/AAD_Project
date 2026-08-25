@@ -688,3 +688,10 @@ document
 
 
 
+// run pb room type and public hotels in one time
+
+Promise.all([
+    loadPublicRoomTypes(),
+    loadPublicHotels()
+]);
+
