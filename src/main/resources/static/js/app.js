@@ -24,6 +24,13 @@ function fmtLKR(n){
 
 
 
+// room type
+function roomTypeInfo(name){
+    return roomTypesCache.find(t => t.name === name)
+        || {
+        name, description: "", maxOccupancy: 2
+    };
 
+}
 
 
