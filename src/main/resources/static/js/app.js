@@ -753,4 +753,66 @@ function clearSession() {
 
 
 
+// ==  if user log change interface ===
+function renderAuthState() {
+
+    const buttons =
+        document.getElementById(
+            "auth-buttons"
+        );
+
+    const chip =
+        document.getElementById(
+            "user-chip"
+        );
+
+    if (session) {
+
+        buttons.style.display = "none";
+
+        chip.style.display = "flex";
+
+        document.getElementById(
+            "user-name"
+        ).textContent =
+            session.fullName;
+
+        document.getElementById(
+            "user-role"
+        ).textContent =
+            (
+                session.roles &&
+                session.roles[0]
+            ) || "GUEST";
+
+        document.getElementById(
+            "user-avatar"
+        ).textContent =
+            session.fullName
+                .trim()
+                .charAt(0)
+                .toUpperCase();
+
+        document.getElementById(
+            "admin-whoami"
+        ).textContent =
+            session.fullName;
+
+    } else {
+
+        buttons.style.display = "flex";
+
+        chip.style.display = "none";
+
+        document
+            .getElementById("user-menu")
+            .classList.remove("open");
+    }
+}
+
+
+
+
+
+
 
