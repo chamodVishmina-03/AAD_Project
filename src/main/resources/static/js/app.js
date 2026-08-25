@@ -720,3 +720,22 @@ function loadSession() {
 
     renderAuthState();
 }
+
+
+
+function saveSession(data) {
+
+    session = data;
+
+    localStorage.setItem(
+        "ceylon_session",
+        JSON.stringify(data)
+    );
+
+    renderAuthState();
+}
+
+
+
+
+
