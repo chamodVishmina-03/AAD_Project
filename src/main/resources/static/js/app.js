@@ -256,3 +256,15 @@ function showView(name){
     if (name === "home") currentHotel = null;
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+
+// data fetch after navigate btn
+document.getElementById("back-link").addEventListener("click", () => showView("home"));
+document.getElementById("brand-home").addEventListener("click", () => showView("home"));
+document.getElementById("nav-hotels").addEventListener("click", () => showView("home"));
+document.getElementById("nav-contact").addEventListener("click", () => {
+    showView("home");
+    document.getElementById("contact-home").scrollIntoView({ behavior: "smooth" });
+});
+
+Promise.all([loadPublicRoomTypes(), loadPublicHotels()]);
