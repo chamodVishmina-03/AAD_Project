@@ -171,3 +171,14 @@ function populateCitySelect(){
     const sel = document.getElementById("search-city");
     sel.innerHTML = `<option value="">All cities</option>` + cities.map(c => `<option value="${c}">${c}</option>`).join("");
 }
+
+
+// search btn
+document.getElementById("search-btn").addEventListener("click", () => {
+    currentCityFilter = document.getElementById("search-city").value;
+    renderHotelGrid();
+    document.getElementById("hotel-grid").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+
+
