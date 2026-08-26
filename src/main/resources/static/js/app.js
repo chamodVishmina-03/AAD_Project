@@ -1277,3 +1277,16 @@ function authFetch(
         )
     );
 }
+
+
+
+
+
+//==============================    Admin data  ================================================
+
+
+let apiCities = [];
+let apiRoomTypesReal = [];
+let apiHotels = [];
+let selectedRoomHotelId = null;
+let apiRoomsForHotel = [];
