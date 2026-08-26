@@ -1534,3 +1534,46 @@ async function loadCities() {
 
 
 
+// admin load room types
+
+
+async function loadRoomTypesReal() {
+
+    try {
+
+        const res =
+            await fetch(
+                `${API_BASE}/api/room-types`
+            );
+
+        apiRoomTypesReal =
+            res.ok
+                ? await res.json()
+                : [];
+
+    } catch (e) {
+
+        apiRoomTypesReal = [];
+    }
+
+    const select =
+        document.getElementById(
+            "room-type"
+        );
+
+    select.innerHTML =
+        apiRoomTypesReal
+            .map(
+                type =>
+                    `<option value="${type.id}">
+                        ${type.name}
+                    </option>`
+            )
+            .join("")
+
+        ||
+
+        `<option value="">
+            No room types found — add one via /api/room-types
+        </option>`;
+}
