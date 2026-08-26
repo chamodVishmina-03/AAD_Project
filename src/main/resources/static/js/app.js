@@ -1485,3 +1485,52 @@ function setAdminTab(tab) {
 }
 
 
+
+// admin load cities
+
+
+
+async function loadCities() {
+
+    try {
+
+        const res =
+            await fetch(
+                `${API_BASE}/api/cities`
+            );
+
+        apiCities =
+            res.ok
+                ? await res.json()
+                : [];
+
+    } catch (e) {
+
+        apiCities = [];
+    }
+
+    const select =
+        document.getElementById(
+            "hotel-city"
+        );
+
+    select.innerHTML =
+        apiCities
+            .map(
+                city =>
+                    `<option value="${city.id}">
+                        ${city.name}, ${city.country}
+                    </option>`
+            )
+            .join("")
+
+        ||
+
+        `<option value="">
+            No cities found — add one via /api/cities
+        </option>`;
+}
+
+
+
+
