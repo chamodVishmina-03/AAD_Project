@@ -1374,3 +1374,48 @@ renderAuthState = function () {
 };
 
 refreshAdminNavVisibility();
+
+
+
+
+
+// admin enter pannel
+
+
+function enterAdmin() {
+
+    if (!isStaffOrAdmin()) {
+        return;
+    }
+
+    document
+        .getElementById("user-menu")
+        .classList.remove("open");
+
+    showView("admin");
+
+    loadAdminHotels();
+}
+
+document
+    .getElementById("nav-admin")
+    .addEventListener(
+        "click",
+        enterAdmin
+    );
+
+document
+    .getElementById("admin-menu-link")
+    .addEventListener(
+        "click",
+        enterAdmin
+    );
+
+document
+    .getElementById("admin-back-link")
+    .addEventListener(
+        "click",
+        () => showView("home")
+    );
+
+
