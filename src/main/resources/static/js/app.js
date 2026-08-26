@@ -938,3 +938,116 @@ document.addEventListener(
 
     }
 );
+
+
+
+
+
+
+
+// =========== Login  ===============
+
+document
+    .getElementById("login-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const errorElement =
+                document.getElementById(
+                    "login-error"
+                );
+
+            errorElement.classList.remove(
+                "show"
+            );
+
+            const email =
+                document
+                    .getElementById(
+                        "login-email"
+                    )
+                    .value
+                    .trim();
+
+            const password =
+                document
+                    .getElementById(
+                        "login-password"
+                    )
+                    .value;
+
+            try {
+
+                const res =
+                    await fetch(
+                        `${API_BASE}/api/auth/login`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                email,
+                                password
+                            })
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    const body =
+                        await res
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    throw new Error(
+                        body.message ||
+                        "Invalid email or password."
+                    );
+                }
+
+                const data =
+                    await res.json();
+
+                saveSession(data);
+
+                closeModal(
+                    "login-overlay"
+                );
+
+                document
+                    .getElementById(
+                        "login-form"
+                    )
+                    .reset();
+
+                showToast(
+                    `Welcome back, ${
+                        data.fullName
+                            .split(" ")[0]
+                    }.`
+                );
+
+            } catch (error) {
+
+                errorElement.textContent =
+                    error.message ||
+                    "Could not reach the server. Is the backend running?";
+
+                errorElement.classList.add(
+                    "show"
+                );
+            }
+
+        }
+    );
+
+
