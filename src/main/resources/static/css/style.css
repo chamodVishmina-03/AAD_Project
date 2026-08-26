@@ -1470,8 +1470,68 @@ footer {
 
 
 
+/* =========== refactored state ===== */
+.is-hidden{
+    display:none !important;
+}
+.is-visible{
+    display:block !important;
+}
+.is-flex{
+    display:flex !important;
+}
+.section-head-tight{
+    margin-top:0;
+}
+.admin-whoami{
+    padding:6px 10px;
+    font-size:13px;
+    font-weight:600;
+}
 
+.admin-toolbar-text{
+    color:var(--text-muted);
+    font-size:13.5px;
+    margin:0;
+}
 
+.empty-state-home{
+    margin-top:16px;
+}
 
+.admin-empty{
+    margin-top:14px;
+}
+.stat-hotels-icon{
+    background:var(--primary-light);
+    color:var(--primary);
+}
 
+.stat-rooms-icon{
+    background:var(--info-bg);
+    color:var(--info);
+}
+
+.stat-available-icon{
+    background:var(--success-bg);
+    color:var(--success);
+}
+
+.hotel-location-icon{
+    width:12px;
+    height:12px;
+}
+
+.empty-table-row td{
+    text-align:center;
+    color:var(--text-muted);padding:24px;}
+.admin-hotel-name{font-weight:600;}
+
+.hotel-banner.gradient-0,.detail-banner.gradient-0{
+    background:linear-gradient(135deg,#4F46E5,#7C3AED);
+}
+.hotel-banner.gradient-1,.detail-banner.gradient-1{background:linear-gradient(135deg,#0EA5A4,#0284C7);}
+.hotel-banner.gradient-2,.detail-banner.gradient-2{background:linear-gradient(135deg,#F59E0B,#DC2626);}
+.hotel-banner.gradient-3,.detail-banner.gradient-3{background:linear-gradient(135deg,#0EA5E9,#4F46E5);}
+.hotel-banner.gradient-4,.detail-banner.gradient-4{background:linear-gradient(135deg,#EC4899,#7C3AED);}
 
