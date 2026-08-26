@@ -1327,3 +1327,50 @@ function isAdmin() {
 
 
 //    admin nav view
+
+
+function refreshAdminNavVisibility() {
+
+    const show =
+        isStaffOrAdmin();
+
+    document.getElementById(
+        "nav-admin"
+    ).style.display =
+        show
+            ? "inline-flex"
+            : "none";
+
+    document.getElementById(
+        "admin-menu-link"
+    ).style.display =
+        show
+            ? "block"
+            : "none";
+}
+
+const originalRenderAuthState =
+    renderAuthState;
+
+renderAuthState = function () {
+
+    originalRenderAuthState();
+
+    refreshAdminNavVisibility();
+
+    if (
+        !isStaffOrAdmin() &&
+        document
+            .getElementById(
+                "view-admin"
+            )
+            .classList.contains(
+            "active"
+        )
+    ) {
+
+        showView("home");
+    }
+};
+
+refreshAdminNavVisibility();
