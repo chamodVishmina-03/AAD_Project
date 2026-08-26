@@ -1634,3 +1634,143 @@ const trashIconSvg = `
     </svg>
 `;
 
+
+
+
+
+
+
+// admin hotels table
+function renderAdminHotels() {
+
+    const tbody =
+        document.querySelector(
+            "#admin-hotels-table tbody"
+        );
+
+    const empty =
+        document.getElementById(
+            "admin-hotels-empty"
+        );
+
+    if (apiHotels.length === 0) {
+
+        tbody.innerHTML = "";
+
+        empty.style.display =
+            "block";
+
+        return;
+    }
+
+    empty.style.display =
+        "none";
+
+    tbody.innerHTML =
+        apiHotels.map(hotel => `
+            <tr>
+
+                <td style="font-weight:600;">
+                    ${hotel.name}
+                </td>
+
+                <td>
+                    ${hotel.cityName || "—"}
+                </td>
+
+                <td>
+                    ${hotel.address || "—"}
+                </td>
+
+                <td class="mono-cell">
+                    ${
+            hotel.starRating != null
+                ? "★ " +
+                hotel.starRating
+                : "—"
+        }
+                </td>
+
+                <td class="mono-cell">
+                    ${hotel.phone || "—"}
+                </td>
+
+                <td class="row-actions">
+
+                    <button
+                        class="icon-btn"
+                        data-edit="${hotel.id}"
+                        type="button"
+                        title="Edit">
+
+                        ${editIconSvg}
+
+                    </button>
+
+                    ${
+            isAdmin()
+                ? `
+                                <button
+                                    class="icon-btn danger"
+                                    data-delete="${hotel.id}"
+                                    type="button"
+                                    title="Delete">
+
+                                    ${trashIconSvg}
+
+                                </button>
+                            `
+                : ""
+        }
+
+                </td>
+
+            </tr>
+        `).join("");
+
+
+    tbody
+        .querySelectorAll("[data-edit]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    openHotelModal(
+                        apiHotels.find(
+                            hotel =>
+                                hotel.id ===
+                                Number(
+                                    button.dataset.edit
+                                )
+                        )
+                    );
+
+                }
+            );
+        });
+
+
+    tbody
+        .querySelectorAll("[data-delete]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    deleteHotel(
+                        Number(
+                            button.dataset.delete
+                        )
+                    );
+
+                }
+            );
+        });
+}
+
+
+
+
