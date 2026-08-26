@@ -1577,3 +1577,34 @@ async function loadRoomTypesReal() {
             No room types found — add one via /api/room-types
         </option>`;
 }
+
+
+
+
+// admin load hotels
+
+
+async function loadAdminHotels() {
+
+    try {
+
+        const res =
+            await fetch(
+                `${API_BASE}/api/hotels`
+            );
+
+        apiHotels =
+            res.ok
+                ? await res.json()
+                : [];
+
+    } catch (e) {
+
+        apiHotels = [];
+    }
+
+    renderAdminHotels();
+    renderRoomHotelSelect();
+}
+
+
