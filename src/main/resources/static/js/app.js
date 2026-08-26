@@ -752,7 +752,6 @@ function clearSession() {
 
 
 
-
 // ==  if user log change interface ===
 function renderAuthState() {
 
@@ -809,6 +808,95 @@ function renderAuthState() {
             .classList.remove("open");
     }
 }
+
+
+
+
+
+
+
+// ======= authentication ==========
+document
+    .getElementById("open-login")
+    .addEventListener(
+        "click",
+        () => openModal("login-overlay")
+    );
+
+document
+    .getElementById("open-register")
+    .addEventListener(
+        "click",
+        () => openModal("register-overlay")
+    );
+
+document
+    .querySelectorAll("[data-close]")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                button
+                    .closest(".modal-overlay")
+                    .classList.remove("open");
+
+            }
+        );
+
+    });
+
+document
+    .querySelectorAll(".modal-overlay")
+    .forEach(overlay => {
+
+        overlay.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target === overlay
+                ) {
+                    overlay.classList.remove(
+                        "open"
+                    );
+                }
+
+            }
+        );
+
+    });
+
+document
+    .getElementById("switch-to-register")
+    .addEventListener(
+        "click",
+        () => {
+
+            closeModal("login-overlay");
+
+            openModal(
+                "register-overlay"
+            );
+        }
+    );
+
+document
+    .getElementById("switch-to-login")
+    .addEventListener(
+        "click",
+        () => {
+
+            closeModal(
+                "register-overlay"
+            );
+
+            openModal(
+                "login-overlay"
+            );
+        }
+    );
 
 
 
