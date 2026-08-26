@@ -23,7 +23,7 @@
             <ul>
                 <li><a id="nav-hotels">Hotels</a></li>
                 <li><a id="nav-contact">Contact</a></li>
-                <li><a id="nav-admin" class="pill-flag" style="display:none;">Admin panel</a></li>
+                <li><a id="nav-admin" class="pill-flag is-hidden">Admin panel</a></li>
             </ul>
         </nav>
         <div class="auth-buttons" id="auth-buttons">
@@ -34,7 +34,7 @@
             <div class="avatar" id="user-avatar">?</div>
             <div class="user-menu" id="user-menu">
                 <div class="who"><div class="n" id="user-name">—</div><div class="r" id="user-role">—</div></div>
-                <button id="admin-menu-link" style="display:none;">Admin panel</button>
+                <button id="admin-menu-link" class="is-hidden">Admin panel</button>
                 <button id="logout-btn" class="danger">Log out</button>
             </div>
         </div>
@@ -77,19 +77,19 @@
 
         <div class="stats-row">
             <div class="stat-card">
-                <div class="stat-icon" style="background:var(--primary-light);color:var(--primary);">
+                <div class="stat-icon stat-hotels-icon">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
                 </div>
                 <div><div class="n" id="stat-hotels">5</div><div class="l">Hotels</div></div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background:var(--info-bg);color:var(--info);">
+                <div class="stat-icon stat-rooms-icon">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 18v-7a2 2 0 012-2h14a2 2 0 012 2v7M3 18h18M3 18v2M21 18v2M7 9V6a2 2 0 012-2h6a2 2 0 012 2v3"/></svg>
                 </div>
                 <div><div class="n" id="stat-rooms">0</div><div class="l">Rooms tracked</div></div>
             </div>
             <div class="stat-card">
-                <div class="stat-icon" style="background:var(--success-bg);color:var(--success);">
+                <div class="stat-icon stat-available-icon">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5"/></svg>
                 </div>
                 <div><div class="n" id="stat-available">0</div><div class="l">Available now</div></div>
@@ -103,7 +103,7 @@
             </div>
         </div>
         <div class="hotel-grid" id="hotel-grid"></div>
-        <div class="empty-state" id="hotel-grid-empty" style="display:none;margin-top:16px;">No hotels match that city — try clearing the search.</div>
+        <div class="empty-state empty-state-home is-hidden" id="hotel-grid-empty">No hotels match that city — try clearing the search.</div>
 
         <div class="section-head" id="contact-home">
             <div>
@@ -161,7 +161,7 @@
         </div>
 
         <section class="card-section">
-            <div class="section-head" style="margin-top:0;">
+            <div class="section-head section-head-tight">
                 <div><h2>Room inventory</h2><p>Live rooms for this hotel.</p></div>
             </div>
             <div class="table-card">
@@ -173,7 +173,7 @@
         </section>
 
         <section class="card-section">
-            <div class="section-head" style="margin-top:0;">
+            <div class="section-head section-head-tight">
                 <div><h2>Room categories</h2><p>Base configuration for this hotel.</p></div>
             </div>
             <div class="type-row" id="type-cards"></div>
@@ -197,7 +197,7 @@
                 </button>
                 <div class="sidebar-divider"></div>
                 <div class="title">Signed in as</div>
-                <div style="padding:6px 10px; font-size:13px; font-weight:600;" id="admin-whoami">—</div>
+                <div class="admin-whoami" id="admin-whoami">—</div>
             </aside>
 
             <div class="admin-main">
@@ -207,7 +207,7 @@
 
                 <div class="admin-panel active" id="panel-hotels">
                     <div class="admin-toolbar">
-                        <p style="color:var(--text-muted);font-size:13.5px;margin:0;">Every hotel in the <code>hotels</code> table.</p>
+                        <p class="admin-toolbar-text">Every hotel in the <code>hotels</code> table.</p>
                         <button class="btn btn-primary" id="add-hotel-btn" type="button">
                             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg> Add hotel
                         </button>
@@ -218,7 +218,7 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                    <div class="empty-state" id="admin-hotels-empty" style="display:none;margin-top:14px;">No hotels yet — add the first one above.</div>
+                    <div class="empty-state admin-empty is-hidden" id="admin-hotels-empty">No hotels yet — add the first one above.</div>
                 </div>
 
                 <div class="admin-panel" id="panel-rooms">
@@ -234,7 +234,7 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                    <div class="empty-state" id="admin-rooms-empty" style="display:block;margin-top:14px;">Pick a hotel above to see and manage its rooms.</div>
+                    <div class="empty-state admin-empty" id="admin-rooms-empty">Pick a hotel above to see and manage its rooms.</div>
                 </div>
             </div>
         </div>
@@ -347,7 +347,122 @@
     </form>
 </div>
 
+
+<!-- ===== Dynamic UI templates ===== -->
+<template id="hotel-card-template">
+    <div class="hotel-card">
+        <div class="hotel-banner">
+            <span class="monogram"></span>
+            <span class="rating-badge"></span>
+        </div>
+        <div class="hotel-body">
+            <div class="hotel-name"></div>
+            <div class="hotel-city">
+                <svg class="icon hotel-location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span class="hotel-location-text"></span>
+            </div>
+            <div class="hotel-desc"></div>
+            <div class="hotel-footer">
+                <div class="price"></div>
+                <div class="view-btn">View rooms →</div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="room-row-template">
+    <tr>
+        <td class="mono-cell room-number"></td>
+        <td class="mono-cell room-floor"></td>
+        <td class="room-type"></td>
+        <td class="mono-cell room-price"></td>
+        <td><span class="badge room-status"></span></td>
+        <td class="room-amenities"></td>
+    </tr>
+</template>
+
+<template id="room-empty-row-template">
+    <tr class="empty-table-row">
+        <td colspan="6">No rooms added for this hotel yet.</td>
+    </tr>
+</template>
+
+<template id="type-card-template">
+    <div class="type-card">
+        <div class="icon-wrap">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M3 18v-7a2 2 0 012-2h14a2 2 0 012 2v7M3 18h18M3 18v2M21 18v2M7 9V6a2 2 0 012-2h6a2 2 0 012 2v3"/>
+            </svg>
+        </div>
+        <div class="tname"></div>
+        <div class="tdesc"></div>
+        <div class="tfoot">
+            <span class="cap"></span>
+            <span class="price"></span>
+        </div>
+    </div>
+</template>
+
+<template id="admin-hotel-row-template">
+    <tr>
+        <td class="admin-hotel-name"></td>
+        <td class="admin-hotel-city"></td>
+        <td class="admin-hotel-address"></td>
+        <td class="mono-cell admin-hotel-rating"></td>
+        <td class="mono-cell admin-hotel-phone"></td>
+        <td class="row-actions">
+            <button class="icon-btn" data-edit type="button" title="Edit" aria-label="Edit hotel">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 3 21l.5-4.5L17 3z"/>
+                    <path d="M15 5l4 4"/>
+                </svg>
+            </button>
+            <button class="icon-btn danger admin-delete-action" data-delete type="button" title="Delete" aria-label="Delete hotel">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 10v7M14 10v7"/>
+                </svg>
+            </button>
+        </td>
+    </tr>
+</template>
+
+<template id="admin-room-row-template">
+    <tr>
+        <td class="mono-cell admin-room-number"></td>
+        <td class="mono-cell admin-room-floor"></td>
+        <td class="admin-room-type"></td>
+        <td class="mono-cell admin-room-price"></td>
+        <td><span class="badge admin-room-status"></span></td>
+        <td class="row-actions">
+            <button class="icon-btn" data-edit type="button" title="Edit" aria-label="Edit room">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 3 21l.5-4.5L17 3z"/>
+                    <path d="M15 5l4 4"/>
+                </svg>
+            </button>
+            <button class="icon-btn danger" data-delete type="button" title="Delete" aria-label="Delete room">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 10v7M14 10v7"/>
+                </svg>
+            </button>
+        </td>
+    </tr>
+</template>
+
+<template id="quick-reply-template">
+    <button class="qr-btn" type="button"></button>
+</template>
+
+<template id="message-template">
+    <div class="msg"></div>
+</template>
+
 <script src="js/app.js"></script>
 
 </body>
 </html>
+
+
