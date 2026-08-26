@@ -815,7 +815,7 @@ function renderAuthState() {
 
 
 
-// ======= authentication ==========
+// ======= authentication  models==========
 document
     .getElementById("open-login")
     .addEventListener(
@@ -1243,3 +1243,37 @@ document
 
 
 
+// = ===== authenticated fetch helper ======
+
+function authFetch(
+    path,
+    options = {}
+) {
+
+    const headers =
+        Object.assign(
+            {
+                "Content-Type":
+                    "application/json"
+            },
+            options.headers || {}
+        );
+
+    if (
+        session &&
+        session.accessToken
+    ) {
+
+        headers["Authorization"] =
+            `Bearer ${session.accessToken}`;
+    }
+
+    return fetch(
+        `${API_BASE}${path}`,
+        Object.assign(
+            {},
+            options,
+            { headers }
+        )
+    );
+}
