@@ -1184,3 +1184,62 @@ document
 
 
 
+
+
+
+
+
+
+
+//========  logout  ===============
+
+
+document
+    .getElementById("logout-btn")
+    .addEventListener(
+        "click",
+        async () => {
+
+            if (
+                session &&
+                session.refreshToken
+            ) {
+
+                try {
+
+                    await fetch(
+                        `${API_BASE}/api/auth/logout`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                refreshToken:
+                                session.refreshToken
+                            })
+                        }
+                    );
+
+                } catch (e) {
+                    /* Backend unreachable.
+                       Clear session locally anyway. */
+                }
+            }
+
+            clearSession();
+
+            showToast(
+                "Logged out."
+            );
+
+            showView("home");
+        }
+    );
+
+
+
+
