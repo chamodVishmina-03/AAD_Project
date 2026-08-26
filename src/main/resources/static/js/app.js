@@ -1419,3 +1419,69 @@ document
     );
 
 
+// admin tabs
+
+
+document
+    .getElementById("tab-hotels")
+    .addEventListener(
+        "click",
+        () => setAdminTab("hotels")
+    );
+
+document
+    .getElementById("tab-rooms")
+    .addEventListener(
+        "click",
+        () => setAdminTab("rooms")
+    );
+
+function setAdminTab(tab) {
+
+    document
+        .getElementById("tab-hotels")
+        .classList.toggle(
+        "active",
+        tab === "hotels"
+    );
+
+    document
+        .getElementById("tab-rooms")
+        .classList.toggle(
+        "active",
+        tab === "rooms"
+    );
+
+    document
+        .getElementById("panel-hotels")
+        .classList.toggle(
+        "active",
+        tab === "hotels"
+    );
+
+    document
+        .getElementById("panel-rooms")
+        .classList.toggle(
+        "active",
+        tab === "rooms"
+    );
+
+    document
+        .getElementById(
+            "admin-panel-title"
+        )
+        .textContent =
+        tab === "hotels"
+            ? "Hotels"
+            : "Rooms";
+
+    if (
+        tab === "rooms" &&
+        apiHotels.length === 0
+    ) {
+
+        loadAdminHotels();
+    }
+}
+
+
