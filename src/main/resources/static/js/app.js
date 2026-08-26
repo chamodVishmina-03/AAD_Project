@@ -1290,3 +1290,36 @@ let apiRoomTypesReal = [];
 let apiHotels = [];
 let selectedRoomHotelId = null;
 let apiRoomsForHotel = [];
+
+
+
+
+// admin permission checking
+
+function isStaffOrAdmin() {
+
+    return !!(
+        session &&
+        session.roles &&
+        session.roles.some(
+            role =>
+                role === "ADMIN" ||
+                role === "STAFF" ||
+                role === "ROLE_ADMIN" ||
+                role === "ROLE_STAFF"
+        )
+    );
+}
+
+function isAdmin() {
+
+    return !!(
+        session &&
+        session.roles &&
+        session.roles.some(
+            role =>
+                role === "ADMIN" ||
+                role === "ROLE_ADMIN"
+        )
+    );
+}
