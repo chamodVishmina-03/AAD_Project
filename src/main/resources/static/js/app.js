@@ -904,3 +904,37 @@ document
 
 
 
+
+// ===========  user menu ==========
+document
+    .getElementById("user-avatar")
+    .addEventListener(
+        "click",
+        () => {
+
+            document
+                .getElementById("user-menu")
+                .classList.toggle("open");
+
+        }
+    );
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const chip =
+            document.getElementById(
+                "user-chip"
+            );
+
+        if (!chip.contains(event.target)) {
+
+            document
+                .getElementById("user-menu")
+                .classList.remove("open");
+
+        }
+
+    }
+);
