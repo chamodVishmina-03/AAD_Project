@@ -1051,3 +1051,136 @@ document
     );
 
 
+
+
+
+
+
+
+
+
+// ==========   register =============
+
+document
+    .getElementById("register-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const errorElement =
+                document.getElementById(
+                    "register-error"
+                );
+
+            errorElement.classList.remove(
+                "show"
+            );
+
+            const fullName =
+                document
+                    .getElementById(
+                        "reg-name"
+                    )
+                    .value
+                    .trim();
+
+            const email =
+                document
+                    .getElementById(
+                        "reg-email"
+                    )
+                    .value
+                    .trim();
+
+            const phone =
+                document
+                    .getElementById(
+                        "reg-phone"
+                    )
+                    .value
+                    .trim();
+
+            const password =
+                document
+                    .getElementById(
+                        "reg-password"
+                    )
+                    .value;
+
+            try {
+
+                const res =
+                    await fetch(
+                        `${API_BASE}/api/auth/register`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                fullName,
+                                email,
+                                password,
+                                phone
+                            })
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    const body =
+                        await res
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    throw new Error(
+                        body.message ||
+                        "Could not create that account."
+                    );
+                }
+
+                const data =
+                    await res.json();
+
+                saveSession(data);
+
+                closeModal(
+                    "register-overlay"
+                );
+
+                document
+                    .getElementById(
+                        "register-form"
+                    )
+                    .reset();
+
+                showToast(
+                    `Account created — welcome, ${
+                        data.fullName
+                            .split(" ")[0]
+                    }.`
+                );
+
+            } catch (error) {
+
+                errorElement.textContent =
+                    error.message ||
+                    "Could not reach the server. Is the backend running?";
+
+                errorElement.classList.add(
+                    "show"
+                );
+            }
+
+        }
+    );
+
+
+
