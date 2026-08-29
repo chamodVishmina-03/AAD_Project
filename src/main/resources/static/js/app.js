@@ -2607,3 +2607,33 @@ document
         }
     );
 
+
+
+
+
+// == admin load room===
+
+
+async function loadAdminRooms(hotelId) {
+
+    try {
+
+        const res =
+            await ajaxRequest(
+                `${API_BASE}/api/rooms/hotel/${hotelId}`
+            );
+
+        apiRoomsForHotel =
+            res.ok
+                ? await res.json()
+                : [];
+
+    } catch (e) {
+
+        apiRoomsForHotel = [];
+    }
+
+    renderAdminRooms();
+}
+
+
