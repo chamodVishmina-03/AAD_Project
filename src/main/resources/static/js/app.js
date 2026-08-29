@@ -3409,4 +3409,8 @@ function getBotReply(
 }
 
 
+// call functions
 
+loadSession();
+
+refreshAdminNavVisibility();
