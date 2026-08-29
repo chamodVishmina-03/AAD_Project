@@ -2800,3 +2800,156 @@ async function openRoomModal(room) {
     );
 }
 
+
+
+
+
+//===== admin save room ====
+
+document
+    .getElementById("room-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const errorElement =
+                document.getElementById(
+                    "room-error"
+                );
+
+            errorElement.classList.remove(
+                "show"
+            );
+
+            if (!selectedRoomHotelId) {
+
+                errorElement.textContent =
+                    "Pick a hotel first.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+
+                return;
+            }
+
+            const id =
+                document.getElementById(
+                    "room-id"
+                ).value;
+
+            const payload = {
+
+                hotelId:
+                selectedRoomHotelId,
+
+                roomTypeId:
+                    Number(
+                        document
+                            .getElementById(
+                                "room-type"
+                            )
+                            .value
+                    ),
+
+                roomNumber:
+                    document
+                        .getElementById(
+                            "room-number"
+                        )
+                        .value
+                        .trim(),
+
+                floorNo:
+                    document
+                        .getElementById(
+                            "room-floor"
+                        )
+                        .value
+                        ? Number(
+                            document
+                                .getElementById(
+                                    "room-floor"
+                                )
+                                .value
+                        )
+                        : null,
+
+                pricePerNight:
+                    Number(
+                        document
+                            .getElementById(
+                                "room-price"
+                            )
+                            .value
+                    ),
+
+                amenityIds: []
+            };
+
+
+            try {
+
+                const res =
+                    await authAjax(
+                        id
+                            ? `/api/rooms/${id}`
+                            : "/api/rooms",
+                        {
+                            method:
+                                id
+                                    ? "PUT"
+                                    : "POST",
+
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    const body =
+                        await res
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    throw new Error(
+                        body.message ||
+                        "Could not save the room."
+                    );
+                }
+
+                closeModal(
+                    "room-modal-overlay"
+                );
+
+                showToast(
+                    id
+                        ? "Room updated."
+                        : "Room added."
+                );
+
+                loadAdminRooms(
+                    selectedRoomHotelId
+                );
+
+            } catch (error) {
+
+                errorElement.textContent =
+                    error.message ||
+                    "Could not reach the server.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+            }
+        }
+    );
+
+
