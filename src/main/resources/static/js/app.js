@@ -2144,3 +2144,56 @@ async function loadAdminHotels() {
     renderAdminHotels();
     renderRoomHotelSelect();
 }
+
+
+
+
+
+// === admin hotel table===
+
+
+function renderAdminHotels() {
+    const tbody = document.querySelector("#admin-hotels-table tbody");
+    const empty = document.getElementById("admin-hotels-empty");
+    const template = document.getElementById("admin-hotel-row-template");
+
+    tbody.replaceChildren();
+
+    if (apiHotels.length === 0) {
+        empty.classList.remove("is-hidden");
+        return;
+    }
+
+    empty.classList.add("is-hidden");
+
+    apiHotels.forEach(hotel => {
+        const row = template.content.cloneNode(true);
+        const root = row.querySelector("tr");
+        root.querySelector(".admin-hotel-name").textContent = hotel.name;
+        root.querySelector(".admin-hotel-city").textContent = hotel.cityName || "—";
+        root.querySelector(".admin-hotel-address").textContent = hotel.address || "—";
+        root.querySelector(".admin-hotel-rating").textContent = hotel.starRating != null ? `★ ${hotel.starRating}` : "—";
+        root.querySelector(".admin-hotel-phone").textContent = hotel.phone || "—";
+
+        const editButton = root.querySelector("[data-edit]");
+        const deleteButton = root.querySelector("[data-delete]");
+        editButton.dataset.edit = hotel.id;
+        deleteButton.dataset.delete = hotel.id;
+        deleteButton.classList.toggle("is-hidden", !isAdmin());
+
+        editButton.addEventListener("click", () => openHotelModal(hotel));
+        deleteButton.addEventListener("click", () => deleteHotel(hotel.id));
+        tbody.appendChild(row);
+    });
+}
+
+
+// ====  admin add hotel butn ======
+document
+    .getElementById("add-hotel-btn")
+    .addEventListener(
+        "click",
+        () => openHotelModal(null)
+    );
+
+
