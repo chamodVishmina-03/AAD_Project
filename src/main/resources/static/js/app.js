@@ -3005,3 +3005,157 @@ async function deleteRoom(id) {
         );
     }
 }
+
+
+
+
+
+
+
+
+
+
+//=== chat box rule base ===
+
+const chatToggle =
+    document.getElementById(
+        "chat-toggle"
+    );
+
+const chatPanel =
+    document.getElementById(
+        "chat-panel"
+    );
+
+const chatClose =
+    document.getElementById(
+        "chat-close"
+    );
+
+const messages =
+    document.getElementById(
+        "chat-messages"
+    );
+
+const quickReplies =
+    document.getElementById(
+        "quick-replies"
+    );
+
+
+/* ---------- Open Chat ---------- */
+
+chatToggle.addEventListener(
+    "click",
+    () => {
+
+        chatPanel.classList.add(
+            "open"
+        );
+
+        if (
+            messages.children.length === 0
+        ) {
+
+            addMessage(
+                "bot",
+                "Ayubowan! I'm the Ceylon Collection concierge. Ask me about check-in time, room prices, Wi-Fi, or our hotel locations — or tap a question below."
+            );
+        }
+    }
+);
+
+
+/* ---------- Close Chat ---------- */
+
+chatClose.addEventListener(
+    "click",
+    () =>
+        chatPanel.classList.remove(
+            "open"
+        )
+);
+
+
+/* ---------- Quick Replies ---------- */
+
+const suggestions = [
+    "What time is check-in?",
+    "How much is a room?",
+    "Which hotels do you have?",
+    "Where is this hotel?"
+];
+
+const quickReplyTemplate = document.getElementById("quick-reply-template");
+quickReplies.replaceChildren();
+suggestions.forEach(question => {
+    const button = quickReplyTemplate.content.cloneNode(true).querySelector(".qr-btn");
+    button.textContent = question;
+    button.addEventListener("click", () => handleUserMessage(question));
+    quickReplies.appendChild(button);
+});
+
+
+/* ---------- Chat Form ---------- */
+
+document
+    .getElementById("chat-form")
+    .addEventListener(
+        "submit",
+        event => {
+
+            event.preventDefault();
+
+            const input =
+                document.getElementById(
+                    "chat-input"
+                );
+
+            const text =
+                input.value.trim();
+
+            if (!text) return;
+
+            handleUserMessage(text);
+
+            input.value = "";
+        }
+    );
+
+
+/* ---------- Add Message ---------- */
+
+function addMessage(who, text) {
+    const template = document.getElementById("message-template");
+    const div = template.content.cloneNode(true).querySelector(".msg");
+    div.classList.add(who);
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+
+/* ---------- User Message ---------- */
+
+function handleUserMessage(
+    rawText
+) {
+
+    addMessage(
+        "user",
+        rawText
+    );
+
+    const reply =
+        getBotReply(rawText);
+
+    setTimeout(
+        () =>
+            addMessage(
+                "bot",
+                reply
+            ),
+        350
+    );
+}
+
