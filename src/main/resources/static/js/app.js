@@ -2120,3 +2120,27 @@ async function loadRoomTypesReal() {
 
 
 
+// ==== admin load hotels =======
+
+async function loadAdminHotels() {
+
+    try {
+
+        const res =
+            await ajaxRequest(
+                `${API_BASE}/api/hotels`
+            );
+
+        apiHotels =
+            res.ok
+                ? await res.json()
+                : [];
+
+    } catch (e) {
+
+        apiHotels = [];
+    }
+
+    renderAdminHotels();
+    renderRoomHotelSelect();
+}
