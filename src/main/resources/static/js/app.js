@@ -1273,6 +1273,13 @@ document
         () => setAdminTab("rooms")
     );
 
+document
+    .getElementById("tab-cities")
+    .addEventListener(
+        "click",
+        () => setAdminTab("cities")
+    );
+
 function setAdminTab(tab) {
 
     document
@@ -1290,6 +1297,13 @@ function setAdminTab(tab) {
     );
 
     document
+        .getElementById("tab-cities")
+        .classList.toggle(
+        "active",
+        tab === "cities"
+    );
+
+    document
         .getElementById("panel-hotels")
         .classList.toggle(
         "active",
@@ -1304,13 +1318,22 @@ function setAdminTab(tab) {
     );
 
     document
+        .getElementById("panel-cities")
+        .classList.toggle(
+        "active",
+        tab === "cities"
+    );
+
+    document
         .getElementById(
             "admin-panel-title"
         )
         .textContent =
         tab === "hotels"
             ? "Hotels"
-            : "Rooms";
+            : tab === "rooms"
+                ? "Rooms"
+                : "Cities";
 
     if (
         tab === "rooms" &&
@@ -1318,6 +1341,11 @@ function setAdminTab(tab) {
     ) {
 
         loadAdminHotels();
+    }
+
+    if (tab === "cities") {
+
+        loadAdminCities();
     }
 }
 
@@ -2265,6 +2293,342 @@ async function deleteRoom(id) {
         showToast(
             error.message ||
             "Could not delete the room."
+        );
+    }
+}
+
+
+/* ============================================================
+   39b. ADMIN — LOAD CITIES (admin table)
+   ============================================================ */
+
+let apiAdminCities = [];
+
+async function loadAdminCities() {
+
+    try {
+
+        const res =
+            await ajaxRequest(
+                `${API_BASE}/api/cities`
+            );
+
+        apiAdminCities =
+            res.ok
+                ? await res.json()
+                : [];
+
+    } catch (e) {
+
+        apiAdminCities = [];
+    }
+
+    renderAdminCities();
+}
+
+
+/* ============================================================
+   39c. ADMIN — CITIES TABLE
+   ============================================================ */
+
+function renderAdminCities() {
+
+    const tbody =
+        document.querySelector(
+            "#admin-cities-table tbody"
+        );
+
+    const empty =
+        document.getElementById(
+            "admin-cities-empty"
+        );
+
+    const template =
+        document.getElementById(
+            "admin-city-row-template"
+        );
+
+    tbody.replaceChildren();
+
+    if (apiAdminCities.length === 0) {
+        empty.classList.remove("is-hidden");
+        return;
+    }
+
+    empty.classList.add("is-hidden");
+
+    apiAdminCities.forEach(city => {
+
+        const row =
+            template.content.cloneNode(true);
+
+        const root =
+            row.querySelector("tr");
+
+        root.querySelector(".admin-city-name")
+            .textContent = city.name;
+
+        root.querySelector(".admin-city-country")
+            .textContent = city.country;
+
+        const editButton =
+            root.querySelector("[data-edit]");
+
+        const deleteButton =
+            root.querySelector("[data-delete]");
+
+        editButton.dataset.edit = city.id;
+        deleteButton.dataset.delete = city.id;
+        deleteButton.classList.toggle("is-hidden", !isAdmin());
+
+        editButton.addEventListener(
+            "click",
+            () => openCityModal(
+                apiAdminCities.find(
+                    c => c.id === city.id
+                )
+            )
+        );
+
+        deleteButton.addEventListener(
+            "click",
+            () => deleteCity(city.id)
+        );
+
+        tbody.appendChild(row);
+    });
+}
+
+
+/* ============================================================
+   39d. ADMIN — ADD CITY BUTTON
+   ============================================================ */
+
+document
+    .getElementById("add-city-btn")
+    .addEventListener(
+        "click",
+        () => openCityModal(null)
+    );
+
+
+/* ============================================================
+   39e. ADMIN — CITY MODAL
+   ============================================================ */
+
+function openCityModal(city) {
+
+    const errorElement =
+        document.getElementById(
+            "city-error"
+        );
+
+    errorElement.classList.remove(
+        "show"
+    );
+
+    document
+        .getElementById("city-form")
+        .reset();
+
+    if (city) {
+
+        document.getElementById(
+            "city-modal-eyebrow"
+        ).textContent =
+            "Admin · Edit city";
+
+        document.getElementById(
+            "city-modal-title"
+        ).textContent =
+            "Edit city";
+
+        document.getElementById(
+            "city-id"
+        ).value = city.id;
+
+        document.getElementById(
+            "city-name"
+        ).value = city.name || "";
+
+        document.getElementById(
+            "city-country"
+        ).value = city.country || "";
+
+    } else {
+
+        document.getElementById(
+            "city-modal-eyebrow"
+        ).textContent =
+            "Admin · New city";
+
+        document.getElementById(
+            "city-modal-title"
+        ).textContent =
+            "Add city";
+
+        document.getElementById(
+            "city-id"
+        ).value = "";
+    }
+
+    openModal(
+        "city-modal-overlay"
+    );
+}
+
+
+/* ============================================================
+   39f. ADMIN — SAVE CITY
+   ============================================================ */
+
+document
+    .getElementById("city-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const errorElement =
+                document.getElementById(
+                    "city-error"
+                );
+
+            errorElement.classList.remove(
+                "show"
+            );
+
+            const id =
+                document.getElementById(
+                    "city-id"
+                ).value;
+
+            const payload = {
+
+                name:
+                    document
+                        .getElementById(
+                            "city-name"
+                        )
+                        .value
+                        .trim(),
+
+                country:
+                    document
+                        .getElementById(
+                            "city-country"
+                        )
+                        .value
+                        .trim()
+            };
+
+            try {
+
+                const res =
+                    await authAjax(
+                        id
+                            ? `/api/cities/${id}`
+                            : "/api/cities",
+                        {
+                            method:
+                                id
+                                    ? "PUT"
+                                    : "POST",
+
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    const body =
+                        await res
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    throw new Error(
+                        body.message ||
+                        "Could not save the city."
+                    );
+                }
+
+                closeModal(
+                    "city-modal-overlay"
+                );
+
+                showToast(
+                    id
+                        ? "City updated."
+                        : "City added."
+                );
+
+                loadAdminCities();
+
+            } catch (error) {
+
+                errorElement.textContent =
+                    error.message ||
+                    "Could not reach the server.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+            }
+        }
+    );
+
+
+/* ============================================================
+   39g. ADMIN — DELETE CITY
+   ============================================================ */
+
+async function deleteCity(id) {
+
+    if (
+        !confirm(
+            "Delete this city? This cannot be undone."
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        const res =
+            await authAjax(
+                `/api/cities/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        if (
+            !res.ok &&
+            res.status !== 204
+        ) {
+
+            throw new Error(
+                "Could not delete the city."
+            );
+        }
+
+        showToast(
+            "City deleted."
+        );
+
+        loadAdminCities();
+
+    } catch (error) {
+
+        showToast(
+            error.message ||
+            "Could not delete the city."
         );
     }
 }
