@@ -2525,3 +2525,85 @@ async function deleteHotel(id) {
 
 
 
+// == admin select hotel ===
+
+
+function renderRoomHotelSelect() {
+
+    const select =
+        document.getElementById(
+            "room-hotel-select"
+        );
+
+    const current =
+        select.value;
+
+    select.innerHTML =
+        `
+            <option value="">
+                Select a hotel…
+            </option>
+        ` +
+
+        apiHotels
+            .map(
+                hotel =>
+                    `<option value="${hotel.id}">
+                        ${hotel.name}
+                    </option>`
+            )
+            .join("");
+
+    if (current) {
+        select.value =
+            current;
+    }
+}
+
+document
+    .getElementById(
+        "room-hotel-select"
+    )
+    .addEventListener(
+        "change",
+        event => {
+
+            selectedRoomHotelId =
+                event.target.value
+                    ? Number(
+                        event.target.value
+                    )
+                    : null;
+
+            document.getElementById(
+                "add-room-btn"
+            ).disabled =
+                !selectedRoomHotelId;
+
+            if (
+                selectedRoomHotelId
+            ) {
+
+                loadAdminRooms(
+                    selectedRoomHotelId
+                );
+
+            } else {
+
+                document.querySelector(
+                    "#admin-rooms-table tbody"
+                ).innerHTML = "";
+
+                const empty =
+                    document.getElementById(
+                        "admin-rooms-empty"
+                    );
+
+                empty.classList.remove("is-hidden");
+
+                empty.textContent =
+                    "Pick a hotel above to see and manage its rooms.";
+            }
+        }
+    );
+
