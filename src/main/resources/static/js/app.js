@@ -2637,3 +2637,52 @@ async function loadAdminRooms(hotelId) {
 }
 
 
+
+
+
+
+
+
+
+
+
+//====  admin room table ===
+
+
+function renderAdminRooms() {
+    const tbody = document.querySelector("#admin-rooms-table tbody");
+    const empty = document.getElementById("admin-rooms-empty");
+    const template = document.getElementById("admin-room-row-template");
+
+    tbody.replaceChildren();
+
+    if (apiRoomsForHotel.length === 0) {
+        empty.textContent = "This hotel has no rooms yet — add the first one above.";
+        empty.classList.remove("is-hidden");
+        return;
+    }
+
+    empty.classList.add("is-hidden");
+
+    apiRoomsForHotel.forEach(room => {
+        const row = template.content.cloneNode(true);
+        const root = row.querySelector("tr");
+        root.querySelector(".admin-room-number").textContent = room.roomNumber;
+        root.querySelector(".admin-room-floor").textContent = room.floorNo != null ? room.floorNo : "—";
+        root.querySelector(".admin-room-type").textContent = room.roomType;
+        root.querySelector(".admin-room-price").textContent = fmtLKR(room.pricePerNight);
+        const status = root.querySelector(".admin-room-status");
+        status.classList.add(`badge-${(room.status || "available").toLowerCase()}`);
+        status.textContent = room.status;
+
+        const editButton = root.querySelector("[data-edit]");
+        const deleteButton = root.querySelector("[data-delete]");
+        editButton.dataset.edit = room.id;
+        deleteButton.dataset.delete = room.id;
+        editButton.addEventListener("click", () => openRoomModal(room));
+        deleteButton.addEventListener("click", () => deleteRoom(room.id));
+        tbody.appendChild(row);
+    });
+}
+
+
