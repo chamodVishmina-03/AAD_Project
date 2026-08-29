@@ -621,3 +621,140 @@ org.springframework.web.servlet.resource.NoResourceFoundException: No static res
 2026-08-29T22:54:06.809+05:30  INFO 7056 --- [Hotel_Management_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-08-29T22:54:06.812+05:30  INFO 7056 --- [Hotel_Management_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-08-29T22:54:06.821+05:30  INFO 7056 --- [Hotel_Management_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-08-29T22:58:30.738+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : Starting HotelManagementSystemApplication using Java 25.0.1 with PID 12604 (E:\projects\Hotel_Management_System\Hotel_Management_System\target\classes started by ASUS in E:\projects\Hotel_Management_System\Hotel_Management_System)
+2026-08-29T22:58:30.740+05:30 DEBUG 12604 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-08-29T22:58:30.741+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-08-29T22:58:30.781+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-08-29T22:58:30.781+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-08-29T22:58:31.545+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-29T22:58:31.637+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 86 ms. Found 16 JPA repository interfaces.
+2026-08-29T22:58:32.243+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-08-29T22:58:32.256+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-29T22:58:32.256+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-08-29T22:58:32.294+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1513 ms
+2026-08-29T22:58:32.449+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-08-29T22:58:32.509+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-08-29T22:58:32.858+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-29T22:58:32.882+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-08-29T22:58:33.051+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@7fd52f9b
+2026-08-29T22:58:33.053+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-08-29T22:58:33.129+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/hotel_management_new?autoReconnect=true&createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.5
+	Default catalog/schema: hotel_management_new/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-29T22:58:34.508+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-29T22:58:34.597+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-29T22:58:34.659+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-29T22:58:34.882+05:30 DEBUG 12604 --- [Hotel_Management_System] [restartedMain] c.i.H.security.JwtAuthenticationFilter   : Filter 'jwtAuthenticationFilter' configured for use
+2026-08-29T22:58:35.192+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-08-29T22:58:35.192+05:30  WARN 12604 --- [Hotel_Management_System] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-08-29T22:58:36.218+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page: class path resource [static/index.html]
+2026-08-29T22:58:36.573+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-08-29T22:58:36.579+05:30  INFO 12604 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : Started HotelManagementSystemApplication in 6.271 seconds (process running for 6.729)
+2026-08-29T22:58:45.981+05:30  INFO 12604 --- [Hotel_Management_System] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-29T22:58:45.981+05:30  INFO 12604 --- [Hotel_Management_System] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-08-29T22:58:45.994+05:30  INFO 12604 --- [Hotel_Management_System] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 13 ms
+2026-08-29T22:58:46.224+05:30  WARN 12604 --- [Hotel_Management_System] [http-nio-8080-exec-4] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.web.servlet.resource.NoResourceFoundException: No static resource favicon.ico for request '/favicon.ico'.]
+2026-08-29T22:59:27.283+05:30  INFO 12604 --- [Hotel_Management_System] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-29T22:59:27.289+05:30  INFO 12604 --- [Hotel_Management_System] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-08-29T22:59:27.294+05:30  INFO 12604 --- [Hotel_Management_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-29T22:59:27.297+05:30  INFO 12604 --- [Hotel_Management_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-08-29T22:59:27.307+05:30  INFO 12604 --- [Hotel_Management_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-08-29T22:59:29.992+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : Starting HotelManagementSystemApplication using Java 25.0.1 with PID 5896 (E:\projects\Hotel_Management_System\Hotel_Management_System\target\classes started by ASUS in E:\projects\Hotel_Management_System\Hotel_Management_System)
+2026-08-29T22:59:29.996+05:30 DEBUG 5896 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-08-29T22:59:29.998+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-08-29T22:59:30.060+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-08-29T22:59:30.060+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-08-29T22:59:30.895+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-29T22:59:30.992+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 87 ms. Found 16 JPA repository interfaces.
+2026-08-29T22:59:31.793+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-08-29T22:59:31.808+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-29T22:59:31.809+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-08-29T22:59:31.850+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1790 ms
+2026-08-29T22:59:32.027+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-08-29T22:59:32.082+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-08-29T22:59:32.660+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-29T22:59:32.729+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-08-29T22:59:32.978+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@30f86bcb
+2026-08-29T22:59:32.980+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-08-29T22:59:33.078+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/hotel_management_new?autoReconnect=true&createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.5
+	Default catalog/schema: hotel_management_new/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-29T22:59:34.754+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-29T22:59:34.877+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-29T22:59:34.973+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-29T22:59:35.184+05:30 DEBUG 5896 --- [Hotel_Management_System] [restartedMain] c.i.H.security.JwtAuthenticationFilter   : Filter 'jwtAuthenticationFilter' configured for use
+2026-08-29T22:59:35.654+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-08-29T22:59:35.655+05:30  WARN 5896 --- [Hotel_Management_System] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-08-29T22:59:36.887+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page: class path resource [static/index.html]
+2026-08-29T22:59:37.508+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-08-29T22:59:37.518+05:30  INFO 5896 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : Started HotelManagementSystemApplication in 8.1 seconds (process running for 9.263)
+2026-08-29T23:02:20.719+05:30  INFO 5896 --- [Hotel_Management_System] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-29T23:02:20.727+05:30  INFO 5896 --- [Hotel_Management_System] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-08-29T23:02:20.732+05:30  INFO 5896 --- [Hotel_Management_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-29T23:02:20.736+05:30  INFO 5896 --- [Hotel_Management_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-08-29T23:02:20.744+05:30  INFO 5896 --- [Hotel_Management_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-08-29T23:08:19.883+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : Starting HotelManagementSystemApplication using Java 25.0.1 with PID 11080 (E:\projects\Hotel_Management_System\Hotel_Management_System\target\classes started by ASUS in E:\projects\Hotel_Management_System\Hotel_Management_System)
+2026-08-29T23:08:19.889+05:30 DEBUG 11080 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : Running with Spring Boot v4.1.0, Spring v7.0.8
+2026-08-29T23:08:19.890+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-08-29T23:08:19.977+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-08-29T23:08:19.977+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-08-29T23:08:21.059+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-29T23:08:21.191+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 118 ms. Found 16 JPA repository interfaces.
+2026-08-29T23:08:22.241+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-08-29T23:08:22.263+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-08-29T23:08:22.264+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-08-29T23:08:22.306+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 2328 ms
+2026-08-29T23:08:22.534+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-08-29T23:08:22.598+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-08-29T23:08:23.139+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-29T23:08:23.174+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-08-29T23:08:23.402+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@75423f79
+2026-08-29T23:08:23.406+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-08-29T23:08:23.565+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:mysql://localhost:3306/hotel_management_new?autoReconnect=true&createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC]
+	Database driver: MySQL Connector/J
+	Database dialect: MySQLDialect
+	Database version: 9.5
+	Default catalog/schema: hotel_management_new/undefined
+	Autocommit mode: undefined/unknown
+	Isolation level: REPEATABLE_READ [default REPEATABLE_READ]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-08-29T23:08:25.782+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-29T23:08:25.903+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-29T23:08:26.009+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-29T23:08:26.420+05:30 DEBUG 11080 --- [Hotel_Management_System] [restartedMain] c.i.H.security.JwtAuthenticationFilter   : Filter 'jwtAuthenticationFilter' configured for use
+2026-08-29T23:08:27.133+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-08-29T23:08:27.134+05:30  WARN 11080 --- [Hotel_Management_System] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-08-29T23:08:28.456+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page: class path resource [static/index.html]
+2026-08-29T23:08:28.835+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-08-29T23:08:28.842+05:30  INFO 11080 --- [Hotel_Management_System] [restartedMain] c.i.H.HotelManagementSystemApplication   : Started HotelManagementSystemApplication in 9.736 seconds (process running for 10.707)
+2026-08-29T23:08:36.464+05:30  INFO 11080 --- [Hotel_Management_System] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-08-29T23:08:36.464+05:30  INFO 11080 --- [Hotel_Management_System] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-08-29T23:08:36.466+05:30  INFO 11080 --- [Hotel_Management_System] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-08-29T23:08:46.005+05:30  INFO 11080 --- [Hotel_Management_System] [http-nio-8080-exec-6] c.i.H.service.impl.AuthServiceImpl       : User admin@hotel.com logged in
+2026-08-29T23:14:14.549+05:30  INFO 11080 --- [Hotel_Management_System] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-08-29T23:14:14.557+05:30  INFO 11080 --- [Hotel_Management_System] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-08-29T23:14:14.564+05:30  INFO 11080 --- [Hotel_Management_System] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-08-29T23:14:14.568+05:30  INFO 11080 --- [Hotel_Management_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-08-29T23:14:14.573+05:30  INFO 11080 --- [Hotel_Management_System] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

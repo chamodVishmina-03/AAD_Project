@@ -1,18 +1,8 @@
-
-
-// =====================================   Configuration ======================================
+// configuration and globle data
 
 const API_BASE = "";
 
-const gradients = {
-    indigo: "linear-gradient(135deg,#4F46E5,#7C3AED)",
-    teal: "linear-gradient(135deg,#0EA5A4,#0284C7)",
-    amber: "linear-gradient(135deg,#F59E0B,#DC2626)",
-    sky: "linear-gradient(135deg,#0EA5E9,#4F46E5)",
-    rose: "linear-gradient(135deg,#EC4899,#7C3AED)"
-};
-
-const gradientList = Object.values(gradients);
+const GRADIENT_COUNT = 5;
 
 let hotels = [];
 let roomTypesCache = [];
@@ -25,9 +15,7 @@ let session = null;
 
 
 
-
-//================================ Common functions    ==============================
-
+// helper function
 
 function fmtLKR(n) {
     return "LKR " + Number(n).toLocaleString("en-LK");
@@ -41,20 +29,6 @@ function roomTypeInfo(name) {
     };
 }
 
-function typeIconSvg() {
-    return `
-        <svg class="icon"
-             viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor">
-            <path d="M3 18v-7a2 2 0 012-2h14a2 2 0 012 2v7
-                     M3 18h18
-                     M3 18v2
-                     M21 18v2
-                     M7 9V6a2 2 0 012-2h6a2 2 0 012 2v3"/>
-        </svg>
-    `;
-}
 
 function showToast(text) {
     const toast = document.getElementById("toast");
@@ -76,10 +50,65 @@ function closeModal(id) {
 }
 
 
-//  get room data from backend endpoint
+
+
+
+
+
+
+// ajax calls XMLHttpRequest object and get data from backend
+
+function ajaxRequest(url, options = {}) {
+    return new Promise((resolve, reject) => {
+        const method = options.method || "GET";
+        const xhr = new XMLHttpRequest();
+
+        xhr.open(method, url, true);
+
+        const headers = options.headers || {};
+        Object.keys(headers).forEach(key => {
+            xhr.setRequestHeader(key, headers[key]);
+        });
+
+        xhr.onload = function () {
+            const status = xhr.status;
+            const ok = status >= 200 && status < 300;
+
+            resolve({
+                ok,
+                status,
+                json: function () {
+                    return new Promise((res, rej) => {
+                        try {
+                            res(xhr.responseText ? JSON.parse(xhr.responseText) : {});
+                        } catch (e) {
+                            rej(e);
+                        }
+                    });
+                }
+            });
+        };
+
+        xhr.onerror = function () {
+            reject(new Error("Network error — could not reach the server."));
+        };
+
+        xhr.send(options.body || null);
+    });
+}
+
+
+
+
+
+
+
+
+// public data roomtype
+
 async function loadPublicRoomTypes() {
     try {
-        const res = await fetch(`${API_BASE}/api/room-types`);
+        const res = await ajaxRequest(`${API_BASE}/api/room-types`);
 
         roomTypesCache = res.ok
             ? await res.json()
@@ -94,23 +123,24 @@ async function loadPublicRoomTypes() {
 
 
 
-//  get hotels and rooms from back end show that details on frontend
+// public data hotels
+
 async function loadPublicHotels() {
 
     const grid = document.getElementById("hotel-grid");
     const empty = document.getElementById("hotel-grid-empty");
 
-    empty.style.display = "none";
+    empty.classList.add("is-hidden");
 
-    grid.innerHTML = `
-        <div class="empty-state">
-            Loading hotels…
-        </div>
-    `;
+    grid.replaceChildren();
+    const loading = document.createElement("div");
+    loading.className = "empty-state";
+    loading.textContent = "Loading hotels…";
+    grid.appendChild(loading);
 
     try {
 
-        const res = await fetch(`${API_BASE}/api/hotels`);
+        const res = await ajaxRequest(`${API_BASE}/api/hotels`);
 
         if (!res.ok) {
             throw new Error("Could not load hotels.");
@@ -125,7 +155,7 @@ async function loadPublicHotels() {
 
                 try {
 
-                    const rRes = await fetch(
+                    const rRes = await ajaxRequest(
                         `${API_BASE}/api/rooms/hotel/${h.id}`
                     );
 
@@ -148,9 +178,7 @@ async function loadPublicHotels() {
                     starRating: h.starRating,
                     description: h.description,
 
-                    grad: gradientList[
-                    i % gradientList.length
-                        ],
+                    gradientClass: `gradient-${i % GRADIENT_COUNT}`,
 
                     rooms: rooms.map(r => ({
                         id: r.id,
@@ -171,9 +199,9 @@ async function loadPublicHotels() {
 
         hotels = [];
 
-        grid.innerHTML = "";
+        grid.replaceChildren();
 
-        empty.style.display = "block";
+        empty.classList.remove("is-hidden");
 
         empty.textContent =
             "Could not reach the server. Is the backend running?";
@@ -192,141 +220,69 @@ async function loadPublicHotels() {
 
 
 
-// ========================      Hotel ========================
 
+
+
+// Home page Hotel grid
 
 function renderHotelGrid() {
-
     const grid = document.getElementById("hotel-grid");
     const empty = document.getElementById("hotel-grid-empty");
+    const template = document.getElementById("hotel-card-template");
 
     const filtered = currentCityFilter
         ? hotels.filter(h => h.city === currentCityFilter)
         : hotels;
 
+    grid.replaceChildren();
+
     if (filtered.length === 0) {
-
-        grid.innerHTML = "";
-
-        empty.textContent =
-            hotels.length === 0
-                ? "No hotels yet — check back soon."
-                : "No hotels match that city — try clearing the search.";
-
-        empty.style.display = "block";
-
+        empty.textContent = hotels.length === 0
+            ? "No hotels yet — check back soon."
+            : "No hotels match that city — try clearing the search.";
+        empty.classList.add("is-visible");
+        empty.classList.remove("is-hidden");
         return;
     }
 
-    empty.style.display = "none";
+    empty.classList.add("is-hidden");
+    empty.classList.remove("is-visible");
 
-    grid.innerHTML = filtered.map(h => {
-
+    filtered.forEach(h => {
+        const card = template.content.cloneNode(true);
+        const root = card.querySelector(".hotel-card");
+        const banner = card.querySelector(".hotel-banner");
         const cheapest = h.rooms.length
-            ? Math.min(
-                ...h.rooms.map(r => r.pricePerNight)
-            )
+            ? Math.min(...h.rooms.map(r => r.pricePerNight))
             : null;
-
         const initials = h.name
             .split(" ")
             .map(w => w[0])
             .slice(0, 2)
             .join("");
 
-        return `
-            <div class="hotel-card" data-id="${h.id}">
+        root.dataset.id = h.id;
+        banner.classList.add(h.gradientClass);
+        card.querySelector(".monogram").textContent = initials;
+        card.querySelector(".rating-badge").textContent = `★ ${h.starRating != null ? h.starRating : "—"}`;
+        card.querySelector(".hotel-name").textContent = h.name;
+        card.querySelector(".hotel-location-text").textContent = `${h.city || "—"}${h.country ? ", " + h.country : ""}`;
+        card.querySelector(".hotel-desc").textContent = h.description || "";
+        card.querySelector(".price").textContent = cheapest != null ? `${fmtLKR(cheapest)} / night` : "No rooms yet";
 
-                <div class="hotel-banner"
-                     style="background:${h.grad};">
-
-                    <span class="monogram">
-                        ${initials}
-                    </span>
-
-                    <span class="rating-badge">
-                        ★ ${h.starRating != null
-            ? h.starRating
-            : "—"}
-                    </span>
-
-                </div>
-
-                <div class="hotel-body">
-
-                    <div class="hotel-name">
-                        ${h.name}
-                    </div>
-
-                    <div class="hotel-city">
-
-                        <svg class="icon"
-                             style="width:12px;height:12px;"
-                             viewBox="0 0 24 24"
-                             fill="none"
-                             stroke="currentColor">
-
-                            <path d="M21 10c0 6-9 12-9 12
-                                     s-9-6-9-12a9 9 0 0118 0z"/>
-
-                            <circle cx="12"
-                                    cy="10"
-                                    r="3"/>
-
-                        </svg>
-
-                        ${h.city || "—"}
-                        ${h.country
-            ? ", " + h.country
-            : ""}
-                    </div>
-
-                    <div class="hotel-desc">
-                        ${h.description || ""}
-                    </div>
-
-                    <div class="hotel-footer">
-
-                        <div class="price">
-
-                            ${cheapest != null
-            ? fmtLKR(cheapest)
-            : "No rooms yet"}
-
-                            ${cheapest != null
-            ? "<span> / night</span>"
-            : ""}
-
-                        </div>
-
-                        <div class="view-btn">
-                            View rooms →
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-        `;
-
-    }).join("");
-
-    grid.querySelectorAll(".hotel-card").forEach(card => {
-
-        card.addEventListener("click", () => {
-
-            openHotel(
-                Number(card.dataset.id)
-            );
-
-        });
-
+        root.addEventListener("click", () => openHotel(Number(root.dataset.id)));
+        grid.appendChild(card);
     });
 }
 
 
-// ============  filter cities===============
+
+
+
+
+
+
+// Home page city filter
 
 function populateCitySelect() {
 
@@ -375,7 +331,10 @@ document
 
 
 
-// =======  show  num of hotels ,rooms,available rooms  =======
+
+
+
+// home filter tabs update
 
 function renderStats() {
 
@@ -402,7 +361,7 @@ function renderStats() {
 
 
 
-//==========   hotel detail view =========
+// hotel details view
 
 function openHotel(id) {
 
@@ -413,9 +372,11 @@ function openHotel(id) {
 
     currentHotel = hotel;
 
-    document.getElementById(
-        "d-banner"
-    ).style.background = hotel.grad;
+    const detailBanner = document.getElementById("d-banner");
+    detailBanner.classList.remove(
+        "gradient-0", "gradient-1", "gradient-2", "gradient-3", "gradient-4"
+    );
+    detailBanner.classList.add(hotel.gradientClass);
 
     document.getElementById(
         "d-eyebrow"
@@ -431,14 +392,8 @@ function openHotel(id) {
     ).textContent =
         hotel.description || "";
 
-    document.getElementById(
-        "d-rating"
-    ).innerHTML =
-        `★ ${
-            hotel.starRating != null
-                ? hotel.starRating
-                : "—"
-        } rating`;
+    document.getElementById("d-rating").textContent =
+        `★ ${hotel.starRating != null ? hotel.starRating : "—"} rating`;
 
     document.getElementById(
         "d-address"
@@ -456,153 +411,55 @@ function openHotel(id) {
         hotel.email || "—";
 
 
-    /* Room Table  */
+    /* ---------- Room Table ---------- */
+    const tbody = document.querySelector("#rooms-table tbody");
+    const roomTemplate = document.getElementById("room-row-template");
+    const emptyRoomTemplate = document.getElementById("room-empty-row-template");
+    tbody.replaceChildren();
 
-    const tbody =
-        document.querySelector(
-            "#rooms-table tbody"
-        );
+    if (!hotel.rooms.length) {
+        tbody.appendChild(emptyRoomTemplate.content.cloneNode(true));
+    } else {
+        hotel.rooms.forEach(room => {
+            const row = roomTemplate.content.cloneNode(true);
+            row.querySelector(".room-number").textContent = room.roomNumber;
+            row.querySelector(".room-floor").textContent = room.floorNo != null ? room.floorNo : "—";
+            row.querySelector(".room-type").textContent = room.roomType;
+            row.querySelector(".room-price").textContent = fmtLKR(room.pricePerNight);
+            const status = row.querySelector(".room-status");
+            status.classList.add(`badge-${(room.status || "").toLowerCase()}`);
+            status.textContent = room.status;
 
-    tbody.innerHTML =
-        hotel.rooms.length
+            const amenities = row.querySelector(".room-amenities");
+            (room.amenities || []).forEach(amenity => {
+                const tag = document.createElement("span");
+                tag.className = "amenity-tag";
+                tag.textContent = amenity;
+                amenities.appendChild(tag);
+            });
+            tbody.appendChild(row);
+        });
+    }
 
-            ? hotel.rooms.map(room => `
-                <tr>
+    /* ---------- Room Categories ---------- */
+    const usedTypes = [...new Set(hotel.rooms.map(r => r.roomType))];
+    const typeWrap = document.getElementById("type-cards");
+    const typeTemplate = document.getElementById("type-card-template");
+    typeWrap.replaceChildren();
 
-                    <td class="mono-cell">
-                        ${room.roomNumber}
-                    </td>
+    usedTypes.forEach(typeName => {
+        const type = roomTypeInfo(typeName);
+        const priced = hotel.rooms.filter(r => r.roomType === typeName);
+        const min = Math.min(...priced.map(r => r.pricePerNight));
+        const maxGuests = type.maxOccupancy || 1;
+        const card = typeTemplate.content.cloneNode(true);
 
-                    <td class="mono-cell">
-                        ${
-                room.floorNo != null
-                    ? room.floorNo
-                    : "—"
-            }
-                    </td>
-
-                    <td>
-                        ${room.roomType}
-                    </td>
-
-                    <td class="mono-cell">
-                        ${fmtLKR(
-                room.pricePerNight
-            )}
-                    </td>
-
-                    <td>
-                        <span class="badge badge-${
-                room.status.toLowerCase()
-            }">
-                            ${room.status}
-                        </span>
-                    </td>
-
-                    <td>
-                        ${room.amenities
-                .map(
-                    a =>
-                        `<span class="amenity-tag">
-                                        ${a}
-                                    </span>`
-                )
-                .join("")}
-                    </td>
-
-                </tr>
-            `).join("")
-
-            : `
-                <tr>
-                    <td colspan="6"
-                        style="
-                            text-align:center;
-                            color:var(--text-muted);
-                        ">
-                        No rooms added for this hotel yet.
-                    </td>
-                </tr>
-            `;
-
-
-    /* Room Categories  */
-
-    const usedTypes = [
-        ...new Set(
-            hotel.rooms.map(
-                r => r.roomType
-            )
-        )
-    ];
-
-    const typeWrap =
-        document.getElementById(
-            "type-cards"
-        );
-
-    typeWrap.innerHTML =
-        usedTypes.length
-
-            ? usedTypes.map(typeName => {
-
-                const type =
-                    roomTypeInfo(typeName);
-
-                const priced =
-                    hotel.rooms.filter(
-                        r =>
-                            r.roomType === typeName
-                    );
-
-                const min =
-                    Math.min(
-                        ...priced.map(
-                            r => r.pricePerNight
-                        )
-                    );
-
-                const maxGuests =
-                    type.maxOccupancy || 1;
-
-                return `
-                    <div class="type-card">
-
-                        <div class="icon-wrap">
-                            ${typeIconSvg()}
-                        </div>
-
-                        <div class="tname">
-                            ${type.name}
-                        </div>
-
-                        <div class="tdesc">
-                            ${type.description || ""}
-                        </div>
-
-                        <div class="tfoot">
-
-                            <span class="cap">
-                                Max ${maxGuests}
-                                guest${
-                    maxGuests > 1
-                        ? "s"
-                        : ""
-                }
-                            </span>
-
-                            <span class="price">
-                                from ${fmtLKR(min)}
-                            </span>
-
-                        </div>
-
-                    </div>
-                `;
-
-            }).join("")
-
-            : "";
+        card.querySelector(".tname").textContent = type.name;
+        card.querySelector(".tdesc").textContent = type.description || "";
+        card.querySelector(".cap").textContent = `Max ${maxGuests} guest${maxGuests > 1 ? "s" : ""}`;
+        card.querySelector(".price").textContent = `from ${fmtLKR(min)}`;
+        typeWrap.appendChild(card);
+    });
 
     showView("detail");
 }
@@ -612,8 +469,7 @@ function openHotel(id) {
 
 
 
-
-//========= page navigation ========
+// == page nav ==
 
 function showView(name) {
 
@@ -688,7 +544,9 @@ document
 
 
 
-// run pb room type and public hotels in one time
+
+
+// data load room type and hotel
 
 Promise.all([
     loadPublicRoomTypes(),
@@ -696,8 +554,11 @@ Promise.all([
 ]);
 
 
-//============= sesion ==============
 
+
+
+
+// load session
 
 function loadSession() {
 
@@ -721,8 +582,6 @@ function loadSession() {
     renderAuthState();
 }
 
-
-
 function saveSession(data) {
 
     session = data;
@@ -734,9 +593,6 @@ function saveSession(data) {
 
     renderAuthState();
 }
-
-
-
 
 function clearSession() {
 
@@ -752,7 +608,9 @@ function clearSession() {
 
 
 
+
 // ==  if user log change interface ===
+
 function renderAuthState() {
 
     const buttons =
@@ -767,9 +625,9 @@ function renderAuthState() {
 
     if (session) {
 
-        buttons.style.display = "none";
+        buttons.classList.add("is-hidden");
 
-        chip.style.display = "flex";
+        chip.classList.add("is-flex");
 
         document.getElementById(
             "user-name"
@@ -799,9 +657,9 @@ function renderAuthState() {
 
     } else {
 
-        buttons.style.display = "flex";
+        buttons.classList.remove("is-hidden");
 
-        chip.style.display = "none";
+        chip.classList.remove("is-flex");
 
         document
             .getElementById("user-menu")
@@ -815,7 +673,8 @@ function renderAuthState() {
 
 
 
-// ======= authentication  models==========
+//====  authentication medel =====
+
 document
     .getElementById("open-login")
     .addEventListener(
@@ -903,9 +762,8 @@ document
 
 
 
+//====== user menu ====
 
-
-// ===========  user menu ==========
 document
     .getElementById("user-avatar")
     .addEventListener(
@@ -944,8 +802,7 @@ document.addEventListener(
 
 
 
-
-// =========== Login  ===============
+// ===== login  =========
 
 document
     .getElementById("login-form")
@@ -982,7 +839,7 @@ document
             try {
 
                 const res =
-                    await fetch(
+                    await ajaxRequest(
                         `${API_BASE}/api/auth/login`,
                         {
                             method: "POST",
@@ -1054,12 +911,7 @@ document
 
 
 
-
-
-
-
-
-// ==========   register =============
+// ===  register =========
 
 document
     .getElementById("register-form")
@@ -1112,7 +964,7 @@ document
             try {
 
                 const res =
-                    await fetch(
+                    await ajaxRequest(
                         `${API_BASE}/api/auth/register`,
                         {
                             method: "POST",
@@ -1190,9 +1042,7 @@ document
 
 
 
-
-//========  logout  ===============
-
+// ==== logout ====
 
 document
     .getElementById("logout-btn")
@@ -1207,7 +1057,7 @@ document
 
                 try {
 
-                    await fetch(
+                    await ajaxRequest(
                         `${API_BASE}/api/auth/logout`,
                         {
                             method: "POST",
@@ -1241,542 +1091,10 @@ document
     );
 
 
+/* ============================================================
+   18. AUTHENTICATED AJAX HELPER
+   ============================================================ */
 
-
-// = ===== authenticated fetch helper ======
-
-function authFetch(
-    path,
-    options = {}
-) {
-
-    const headers =
-        Object.assign(
-            {
-                "Content-Type":
-                    "application/json"
-            },
-            options.headers || {}
-        );
-
-    if (
-        session &&
-        session.accessToken
-    ) {
-
-        headers["Authorization"] =
-            `Bearer ${session.accessToken}`;
-    }
-
-    return fetch(
-        `${API_BASE}${path}`,
-        Object.assign(
-            {},
-            options,
-            { headers }
-        )
-    );
-}
-
-
-
-
-
-//==============================    Admin data  ================================================
-
-
-let apiCities = [];
-let apiRoomTypesReal = [];
-let apiHotels = [];
-let selectedRoomHotelId = null;
-let apiRoomsForHotel = [];
-
-
-
-
-// admin permission checking
-
-function isStaffOrAdmin() {
-
-    return !!(
-        session &&
-        session.roles &&
-        session.roles.some(
-            role =>
-                role === "ADMIN" ||
-                role === "STAFF" ||
-                role === "ROLE_ADMIN" ||
-                role === "ROLE_STAFF"
-        )
-    );
-}
-
-function isAdmin() {
-
-    return !!(
-        session &&
-        session.roles &&
-        session.roles.some(
-            role =>
-                role === "ADMIN" ||
-                role === "ROLE_ADMIN"
-        )
-    );
-}
-
-
-
-//    admin nav view
-
-
-function refreshAdminNavVisibility() {
-
-    const show =
-        isStaffOrAdmin();
-
-    document.getElementById(
-        "nav-admin"
-    ).style.display =
-        show
-            ? "inline-flex"
-            : "none";
-
-    document.getElementById(
-        "admin-menu-link"
-    ).style.display =
-        show
-            ? "block"
-            : "none";
-}
-
-const originalRenderAuthState =
-    renderAuthState;
-
-renderAuthState = function () {
-
-    originalRenderAuthState();
-
-    refreshAdminNavVisibility();
-
-    if (
-        !isStaffOrAdmin() &&
-        document
-            .getElementById(
-                "view-admin"
-            )
-            .classList.contains(
-            "active"
-        )
-    ) {
-
-        showView("home");
-    }
-};
-
-refreshAdminNavVisibility();
-
-
-
-
-
-// admin enter pannel
-
-
-function enterAdmin() {
-
-    if (!isStaffOrAdmin()) {
-        return;
-    }
-
-    document
-        .getElementById("user-menu")
-        .classList.remove("open");
-
-    showView("admin");
-
-    loadAdminHotels();
-}
-
-document
-    .getElementById("nav-admin")
-    .addEventListener(
-        "click",
-        enterAdmin
-    );
-
-document
-    .getElementById("admin-menu-link")
-    .addEventListener(
-        "click",
-        enterAdmin
-    );
-
-document
-    .getElementById("admin-back-link")
-    .addEventListener(
-        "click",
-        () => showView("home")
-    );
-
-
-// admin tabs
-
-
-document
-    .getElementById("tab-hotels")
-    .addEventListener(
-        "click",
-        () => setAdminTab("hotels")
-    );
-
-document
-    .getElementById("tab-rooms")
-    .addEventListener(
-        "click",
-        () => setAdminTab("rooms")
-    );
-
-function setAdminTab(tab) {
-
-    document
-        .getElementById("tab-hotels")
-        .classList.toggle(
-        "active",
-        tab === "hotels"
-    );
-
-    document
-        .getElementById("tab-rooms")
-        .classList.toggle(
-        "active",
-        tab === "rooms"
-    );
-
-    document
-        .getElementById("panel-hotels")
-        .classList.toggle(
-        "active",
-        tab === "hotels"
-    );
-
-    document
-        .getElementById("panel-rooms")
-        .classList.toggle(
-        "active",
-        tab === "rooms"
-    );
-
-    document
-        .getElementById(
-            "admin-panel-title"
-        )
-        .textContent =
-        tab === "hotels"
-            ? "Hotels"
-            : "Rooms";
-
-    if (
-        tab === "rooms" &&
-        apiHotels.length === 0
-    ) {
-
-        loadAdminHotels();
-    }
-}
-
-
-
-// admin load cities
-
-
-
-async function loadCities() {
-
-    try {
-
-        const res =
-            await fetch(
-                `${API_BASE}/api/cities`
-            );
-
-        apiCities =
-            res.ok
-                ? await res.json()
-                : [];
-
-    } catch (e) {
-
-        apiCities = [];
-    }
-
-    const select =
-        document.getElementById(
-            "hotel-city"
-        );
-
-    select.innerHTML =
-        apiCities
-            .map(
-                city =>
-                    `<option value="${city.id}">
-                        ${city.name}, ${city.country}
-                    </option>`
-            )
-            .join("")
-
-        ||
-
-        `<option value="">
-            No cities found — add one via /api/cities
-        </option>`;
-}
-
-
-
-
-// admin load room types
-
-
-async function loadRoomTypesReal() {
-
-    try {
-
-        const res =
-            await fetch(
-                `${API_BASE}/api/room-types`
-            );
-
-        apiRoomTypesReal =
-            res.ok
-                ? await res.json()
-                : [];
-
-    } catch (e) {
-
-        apiRoomTypesReal = [];
-    }
-
-    const select =
-        document.getElementById(
-            "room-type"
-        );
-
-    select.innerHTML =
-        apiRoomTypesReal
-            .map(
-                type =>
-                    `<option value="${type.id}">
-                        ${type.name}
-                    </option>`
-            )
-            .join("")
-
-        ||
-
-        `<option value="">
-            No room types found — add one via /api/room-types
-        </option>`;
-}
-
-
-
-
-// admin load hotels
-
-
-async function loadAdminHotels() {
-
-    try {
-
-        const res =
-            await fetch(
-                `${API_BASE}/api/hotels`
-            );
-
-        apiHotels =
-            res.ok
-                ? await res.json()
-                : [];
-
-    } catch (e) {
-
-        apiHotels = [];
-    }
-
-    renderAdminHotels();
-    renderRoomHotelSelect();
-}
-
-
-
-
-
-// admin icon
-
-const editIconSvg = `
-    <svg class="icon"
-         viewBox="0 0 24 24"
-         fill="none"
-         stroke="currentColor">
-        <path d="M17 3a2.85 2.85 0 114 4L7.5 20.5
-                 2 22l1.5-5.5L17 3z"/>
-    </svg>
-`;
-
-const trashIconSvg = `
-    <svg class="icon"
-         viewBox="0 0 24 24"
-         fill="none"
-         stroke="currentColor">
-        <path d="M3 6h18
-                 M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2
-                 m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/>
-    </svg>
-`;
-
-
-
-
-
-
-
-// admin hotels table
-function renderAdminHotels() {
-
-    const tbody =
-        document.querySelector(
-            "#admin-hotels-table tbody"
-        );
-
-    const empty =
-        document.getElementById(
-            "admin-hotels-empty"
-        );
-
-    if (apiHotels.length === 0) {
-
-        tbody.innerHTML = "";
-
-        empty.style.display =
-            "block";
-
-        return;
-    }
-
-    empty.style.display =
-        "none";
-
-    tbody.innerHTML =
-        apiHotels.map(hotel => `
-            <tr>
-
-                <td style="font-weight:600;">
-                    ${hotel.name}
-                </td>
-
-                <td>
-                    ${hotel.cityName || "—"}
-                </td>
-
-                <td>
-                    ${hotel.address || "—"}
-                </td>
-
-                <td class="mono-cell">
-                    ${
-            hotel.starRating != null
-                ? "★ " +
-                hotel.starRating
-                : "—"
-        }
-                </td>
-
-                <td class="mono-cell">
-                    ${hotel.phone || "—"}
-                </td>
-
-                <td class="row-actions">
-
-                    <button
-                        class="icon-btn"
-                        data-edit="${hotel.id}"
-                        type="button"
-                        title="Edit">
-
-                        ${editIconSvg}
-
-                    </button>
-
-                    ${
-            isAdmin()
-                ? `
-                                    <button
-                                        class="icon-btn danger"
-                                        data-delete="${hotel.id}"
-                                        type="button"
-                                        title="Delete">
-    
-                                        ${trashIconSvg}
-    
-                                    </button>
-                            `
-                : ""
-        }
-
-                </td>
-
-            </tr>
-        `).join("");
-
-
-    tbody
-        .querySelectorAll("[data-edit]")
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    openHotelModal(
-                        apiHotels.find(
-                            hotel =>
-                                hotel.id ===
-                                Number(
-                                    button.dataset.edit
-                                )
-                        )
-                    );
-
-                }
-            );
-        });
-
-
-    tbody
-        .querySelectorAll("[data-delete]")
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                () => {
-
-                    deleteHotel(
-                        Number(
-                            button.dataset.delete
-                        )
-                    );
-
-                }
-            );
-        });
-}
-
-
-
-
-
-
-// == Ajax authentication helper ===
 function authAjax(
     path,
     options = {}
@@ -1811,11 +1129,9 @@ function authAjax(
 }
 
 
-
-
-
-
-// =====  admin  global data ====
+/* ============================================================
+   19. ADMIN — GLOBAL DATA
+   ============================================================ */
 
 let apiCities = [];
 let apiRoomTypesReal = [];
@@ -1824,9 +1140,9 @@ let selectedRoomHotelId = null;
 let apiRoomsForHotel = [];
 
 
-
-// ========  admin permission check====
-
+/* ============================================================
+   20. ADMIN — PERMISSION CHECK
+   ============================================================ */
 
 function isStaffOrAdmin() {
 
@@ -1857,11 +1173,9 @@ function isAdmin() {
 }
 
 
-
-
-
-// ==  ===  admin nav visibility =====
-
+/* ============================================================
+   21. ADMIN — NAVIGATION VISIBILITY
+   ============================================================ */
 
 function refreshAdminNavVisibility() {
 
@@ -1900,13 +1214,10 @@ renderAuthState = function () {
 refreshAdminNavVisibility();
 
 
+/* ============================================================
+   22. ADMIN — ENTER PANEL
+   ============================================================ */
 
-
-
-
-
-
-// =========  admin enter pannel ====
 function enterAdmin() {
 
     if (!isStaffOrAdmin()) {
@@ -1944,13 +1255,9 @@ document
     );
 
 
-
-
-
-
-
-//==========  admin tabs =========
-
+/* ============================================================
+   23. ADMIN — TABS
+   ============================================================ */
 
 document
     .getElementById("tab-hotels")
@@ -2015,15 +1322,9 @@ function setAdminTab(tab) {
 }
 
 
-
-
-
-
-
-
-
-// ===  admin load cities =======
-
+/* ============================================================
+   24. ADMIN — LOAD CITIES
+   ============================================================ */
 
 async function loadCities() {
 
@@ -2067,13 +1368,9 @@ async function loadCities() {
 }
 
 
-
-
-
-
-
-// ====== admin load roomtype =========
-
+/* ============================================================
+   25. ADMIN — LOAD ROOM TYPES
+   ============================================================ */
 
 async function loadRoomTypesReal() {
 
@@ -2117,10 +1414,9 @@ async function loadRoomTypesReal() {
 }
 
 
-
-
-
-// ==== admin load hotels =======
+/* ============================================================
+   26. ADMIN — LOAD HOTELS
+   ============================================================ */
 
 async function loadAdminHotels() {
 
@@ -2146,11 +1442,13 @@ async function loadAdminHotels() {
 }
 
 
+/* ============================================================
+   27. ADMIN — ICONS
+   ============================================================ */
 
-
-
-// === admin hotel table===
-
+/* ============================================================
+   28. ADMIN — HOTEL TABLE
+   ============================================================ */
 
 function renderAdminHotels() {
     const tbody = document.querySelector("#admin-hotels-table tbody");
@@ -2187,8 +1485,10 @@ function renderAdminHotels() {
     });
 }
 
+/* ============================================================
+   29. ADMIN — ADD HOTEL BUTTON
+   ============================================================ */
 
-// ====  admin add hotel butn ======
 document
     .getElementById("add-hotel-btn")
     .addEventListener(
@@ -2197,10 +1497,9 @@ document
     );
 
 
-
-
-
-// === admin hotel model  ===
+/* ============================================================
+   30. ADMIN — HOTEL MODAL
+   ============================================================ */
 
 async function openHotelModal(hotel) {
 
@@ -2306,10 +1605,9 @@ async function openHotelModal(hotel) {
 }
 
 
-
-
-
-//===  admin save hotel  ===
+/* ============================================================
+   31. ADMIN — SAVE HOTEL
+   ============================================================ */
 
 document
     .getElementById("hotel-form")
@@ -2462,20 +1760,9 @@ document
     );
 
 
-
-
-
-
-
-
-
-
-
-
-
-// admin delete hotel =====
-
-
+/* ============================================================
+   32. ADMIN — DELETE HOTEL
+   ============================================================ */
 
 async function deleteHotel(id) {
 
@@ -2522,11 +1809,9 @@ async function deleteHotel(id) {
 }
 
 
-
-
-
-// == admin select hotel ===
-
+/* ============================================================
+   33. ADMIN — ROOM HOTEL SELECT
+   ============================================================ */
 
 function renderRoomHotelSelect() {
 
@@ -2608,11 +1893,9 @@ document
     );
 
 
-
-
-
-// == admin load room===
-
+/* ============================================================
+   34. ADMIN — LOAD ROOMS
+   ============================================================ */
 
 async function loadAdminRooms(hotelId) {
 
@@ -2637,17 +1920,9 @@ async function loadAdminRooms(hotelId) {
 }
 
 
-
-
-
-
-
-
-
-
-
-//====  admin room table ===
-
+/* ============================================================
+   35. ADMIN — ROOM TABLE
+   ============================================================ */
 
 function renderAdminRooms() {
     const tbody = document.querySelector("#admin-rooms-table tbody");
@@ -2685,15 +1960,10 @@ function renderAdminRooms() {
     });
 }
 
+/* ============================================================
+   36. ADMIN — ADD ROOM
+   ============================================================ */
 
-
-
-
-
-
-
-
-//===  admin add room ===
 document
     .getElementById("add-room-btn")
     .addEventListener(
@@ -2702,13 +1972,9 @@ document
     );
 
 
-
-
-
-
-
-
-//== admin room model ===
+/* ============================================================
+   37. ADMIN — ROOM MODAL
+   ============================================================ */
 
 async function openRoomModal(room) {
 
@@ -2801,10 +2067,9 @@ async function openRoomModal(room) {
 }
 
 
-
-
-
-//===== admin save room ====
+/* ============================================================
+   38. ADMIN — SAVE ROOM
+   ============================================================ */
 
 document
     .getElementById("room-form")
@@ -2953,11 +2218,9 @@ document
     );
 
 
-
-
-
-// ===  admin delete room=====
-
+/* ============================================================
+   39. ADMIN — DELETE ROOM
+   ============================================================ */
 
 async function deleteRoom(id) {
 
@@ -3007,15 +2270,9 @@ async function deleteRoom(id) {
 }
 
 
-
-
-
-
-
-
-
-
-//=== chat box rule base ===
+/* ============================================================
+   40. RULE-BASED CHATBOT
+   ============================================================ */
 
 const chatToggle =
     document.getElementById(
@@ -3160,10 +2417,9 @@ function handleUserMessage(
 }
 
 
-
-
-
-//====== chat box response ====
+/* ============================================================
+   41. CHATBOT — RESPONSE LOGIC
+   ============================================================ */
 
 function getBotReply(
     rawText
@@ -3409,7 +2665,9 @@ function getBotReply(
 }
 
 
-// call functions
+/* ============================================================
+   42. FINAL INITIALIZATION
+   ============================================================ */
 
 loadSession();
 

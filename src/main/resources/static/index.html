@@ -200,6 +200,9 @@
                 <button class="sidebar-link" id="tab-rooms">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 18v-7a2 2 0 012-2h14a2 2 0 012 2v7M3 18h18M3 18v2M21 18v2M7 9V6a2 2 0 012-2h6a2 2 0 012 2v3"/></svg> Rooms
                 </button>
+                <button class="sidebar-link" id="tab-cities">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Cities
+                </button>
                 <div class="sidebar-divider"></div>
                 <div class="title">Signed in as</div>
                 <div class="admin-whoami" id="admin-whoami">—</div>
@@ -240,6 +243,22 @@
                         </table>
                     </div>
                     <div class="empty-state admin-empty" id="admin-rooms-empty">Pick a hotel above to see and manage its rooms.</div>
+                </div>
+
+                <div class="admin-panel" id="panel-cities">
+                    <div class="admin-toolbar">
+                        <p class="admin-toolbar-text">Every city in the <code>cities</code> table.</p>
+                        <button class="btn btn-primary" id="add-city-btn" type="button">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg> Add city
+                        </button>
+                    </div>
+                    <div class="table-card">
+                        <table id="admin-cities-table">
+                            <thead><tr><th>Name</th><th>Country</th><th></th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state admin-empty is-hidden" id="admin-cities-empty">No cities yet — add the first one above.</div>
                 </div>
             </div>
         </div>
@@ -343,6 +362,23 @@
             </div>
             <div class="field"><label>Price per night (LKR)</label><input type="number" id="room-price" min="0" step="1" required /></div>
             <button type="submit" class="btn btn-primary btn-block modal-submit">Save room</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- ===== City add/edit modal ===== -->
+<div class="modal-overlay" id="city-modal-overlay">
+    <div class="modal-box">
+        <button class="modal-close" data-close>×</button>
+        <div class="modal-eyebrow" id="city-modal-eyebrow">Admin · New city</div>
+        <h3 id="city-modal-title">Add city</h3>
+        <form id="city-form">
+            <div class="modal-error" id="city-error"></div>
+            <input type="hidden" id="city-id" />
+            <div class="field"><label>City name</label><input type="text" id="city-name" required /></div>
+            <div class="field"><label>Country</label><input type="text" id="city-country" required /></div>
+            <button type="submit" class="btn btn-primary btn-block modal-submit">Save city</button>
         </form>
     </div>
 </div>
@@ -470,6 +506,26 @@
                 </svg>
             </button>
             <button class="icon-btn danger" data-delete type="button" title="Delete" aria-label="Delete room">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 10v7M14 10v7"/>
+                </svg>
+            </button>
+        </td>
+    </tr>
+</template>
+
+<template id="admin-city-row-template">
+    <tr>
+        <td class="admin-city-name"></td>
+        <td class="admin-city-country"></td>
+        <td class="row-actions">
+            <button class="icon-btn" data-edit type="button" title="Edit" aria-label="Edit city">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 3 21l.5-4.5L17 3z"/>
+                    <path d="M15 5l4 4"/>
+                </svg>
+            </button>
+            <button class="icon-btn danger admin-delete-action" data-delete type="button" title="Delete" aria-label="Delete city">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 10v7M14 10v7"/>
                 </svg>
