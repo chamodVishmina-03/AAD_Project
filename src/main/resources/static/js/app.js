@@ -2953,3 +2953,55 @@ document
     );
 
 
+
+
+
+// ===  admin delete room=====
+
+
+async function deleteRoom(id) {
+
+    if (
+        !confirm(
+            "Delete this room? This cannot be undone."
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        const res =
+            await authAjax(
+                `/api/rooms/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        if (
+            !res.ok &&
+            res.status !== 204
+        ) {
+
+            throw new Error(
+                "Could not delete the room."
+            );
+        }
+
+        showToast(
+            "Room deleted."
+        );
+
+        loadAdminRooms(
+            selectedRoomHotelId
+        );
+
+    } catch (error) {
+
+        showToast(
+            error.message ||
+            "Could not delete the room."
+        );
+    }
+}
