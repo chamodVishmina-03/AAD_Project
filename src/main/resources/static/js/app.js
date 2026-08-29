@@ -2686,3 +2686,21 @@ function renderAdminRooms() {
 }
 
 
+
+
+
+
+
+
+
+//===  admin add room ===
+document
+    .getElementById("add-room-btn")
+    .addEventListener(
+        "click",
+        () => openRoomModal(null)
+    );
+
+
+
+
