@@ -1858,3 +1858,46 @@ function isAdmin() {
 
 
 
+
+
+// ==  ===  admin nav visibility =====
+
+
+function refreshAdminNavVisibility() {
+
+    const show =
+        isStaffOrAdmin();
+
+    document.getElementById("nav-admin").classList.toggle("is-hidden", !show);
+
+    document.getElementById("admin-menu-link").classList.toggle("is-hidden", !show);
+}
+
+const originalRenderAuthState =
+    renderAuthState;
+
+renderAuthState = function () {
+
+    originalRenderAuthState();
+
+    refreshAdminNavVisibility();
+
+    if (
+        !isStaffOrAdmin() &&
+        document
+            .getElementById(
+                "view-admin"
+            )
+            .classList.contains(
+            "active"
+        )
+    ) {
+
+        showView("home");
+    }
+};
+
+refreshAdminNavVisibility();
+
+
+
