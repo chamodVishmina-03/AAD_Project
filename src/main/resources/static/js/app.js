@@ -1710,15 +1710,15 @@ function renderAdminHotels() {
                     ${
             isAdmin()
                 ? `
-                                <button
-                                    class="icon-btn danger"
-                                    data-delete="${hotel.id}"
-                                    type="button"
-                                    title="Delete">
-
-                                    ${trashIconSvg}
-
-                                </button>
+                                    <button
+                                        class="icon-btn danger"
+                                        data-delete="${hotel.id}"
+                                        type="button"
+                                        title="Delete">
+    
+                                        ${trashIconSvg}
+    
+                                    </button>
                             `
                 : ""
         }
@@ -1770,6 +1770,47 @@ function renderAdminHotels() {
             );
         });
 }
+
+
+
+
+
+
+// == Ajax authentication helper ===
+function authAjax(
+    path,
+    options = {}
+) {
+
+    const headers =
+        Object.assign(
+            {
+                "Content-Type":
+                    "application/json"
+            },
+            options.headers || {}
+        );
+
+    if (
+        session &&
+        session.accessToken
+    ) {
+
+        headers["Authorization"] =
+            `Bearer ${session.accessToken}`;
+    }
+
+    return ajaxRequest(
+        `${API_BASE}${path}`,
+        Object.assign(
+            {},
+            options,
+            { headers }
+        )
+    );
+}
+
+
 
 
 

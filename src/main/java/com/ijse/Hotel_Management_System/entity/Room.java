@@ -57,7 +57,13 @@ public class Room extends BaseEntity {
     )
     private Set<Amenity> amenities = new HashSet<>();
 
+
     @Builder.Default
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<RoomImage> images = new HashSet<>();
+    
 }
+
+
+
+

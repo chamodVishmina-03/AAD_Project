@@ -19,7 +19,7 @@ public class RoomType {
 
     @NotBlank
     @Column(nullable = false, unique = true)
-    private String name; // e.g. SINGLE, DOUBLE, DELUXE, SUITE
+    private String name;
 
     private String description;
 
