@@ -2197,3 +2197,112 @@ document
     );
 
 
+
+
+
+// === admin hotel model  ===
+
+async function openHotelModal(hotel) {
+
+    await loadCities();
+
+    const errorElement =
+        document.getElementById(
+            "hotel-error"
+        );
+
+    errorElement.classList.remove(
+        "show"
+    );
+
+    document
+        .getElementById("hotel-form")
+        .reset();
+
+
+    if (hotel) {
+
+        document.getElementById(
+            "hotel-modal-eyebrow"
+        ).textContent =
+            "Admin · Edit hotel";
+
+        document.getElementById(
+            "hotel-modal-title"
+        ).textContent =
+            "Edit hotel";
+
+        document.getElementById(
+            "hotel-id"
+        ).value =
+            hotel.id;
+
+        document.getElementById(
+            "hotel-name"
+        ).value =
+            hotel.name || "";
+
+        document.getElementById(
+            "hotel-description"
+        ).value =
+            hotel.description || "";
+
+        document.getElementById(
+            "hotel-address"
+        ).value =
+            hotel.address || "";
+
+        document.getElementById(
+            "hotel-rating"
+        ).value =
+            hotel.starRating || "";
+
+        document.getElementById(
+            "hotel-phone"
+        ).value =
+            hotel.phone || "";
+
+        document.getElementById(
+            "hotel-email"
+        ).value =
+            hotel.email || "";
+
+
+        const match =
+            apiCities.find(
+                city =>
+                    city.name ===
+                    hotel.cityName
+            );
+
+        if (match) {
+
+            document.getElementById(
+                "hotel-city"
+            ).value =
+                match.id;
+        }
+
+    } else {
+
+        document.getElementById(
+            "hotel-modal-eyebrow"
+        ).textContent =
+            "Admin · New hotel";
+
+        document.getElementById(
+            "hotel-modal-title"
+        ).textContent =
+            "Add hotel";
+
+        document.getElementById(
+            "hotel-id"
+        ).value = "";
+    }
+
+    openModal(
+        "hotel-modal-overlay"
+    );
+}
+
+
