@@ -1,8 +1,8 @@
 package com.ijse.Hotel_Management_System.ai;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ijse.Hotel_Management_System.exception.AiServiceException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import com.ijse.Hotel_Management_System.exception.ChatServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -50,10 +50,10 @@ public class ChatClient {
 
     public String complete(String systemPrompt, String userPrompt) {
         if (!enabled) {
-            throw new AiServiceException("AI features are currently disabled.");
+            throw new ChatServiceException("AI features are currently disabled.");
         }
         if (apiKey == null || apiKey.isBlank() || apiKey.startsWith("CHANGE_ME")) {
-            throw new AiServiceException("AI service is not configured. Set the ANTHROPIC_API_KEY environment variable.");
+            throw new ChatServiceException("AI service is not configured. Set the ANTHROPIC_API_KEY environment variable.");
         }
 
         try {
@@ -79,7 +79,7 @@ public class ChatClient {
 
             if (response.statusCode() < 200 || response.statusCode() >= 300) {
                 log.error("Anthropic API returned status {}: {}", response.statusCode(), response.body());
-                throw new AiServiceException("AI service returned an error (status " + response.statusCode() + ").");
+                throw new ChatServiceException("AI service returned an error (status " + response.statusCode() + ").");
             }
 
             JsonNode root = objectMapper.readTree(response.body());
@@ -95,16 +95,16 @@ public class ChatClient {
             }
 
             if (text.isEmpty()) {
-                throw new AiServiceException("AI service returned an empty response.");
+                throw new ChatServiceException("AI service returned an empty response.");
             }
 
             return text.toString().trim();
 
-        } catch (AiServiceException e) {
+        } catch (ChatServiceException e) {
             throw e;
         } catch (Exception e) {
             log.error("Failed to call Anthropic API", e);
-            throw new AiServiceException("Could not reach the AI service.", e);
+            throw new ChatServiceException("Could not reach the AI service.", e);
         }
     }
 }
