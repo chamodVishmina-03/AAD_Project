@@ -2704,3 +2704,99 @@ document
 
 
 
+
+
+
+
+//== admin room model ===
+
+async function openRoomModal(room) {
+
+    await loadRoomTypesReal();
+
+    const errorElement =
+        document.getElementById(
+            "room-error"
+        );
+
+    errorElement.classList.remove(
+        "show"
+    );
+
+    document
+        .getElementById("room-form")
+        .reset();
+
+
+    if (room) {
+
+        document.getElementById(
+            "room-modal-eyebrow"
+        ).textContent =
+            "Admin · Edit room";
+
+        document.getElementById(
+            "room-modal-title"
+        ).textContent =
+            "Edit room";
+
+        document.getElementById(
+            "room-id"
+        ).value =
+            room.id;
+
+        document.getElementById(
+            "room-number"
+        ).value =
+            room.roomNumber || "";
+
+        document.getElementById(
+            "room-floor"
+        ).value =
+            room.floorNo != null
+                ? room.floorNo
+                : "";
+
+        document.getElementById(
+            "room-price"
+        ).value =
+            room.pricePerNight || "";
+
+
+        const match =
+            apiRoomTypesReal.find(
+                type =>
+                    type.name ===
+                    room.roomType
+            );
+
+        if (match) {
+
+            document.getElementById(
+                "room-type"
+            ).value =
+                match.id;
+        }
+
+    } else {
+
+        document.getElementById(
+            "room-modal-eyebrow"
+        ).textContent =
+            "Admin · New room";
+
+        document.getElementById(
+            "room-modal-title"
+        ).textContent =
+            "Add room";
+
+        document.getElementById(
+            "room-id"
+        ).value = "";
+    }
+
+    openModal(
+        "room-modal-overlay"
+    );
+}
+
