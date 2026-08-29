@@ -2465,3 +2465,63 @@ document
 
 
 
+
+
+
+
+
+
+
+
+// admin delete hotel =====
+
+
+
+async function deleteHotel(id) {
+
+    if (
+        !confirm(
+            "Delete this hotel? This cannot be undone."
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        const res =
+            await authAjax(
+                `/api/hotels/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        if (
+            !res.ok &&
+            res.status !== 204
+        ) {
+            throw new Error(
+                "Could not delete the hotel."
+            );
+        }
+
+        showToast(
+            "Hotel deleted."
+        );
+
+        loadAdminHotels();
+
+    } catch (error) {
+
+        showToast(
+            error.message ||
+            "Could not delete the hotel."
+        );
+    }
+}
+
+
+
+
+
