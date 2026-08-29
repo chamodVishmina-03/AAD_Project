@@ -2306,3 +2306,162 @@ async function openHotelModal(hotel) {
 }
 
 
+
+
+
+//===  admin save hotel  ===
+
+document
+    .getElementById("hotel-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const errorElement =
+                document.getElementById(
+                    "hotel-error"
+                );
+
+            errorElement.classList.remove(
+                "show"
+            );
+
+            const id =
+                document.getElementById(
+                    "hotel-id"
+                ).value;
+
+            const payload = {
+
+                name:
+                    document
+                        .getElementById(
+                            "hotel-name"
+                        )
+                        .value
+                        .trim(),
+
+                description:
+                    document
+                        .getElementById(
+                            "hotel-description"
+                        )
+                        .value
+                        .trim(),
+
+                address:
+                    document
+                        .getElementById(
+                            "hotel-address"
+                        )
+                        .value
+                        .trim(),
+
+                cityId:
+                    Number(
+                        document
+                            .getElementById(
+                                "hotel-city"
+                            )
+                            .value
+                    ),
+
+                starRating:
+                    document
+                        .getElementById(
+                            "hotel-rating"
+                        )
+                        .value
+                        ? Number(
+                            document
+                                .getElementById(
+                                    "hotel-rating"
+                                )
+                                .value
+                        )
+                        : null,
+
+                phone:
+                    document
+                        .getElementById(
+                            "hotel-phone"
+                        )
+                        .value
+                        .trim(),
+
+                email:
+                    document
+                        .getElementById(
+                            "hotel-email"
+                        )
+                        .value
+                        .trim()
+            };
+
+
+            try {
+
+                const res =
+                    await authAjax(
+                        id
+                            ? `/api/hotels/${id}`
+                            : "/api/hotels",
+                        {
+                            method:
+                                id
+                                    ? "PUT"
+                                    : "POST",
+
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    const body =
+                        await res
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    throw new Error(
+                        body.message ||
+                        "Could not save the hotel."
+                    );
+                }
+
+                closeModal(
+                    "hotel-modal-overlay"
+                );
+
+                showToast(
+                    id
+                        ? "Hotel updated."
+                        : "Hotel added."
+                );
+
+                loadAdminHotels();
+
+            } catch (error) {
+
+                errorElement.textContent =
+                    error.message ||
+                    "Could not reach the server.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+            }
+        }
+    );
+
+
+
+
+
