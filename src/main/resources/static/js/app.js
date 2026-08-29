@@ -3159,3 +3159,254 @@ function handleUserMessage(
     );
 }
 
+
+
+
+
+//====== chat box response ====
+
+function getBotReply(
+    rawText
+) {
+
+    const msg =
+        rawText.toLowerCase();
+
+
+    /* ---------- Check-in ---------- */
+
+    if (
+        msg.includes("check-in") ||
+        msg.includes("check in") ||
+        msg.includes("checkin")
+    ) {
+
+        return "Check-in is from 2:00 PM at every Ceylon Collection property. Early check-in is possible if a room is ready.";
+    }
+
+
+    /* ---------- Check-out ---------- */
+
+    else if (
+        msg.includes("check-out") ||
+        msg.includes("check out") ||
+        msg.includes("checkout")
+    ) {
+
+        return "Check-out is by 11:00 AM. Late check-out until 1:00 PM is free for Suite guests.";
+    }
+
+
+    /* ---------- Price ---------- */
+
+    else if (
+        msg.includes("price") ||
+        msg.includes("rate") ||
+        msg.includes("cost") ||
+        msg.includes("how much")
+    ) {
+
+        if (
+            currentHotel &&
+            currentHotel.rooms.length
+        ) {
+
+            const min =
+                Math.min(
+                    ...currentHotel.rooms.map(
+                        room =>
+                            room.pricePerNight
+                    )
+                );
+
+            const max =
+                Math.max(
+                    ...currentHotel.rooms.map(
+                        room =>
+                            room.pricePerNight
+                    )
+                );
+
+            return `At ${currentHotel.name}, rates range from ${fmtLKR(min)} to ${fmtLKR(max)} per night. See the Rooms table above for each room.`;
+        }
+
+        return "Rates vary by property, roughly LKR 6,500 to LKR 34,000 per night. Open a hotel to see its exact prices.";
+    }
+
+
+    /* ---------- Wi-Fi ---------- */
+
+    else if (
+        msg.includes("wifi") ||
+        msg.includes("wi-fi") ||
+        msg.includes("internet")
+    ) {
+
+        return "Yes — free high-speed Wi-Fi is included in every room across all our hotels.";
+    }
+
+
+    /* ---------- Hotels ---------- */
+
+    else if (
+        msg.includes("which hotel") ||
+        msg.includes("hotels do you") ||
+        msg.includes("list of hotel") ||
+        msg.includes("locations")
+    ) {
+
+        return (
+            "We manage " +
+            hotels.length +
+            " properties: " +
+            hotels
+                .map(
+                    hotel =>
+                        `${hotel.name} (${hotel.city})`
+                )
+                .join(", ") +
+            "."
+        );
+    }
+
+
+    /* ---------- Current Hotel Location ---------- */
+
+    else if (
+        msg.includes("this hotel") ||
+        (
+            currentHotel &&
+            (
+                msg.includes("location") ||
+                msg.includes("address") ||
+                msg.includes("where")
+            )
+        )
+    ) {
+
+        if (currentHotel) {
+
+            return `${currentHotel.name} is located at ${currentHotel.address}.`;
+        }
+
+        return "Open a hotel first, then ask again and I'll give you its exact address.";
+    }
+
+
+    /* ---------- General Location ---------- */
+
+    else if (
+        msg.includes("location") ||
+        msg.includes("address") ||
+        msg.includes("where")
+    ) {
+
+        return "Our head office is at 12 Galle Face Terrace, Colombo 03. Open a specific hotel to see its own address.";
+    }
+
+
+    /* ---------- Contact ---------- */
+
+    else if (
+        msg.includes("phone") ||
+        msg.includes("contact") ||
+        msg.includes("number")
+    ) {
+
+        if (currentHotel) {
+
+            return `You can reach ${currentHotel.name} on ${currentHotel.phone} or ${currentHotel.email}.`;
+        }
+
+        return "Head office reservations: +94 11 234 5678, reservations@ceyloncollection.lk.";
+    }
+
+
+    /* ---------- Available Rooms ---------- */
+
+    else if (
+        msg.includes("available") ||
+        msg.includes("vacant") ||
+        (
+            msg.includes("room") &&
+            msg.includes("free")
+        )
+    ) {
+
+        if (currentHotel) {
+
+            const free =
+                currentHotel.rooms.filter(
+                    room =>
+                        room.status ===
+                        "AVAILABLE"
+                ).length;
+
+            return `${currentHotel.name} currently has ${free} rooms marked AVAILABLE.`;
+        }
+
+        const free =
+            hotels
+                .flatMap(
+                    hotel =>
+                        hotel.rooms
+                )
+                .filter(
+                    room =>
+                        room.status ===
+                        "AVAILABLE"
+                )
+                .length;
+
+        return `${free} rooms are marked AVAILABLE across all properties right now.`;
+    }
+
+
+    /* ---------- Login / Account ---------- */
+
+    else if (
+        msg.includes("login") ||
+        msg.includes("log in") ||
+        msg.includes("sign up") ||
+        msg.includes("register") ||
+        msg.includes("account")
+    ) {
+
+        return session
+            ? `You're logged in as ${session.fullName}. Use the account menu at the top-right to sign out.`
+            : 'Use the "Log in" or "Sign up" button at the top-right to create or access your account.';
+    }
+
+
+    /* ---------- Greeting ---------- */
+
+    else if (
+        msg.includes("hi") ||
+        msg.includes("hello") ||
+        msg.includes("ayubowan")
+    ) {
+
+        return "Ayubowan! How can I help — check-in time, room prices, Wi-Fi, or our hotel locations?";
+    }
+
+
+    /* ---------- Thank You ---------- */
+
+    else if (
+        msg.includes("thank")
+    ) {
+
+        return "You're most welcome! Anything else I can help with?";
+    }
+
+
+    /* ---------- Default ---------- */
+
+    else {
+
+        return "I didn't quite catch that. I can help with: check-in/check-out time, room prices, Wi-Fi, hotel locations, or contact details.";
+    }
+}
+
+
+
