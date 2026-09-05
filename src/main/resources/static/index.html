@@ -203,6 +203,18 @@
                 <button class="sidebar-link" id="tab-cities">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Cities
                 </button>
+                <button class="sidebar-link" id="tab-room-types">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M4 10h16M10 4v16"/></svg> Room Types
+                </button>
+                <button class="sidebar-link" id="tab-amenities">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5"/></svg> Amenities
+                </button>
+                <button class="sidebar-link" id="tab-coupons">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 12V8H6a2 2 0 010-4h12v4"/><path d="M4 6v12a2 2 0 002 2h14v-4"/><circle cx="18" cy="14" r="1.5"/></svg> Coupons
+                </button>
+                <button class="sidebar-link" id="tab-extra-services">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg> Extra Services
+                </button>
                 <div class="sidebar-divider"></div>
                 <div class="title">Signed in as</div>
                 <div class="admin-whoami" id="admin-whoami">—</div>
@@ -259,6 +271,70 @@
                         </table>
                     </div>
                     <div class="empty-state admin-empty is-hidden" id="admin-cities-empty">No cities yet — add the first one above.</div>
+                </div>
+
+                <div class="admin-panel" id="panel-room-types">
+                    <div class="admin-toolbar">
+                        <p class="admin-toolbar-text">Every room type in the <code>room_types</code> table.</p>
+                        <button class="btn btn-primary" id="add-room-type-btn" type="button">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg> Add room type
+                        </button>
+                    </div>
+                    <div class="table-card">
+                        <table id="admin-room-types-table">
+                            <thead><tr><th>Name</th><th>Description</th><th>Max occupancy</th><th></th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state admin-empty is-hidden" id="admin-room-types-empty">No room types yet — add the first one above.</div>
+                </div>
+
+                <div class="admin-panel" id="panel-amenities">
+                    <div class="admin-toolbar">
+                        <p class="admin-toolbar-text">Every amenity in the <code>amenities</code> table.</p>
+                        <button class="btn btn-primary" id="add-amenity-btn" type="button">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg> Add amenity
+                        </button>
+                    </div>
+                    <div class="table-card">
+                        <table id="admin-amenities-table">
+                            <thead><tr><th>Name</th><th>Description</th><th>Icon</th><th></th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state admin-empty is-hidden" id="admin-amenities-empty">No amenities yet — add the first one above.</div>
+                </div>
+
+                <div class="admin-panel" id="panel-coupons">
+                    <div class="admin-toolbar">
+                        <p class="admin-toolbar-text">Every coupon in the <code>coupons</code> table.</p>
+                        <button class="btn btn-primary" id="add-coupon-btn" type="button">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg> Add coupon
+                        </button>
+                    </div>
+                    <div class="table-card">
+                        <table id="admin-coupons-table">
+                            <thead><tr><th>Code</th><th>Type</th><th>Value</th><th>Min booking</th><th>Expiry</th><th>Status</th><th></th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state admin-empty is-hidden" id="admin-coupons-empty">No coupons yet — add the first one above.</div>
+                </div>
+
+                <div class="admin-panel" id="panel-extra-services">
+                    <div class="admin-toolbar">
+                        <select class="admin-select" id="extra-service-hotel-select"><option value="">Select a hotel…</option></select>
+                        <button class="btn btn-primary" id="add-extra-service-btn" type="button" disabled>
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg> Add service
+                        </button>
+                    </div>
+                    <div class="table-card">
+                        <table id="admin-extra-services-table">
+                            <thead><tr><th>Name</th><th>Description</th><th>Price</th><th></th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="empty-state admin-empty" id="admin-extra-services-empty">Pick a hotel above to see and manage its extra services.</div>
                 </div>
             </div>
         </div>
@@ -379,6 +455,88 @@
             <div class="field"><label>City name</label><input type="text" id="city-name" required /></div>
             <div class="field"><label>Country</label><input type="text" id="city-country" required /></div>
             <button type="submit" class="btn btn-primary btn-block modal-submit">Save city</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- ===== Room type add/edit modal ===== -->
+<div class="modal-overlay" id="room-type-modal-overlay">
+    <div class="modal-box">
+        <button class="modal-close" data-close>×</button>
+        <div class="modal-eyebrow" id="room-type-modal-eyebrow">Admin · New room type</div>
+        <h3 id="room-type-modal-title">Add room type</h3>
+        <form id="room-type-form">
+            <div class="modal-error" id="room-type-error"></div>
+            <input type="hidden" id="room-type-id" />
+            <div class="field"><label>Name</label><input type="text" id="room-type-name" required /></div>
+            <div class="field"><label>Description</label><textarea id="room-type-description"></textarea></div>
+            <div class="field"><label>Max occupancy</label><input type="number" id="room-type-max-occupancy" min="1" /></div>
+            <button type="submit" class="btn btn-primary btn-block modal-submit">Save room type</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- ===== Amenity add/edit modal ===== -->
+<div class="modal-overlay" id="amenity-modal-overlay">
+    <div class="modal-box">
+        <button class="modal-close" data-close>×</button>
+        <div class="modal-eyebrow" id="amenity-modal-eyebrow">Admin · New amenity</div>
+        <h3 id="amenity-modal-title">Add amenity</h3>
+        <form id="amenity-form">
+            <div class="modal-error" id="amenity-error"></div>
+            <input type="hidden" id="amenity-id" />
+            <div class="field"><label>Name</label><input type="text" id="amenity-name" required /></div>
+            <div class="field"><label>Description</label><textarea id="amenity-description"></textarea></div>
+            <div class="field"><label>Icon</label><input type="text" id="amenity-icon" placeholder="e.g. wifi" /></div>
+            <button type="submit" class="btn btn-primary btn-block modal-submit">Save amenity</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- ===== Coupon add modal (create only — backend has no update endpoint) ===== -->
+<div class="modal-overlay" id="coupon-modal-overlay">
+    <div class="modal-box">
+        <button class="modal-close" data-close>×</button>
+        <div class="modal-eyebrow">Admin · New coupon</div>
+        <h3>Add coupon</h3>
+        <form id="coupon-form">
+            <div class="modal-error" id="coupon-error"></div>
+            <div class="field"><label>Code</label><input type="text" id="coupon-code" required /></div>
+            <div class="field-row">
+                <div class="field"><label>Discount type</label>
+                    <select id="coupon-discount-type" required>
+                        <option value="PERCENTAGE">Percentage</option>
+                        <option value="FIXED">Fixed amount</option>
+                    </select>
+                </div>
+                <div class="field"><label>Discount value</label><input type="number" id="coupon-discount-value" min="0" step="0.01" required /></div>
+            </div>
+            <div class="field-row">
+                <div class="field"><label>Min booking amount</label><input type="number" id="coupon-min-booking" min="0" step="0.01" /></div>
+                <div class="field"><label>Expiry date</label><input type="date" id="coupon-expiry" /></div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block modal-submit">Save coupon</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- ===== Extra service add/edit modal ===== -->
+<div class="modal-overlay" id="extra-service-modal-overlay">
+    <div class="modal-box">
+        <button class="modal-close" data-close>×</button>
+        <div class="modal-eyebrow" id="extra-service-modal-eyebrow">Admin · New extra service</div>
+        <h3 id="extra-service-modal-title">Add extra service</h3>
+        <form id="extra-service-form">
+            <div class="modal-error" id="extra-service-error"></div>
+            <input type="hidden" id="extra-service-id" />
+            <div class="field"><label>Name</label><input type="text" id="extra-service-name" required /></div>
+            <div class="field"><label>Description</label><textarea id="extra-service-description"></textarea></div>
+            <div class="field"><label>Price (LKR)</label><input type="number" id="extra-service-price" min="0" step="0.01" required /></div>
+            <button type="submit" class="btn btn-primary btn-block modal-submit">Save service</button>
         </form>
     </div>
 </div>
@@ -534,6 +692,92 @@
     </tr>
 </template>
 
+<template id="admin-room-type-row-template">
+    <tr>
+        <td class="admin-room-type-name"></td>
+        <td class="admin-room-type-description"></td>
+        <td class="mono-cell admin-room-type-max-occupancy"></td>
+        <td class="row-actions">
+            <button class="icon-btn" data-edit type="button" title="Edit" aria-label="Edit room type">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 3 21l.5-4.5L17 3z"/>
+                    <path d="M15 5l4 4"/>
+                </svg>
+            </button>
+            <button class="icon-btn danger admin-delete-action" data-delete type="button" title="Delete" aria-label="Delete room type">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 10v7M14 10v7"/>
+                </svg>
+            </button>
+        </td>
+    </tr>
+</template>
+
+<template id="admin-amenity-row-template">
+    <tr>
+        <td class="admin-amenity-name"></td>
+        <td class="admin-amenity-description"></td>
+        <td class="mono-cell admin-amenity-icon"></td>
+        <td class="row-actions">
+            <button class="icon-btn" data-edit type="button" title="Edit" aria-label="Edit amenity">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 3 21l.5-4.5L17 3z"/>
+                    <path d="M15 5l4 4"/>
+                </svg>
+            </button>
+            <button class="icon-btn danger admin-delete-action" data-delete type="button" title="Delete" aria-label="Delete amenity">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 10v7M14 10v7"/>
+                </svg>
+            </button>
+        </td>
+    </tr>
+</template>
+
+<template id="admin-coupon-row-template">
+    <tr>
+        <td class="mono-cell admin-coupon-code"></td>
+        <td class="admin-coupon-type"></td>
+        <td class="mono-cell admin-coupon-value"></td>
+        <td class="mono-cell admin-coupon-min"></td>
+        <td class="mono-cell admin-coupon-expiry"></td>
+        <td><span class="badge admin-coupon-status"></span></td>
+        <td class="row-actions">
+            <button class="icon-btn admin-deactivate-action" data-deactivate type="button" title="Deactivate" aria-label="Deactivate coupon">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/>
+                </svg>
+            </button>
+            <button class="icon-btn danger" data-delete type="button" title="Delete" aria-label="Delete coupon">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 10v7M14 10v7"/>
+                </svg>
+            </button>
+        </td>
+    </tr>
+</template>
+
+<template id="admin-extra-service-row-template">
+    <tr>
+        <td class="admin-extra-service-name"></td>
+        <td class="admin-extra-service-description"></td>
+        <td class="mono-cell admin-extra-service-price"></td>
+        <td class="row-actions">
+            <button class="icon-btn" data-edit type="button" title="Edit" aria-label="Edit extra service">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M17 3a2.85 2.85 0 114 4L7.5 20.5 3 21l.5-4.5L17 3z"/>
+                    <path d="M15 5l4 4"/>
+                </svg>
+            </button>
+            <button class="icon-btn danger" data-delete type="button" title="Delete" aria-label="Delete extra service">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15M10 10v7M14 10v7"/>
+                </svg>
+            </button>
+        </td>
+    </tr>
+</template>
+
 <template id="quick-reply-template">
     <button class="qr-btn" type="button"></button>
 </template>
@@ -552,5 +796,3 @@
 
 </body>
 </html>
-
-
