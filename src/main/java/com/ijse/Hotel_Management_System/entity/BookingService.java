@@ -22,6 +22,7 @@ public class BookingService {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
@@ -29,6 +30,7 @@ public class BookingService {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "extra_service_id", nullable = false)
     private ExtraService extraService;
+
 
     @NotNull
     @Column(nullable = false)

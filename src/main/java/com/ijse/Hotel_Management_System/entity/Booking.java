@@ -56,6 +56,8 @@ public class Booking extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal totalAmount;
 
+
+
     @Builder.Default
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingService> extraServices = new ArrayList<>();

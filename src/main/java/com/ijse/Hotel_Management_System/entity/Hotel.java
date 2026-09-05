@@ -34,9 +34,11 @@ public class Hotel extends BaseEntity {
     @Column(nullable = false)
     private String address;
 
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "city_id", nullable = false)
     private City city;
+
 
     private Double starRating;
 
@@ -44,8 +46,11 @@ public class Hotel extends BaseEntity {
 
     private String email;
 
+
     @Builder.Default
     private boolean active = true;
+
+
 
     @Builder.Default
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -54,4 +59,12 @@ public class Hotel extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Room> rooms = new ArrayList<>();
+
+
+
 }
+
+
+
+
+

@@ -17,7 +17,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "rooms", uniqueConstraints = @UniqueConstraint(columnNames = {"hotel_id", "roomNumber"}))
+@Table(name = "rooms",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"hotel_id", "roomNumber"}))
+
 public class Room extends BaseEntity {
 
     @Id

@@ -30,18 +30,22 @@ public class Coupon {
     @Column(nullable = false, unique = true)
     private String code;
 
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DiscountType discountType;
 
+
     @NotNull
     @Column(nullable = false)
     private BigDecimal discountValue;
 
+
     private BigDecimal minBookingAmount;
 
     private LocalDate expiryDate;
+
 
     @Builder.Default
     private boolean active = true;
