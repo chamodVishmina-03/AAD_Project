@@ -1280,60 +1280,75 @@ document
         () => setAdminTab("cities")
     );
 
+document
+    .getElementById("tab-room-types")
+    .addEventListener(
+        "click",
+        () => setAdminTab("room-types")
+    );
+
+document
+    .getElementById("tab-amenities")
+    .addEventListener(
+        "click",
+        () => setAdminTab("amenities")
+    );
+
+document
+    .getElementById("tab-coupons")
+    .addEventListener(
+        "click",
+        () => setAdminTab("coupons")
+    );
+
+document
+    .getElementById("tab-extra-services")
+    .addEventListener(
+        "click",
+        () => setAdminTab("extra-services")
+    );
+
 function setAdminTab(tab) {
 
-    document
-        .getElementById("tab-hotels")
-        .classList.toggle(
-        "active",
-        tab === "hotels"
-    );
+    const tabIds = [
+        "hotels", "rooms", "cities",
+        "room-types", "amenities",
+        "coupons", "extra-services"
+    ];
 
-    document
-        .getElementById("tab-rooms")
-        .classList.toggle(
-        "active",
-        tab === "rooms"
-    );
+    tabIds.forEach(t => {
 
-    document
-        .getElementById("tab-cities")
-        .classList.toggle(
-        "active",
-        tab === "cities"
-    );
+        document
+            .getElementById(`tab-${t}`)
+            .classList.toggle(
+            "active",
+            tab === t
+        );
 
-    document
-        .getElementById("panel-hotels")
-        .classList.toggle(
-        "active",
-        tab === "hotels"
-    );
+        document
+            .getElementById(`panel-${t}`)
+            .classList.toggle(
+            "active",
+            tab === t
+        );
+    });
 
-    document
-        .getElementById("panel-rooms")
-        .classList.toggle(
-        "active",
-        tab === "rooms"
-    );
-
-    document
-        .getElementById("panel-cities")
-        .classList.toggle(
-        "active",
-        tab === "cities"
-    );
+    const titles = {
+        hotels: "Hotels",
+        rooms: "Rooms",
+        cities: "Cities",
+        "room-types": "Room Types",
+        amenities: "Amenities",
+        coupons: "Coupons",
+        "extra-services": "Extra Services"
+    };
 
     document
         .getElementById(
             "admin-panel-title"
         )
         .textContent =
-        tab === "hotels"
-            ? "Hotels"
-            : tab === "rooms"
-                ? "Rooms"
-                : "Cities";
+        titles[tab];
 
     if (
         tab === "rooms" &&
@@ -1346,6 +1361,33 @@ function setAdminTab(tab) {
     if (tab === "cities") {
 
         loadAdminCities();
+    }
+
+    if (tab === "room-types") {
+
+        loadAdminRoomTypes();
+    }
+
+    if (tab === "amenities") {
+
+        loadAdminAmenities();
+    }
+
+    if (tab === "coupons") {
+
+        loadAdminCoupons();
+    }
+
+    if (tab === "extra-services") {
+
+        if (apiHotels.length === 0) {
+
+            loadAdminHotels();
+
+        } else {
+
+            renderExtraServiceHotelSelect();
+        }
     }
 }
 
@@ -1467,6 +1509,7 @@ async function loadAdminHotels() {
 
     renderAdminHotels();
     renderRoomHotelSelect();
+    renderExtraServiceHotelSelect();
 }
 
 
@@ -2635,6 +2678,1565 @@ async function deleteCity(id) {
 
 
 /* ============================================================
+   39h. ADMIN — LOAD ROOM TYPES (admin table)
+   ============================================================ */
+
+let apiAdminRoomTypes = [];
+
+async function loadAdminRoomTypes() {
+
+    try {
+
+        const res =
+            await ajaxRequest(
+                `${API_BASE}/api/room-types`
+            );
+
+        apiAdminRoomTypes =
+            res.ok
+                ? await res.json()
+                : [];
+
+    } catch (e) {
+
+        apiAdminRoomTypes = [];
+    }
+
+    renderAdminRoomTypes();
+}
+
+
+/* ============================================================
+   39i. ADMIN — ROOM TYPES TABLE
+   ============================================================ */
+
+function renderAdminRoomTypes() {
+
+    const tbody =
+        document.querySelector(
+            "#admin-room-types-table tbody"
+        );
+
+    const empty =
+        document.getElementById(
+            "admin-room-types-empty"
+        );
+
+    const template =
+        document.getElementById(
+            "admin-room-type-row-template"
+        );
+
+    tbody.replaceChildren();
+
+    if (apiAdminRoomTypes.length === 0) {
+        empty.classList.remove("is-hidden");
+        return;
+    }
+
+    empty.classList.add("is-hidden");
+
+    apiAdminRoomTypes.forEach(type => {
+
+        const row =
+            template.content.cloneNode(true);
+
+        const root =
+            row.querySelector("tr");
+
+        root.querySelector(".admin-room-type-name")
+            .textContent = type.name;
+
+        root.querySelector(".admin-room-type-description")
+            .textContent = type.description || "—";
+
+        root.querySelector(".admin-room-type-max-occupancy")
+            .textContent =
+            type.maxOccupancy != null
+                ? type.maxOccupancy
+                : "—";
+
+        const editButton =
+            root.querySelector("[data-edit]");
+
+        const deleteButton =
+            root.querySelector("[data-delete]");
+
+        editButton.dataset.edit = type.id;
+        deleteButton.dataset.delete = type.id;
+        deleteButton.classList.toggle("is-hidden", !isAdmin());
+
+        editButton.addEventListener(
+            "click",
+            () => openRoomTypeModal(
+                apiAdminRoomTypes.find(
+                    t => t.id === type.id
+                )
+            )
+        );
+
+        deleteButton.addEventListener(
+            "click",
+            () => deleteRoomType(type.id)
+        );
+
+        tbody.appendChild(row);
+    });
+}
+
+
+/* ============================================================
+   39j. ADMIN — ADD ROOM TYPE BUTTON
+   ============================================================ */
+
+document
+    .getElementById("add-room-type-btn")
+    .addEventListener(
+        "click",
+        () => openRoomTypeModal(null)
+    );
+
+
+/* ============================================================
+   39k. ADMIN — ROOM TYPE MODAL
+   ============================================================ */
+
+function openRoomTypeModal(type) {
+
+    const errorElement =
+        document.getElementById(
+            "room-type-error"
+        );
+
+    errorElement.classList.remove(
+        "show"
+    );
+
+    document
+        .getElementById("room-type-form")
+        .reset();
+
+    if (type) {
+
+        document.getElementById(
+            "room-type-modal-eyebrow"
+        ).textContent =
+            "Admin · Edit room type";
+
+        document.getElementById(
+            "room-type-modal-title"
+        ).textContent =
+            "Edit room type";
+
+        document.getElementById(
+            "room-type-id"
+        ).value = type.id;
+
+        document.getElementById(
+            "room-type-name"
+        ).value = type.name || "";
+
+        document.getElementById(
+            "room-type-description"
+        ).value = type.description || "";
+
+        document.getElementById(
+            "room-type-max-occupancy"
+        ).value =
+            type.maxOccupancy != null
+                ? type.maxOccupancy
+                : "";
+
+    } else {
+
+        document.getElementById(
+            "room-type-modal-eyebrow"
+        ).textContent =
+            "Admin · New room type";
+
+        document.getElementById(
+            "room-type-modal-title"
+        ).textContent =
+            "Add room type";
+
+        document.getElementById(
+            "room-type-id"
+        ).value = "";
+    }
+
+    openModal(
+        "room-type-modal-overlay"
+    );
+}
+
+
+/* ============================================================
+   39l. ADMIN — SAVE ROOM TYPE
+   ============================================================ */
+
+document
+    .getElementById("room-type-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const errorElement =
+                document.getElementById(
+                    "room-type-error"
+                );
+
+            errorElement.classList.remove(
+                "show"
+            );
+
+            const id =
+                document.getElementById(
+                    "room-type-id"
+                ).value;
+
+            const payload = {
+
+                name:
+                    document
+                        .getElementById(
+                            "room-type-name"
+                        )
+                        .value
+                        .trim(),
+
+                description:
+                    document
+                        .getElementById(
+                            "room-type-description"
+                        )
+                        .value
+                        .trim(),
+
+                maxOccupancy:
+                    document
+                        .getElementById(
+                            "room-type-max-occupancy"
+                        )
+                        .value
+                        ? Number(
+                            document
+                                .getElementById(
+                                    "room-type-max-occupancy"
+                                )
+                                .value
+                        )
+                        : null
+            };
+
+            try {
+
+                const res =
+                    await authAjax(
+                        id
+                            ? `/api/room-types/${id}`
+                            : "/api/room-types",
+                        {
+                            method:
+                                id
+                                    ? "PUT"
+                                    : "POST",
+
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    const body =
+                        await res
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    throw new Error(
+                        body.message ||
+                        "Could not save the room type."
+                    );
+                }
+
+                closeModal(
+                    "room-type-modal-overlay"
+                );
+
+                showToast(
+                    id
+                        ? "Room type updated."
+                        : "Room type added."
+                );
+
+                loadAdminRoomTypes();
+
+            } catch (error) {
+
+                errorElement.textContent =
+                    error.message ||
+                    "Could not reach the server.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+            }
+        }
+    );
+
+
+/* ============================================================
+   39m. ADMIN — DELETE ROOM TYPE
+   ============================================================ */
+
+async function deleteRoomType(id) {
+
+    if (
+        !confirm(
+            "Delete this room type? This cannot be undone."
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        const res =
+            await authAjax(
+                `/api/room-types/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        if (
+            !res.ok &&
+            res.status !== 204
+        ) {
+
+            throw new Error(
+                "Could not delete the room type."
+            );
+        }
+
+        showToast(
+            "Room type deleted."
+        );
+
+        loadAdminRoomTypes();
+
+    } catch (error) {
+
+        showToast(
+            error.message ||
+            "Could not delete the room type."
+        );
+    }
+}
+
+
+/* ============================================================
+   39n. ADMIN — LOAD AMENITIES
+   Note: /api/amenities responds with a CommonResponse wrapper
+   ({ status, body, message }), unlike cities/room-types which
+   return a raw JSON array. The list lives in res.body here.
+   ============================================================ */
+
+let apiAdminAmenities = [];
+
+async function loadAdminAmenities() {
+
+    try {
+
+        const res =
+            await ajaxRequest(
+                `${API_BASE}/api/amenities`
+            );
+
+        const data =
+            res.ok
+                ? await res.json()
+                : null;
+
+        apiAdminAmenities =
+            (data && data.body) || [];
+
+    } catch (e) {
+
+        apiAdminAmenities = [];
+    }
+
+    renderAdminAmenities();
+}
+
+
+/* ============================================================
+   39o. ADMIN — AMENITIES TABLE
+   ============================================================ */
+
+function renderAdminAmenities() {
+
+    const tbody =
+        document.querySelector(
+            "#admin-amenities-table tbody"
+        );
+
+    const empty =
+        document.getElementById(
+            "admin-amenities-empty"
+        );
+
+    const template =
+        document.getElementById(
+            "admin-amenity-row-template"
+        );
+
+    tbody.replaceChildren();
+
+    if (apiAdminAmenities.length === 0) {
+        empty.classList.remove("is-hidden");
+        return;
+    }
+
+    empty.classList.add("is-hidden");
+
+    apiAdminAmenities.forEach(amenity => {
+
+        const row =
+            template.content.cloneNode(true);
+
+        const root =
+            row.querySelector("tr");
+
+        root.querySelector(".admin-amenity-name")
+            .textContent = amenity.name;
+
+        root.querySelector(".admin-amenity-description")
+            .textContent = amenity.description || "—";
+
+        root.querySelector(".admin-amenity-icon")
+            .textContent = amenity.icon || "—";
+
+        const editButton =
+            root.querySelector("[data-edit]");
+
+        const deleteButton =
+            root.querySelector("[data-delete]");
+
+        editButton.dataset.edit = amenity.id;
+        deleteButton.dataset.delete = amenity.id;
+        deleteButton.classList.toggle("is-hidden", !isAdmin());
+
+        editButton.addEventListener(
+            "click",
+            () => openAmenityModal(
+                apiAdminAmenities.find(
+                    a => a.id === amenity.id
+                )
+            )
+        );
+
+        deleteButton.addEventListener(
+            "click",
+            () => deleteAmenity(amenity.id)
+        );
+
+        tbody.appendChild(row);
+    });
+}
+
+
+/* ============================================================
+   39p. ADMIN — ADD AMENITY BUTTON
+   ============================================================ */
+
+document
+    .getElementById("add-amenity-btn")
+    .addEventListener(
+        "click",
+        () => openAmenityModal(null)
+    );
+
+
+/* ============================================================
+   39q. ADMIN — AMENITY MODAL
+   ============================================================ */
+
+function openAmenityModal(amenity) {
+
+    const errorElement =
+        document.getElementById(
+            "amenity-error"
+        );
+
+    errorElement.classList.remove(
+        "show"
+    );
+
+    document
+        .getElementById("amenity-form")
+        .reset();
+
+    if (amenity) {
+
+        document.getElementById(
+            "amenity-modal-eyebrow"
+        ).textContent =
+            "Admin · Edit amenity";
+
+        document.getElementById(
+            "amenity-modal-title"
+        ).textContent =
+            "Edit amenity";
+
+        document.getElementById(
+            "amenity-id"
+        ).value = amenity.id;
+
+        document.getElementById(
+            "amenity-name"
+        ).value = amenity.name || "";
+
+        document.getElementById(
+            "amenity-description"
+        ).value = amenity.description || "";
+
+        document.getElementById(
+            "amenity-icon"
+        ).value = amenity.icon || "";
+
+    } else {
+
+        document.getElementById(
+            "amenity-modal-eyebrow"
+        ).textContent =
+            "Admin · New amenity";
+
+        document.getElementById(
+            "amenity-modal-title"
+        ).textContent =
+            "Add amenity";
+
+        document.getElementById(
+            "amenity-id"
+        ).value = "";
+    }
+
+    openModal(
+        "amenity-modal-overlay"
+    );
+}
+
+
+/* ============================================================
+   39r. ADMIN — SAVE AMENITY
+   ============================================================ */
+
+document
+    .getElementById("amenity-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const errorElement =
+                document.getElementById(
+                    "amenity-error"
+                );
+
+            errorElement.classList.remove(
+                "show"
+            );
+
+            const id =
+                document.getElementById(
+                    "amenity-id"
+                ).value;
+
+            const payload = {
+
+                name:
+                    document
+                        .getElementById(
+                            "amenity-name"
+                        )
+                        .value
+                        .trim(),
+
+                description:
+                    document
+                        .getElementById(
+                            "amenity-description"
+                        )
+                        .value
+                        .trim(),
+
+                icon:
+                    document
+                        .getElementById(
+                            "amenity-icon"
+                        )
+                        .value
+                        .trim()
+            };
+
+            try {
+
+                const res =
+                    await authAjax(
+                        id
+                            ? `/api/amenities/${id}`
+                            : "/api/amenities",
+                        {
+                            method:
+                                id
+                                    ? "PUT"
+                                    : "POST",
+
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    const body =
+                        await res
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    throw new Error(
+                        body.message ||
+                        "Could not save the amenity."
+                    );
+                }
+
+                closeModal(
+                    "amenity-modal-overlay"
+                );
+
+                showToast(
+                    id
+                        ? "Amenity updated."
+                        : "Amenity added."
+                );
+
+                loadAdminAmenities();
+
+            } catch (error) {
+
+                errorElement.textContent =
+                    error.message ||
+                    "Could not reach the server.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+            }
+        }
+    );
+
+
+/* ============================================================
+   39s. ADMIN — DELETE AMENITY
+   ============================================================ */
+
+async function deleteAmenity(id) {
+
+    if (
+        !confirm(
+            "Delete this amenity? This cannot be undone."
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        const res =
+            await authAjax(
+                `/api/amenities/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        if (
+            !res.ok &&
+            res.status !== 204
+        ) {
+
+            throw new Error(
+                "Could not delete the amenity."
+            );
+        }
+
+        showToast(
+            "Amenity deleted."
+        );
+
+        loadAdminAmenities();
+
+    } catch (error) {
+
+        showToast(
+            error.message ||
+            "Could not delete the amenity."
+        );
+    }
+}
+
+
+/* ============================================================
+   39t. ADMIN — LOAD COUPONS
+   Note: /api/coupons requires an authenticated ADMIN/STAFF
+   request, so this uses authAjax even for the GET.
+   ============================================================ */
+
+let apiAdminCoupons = [];
+
+async function loadAdminCoupons() {
+
+    try {
+
+        const res =
+            await authAjax(
+                `/api/coupons`
+            );
+
+        apiAdminCoupons =
+            res.ok
+                ? await res.json()
+                : [];
+
+    } catch (e) {
+
+        apiAdminCoupons = [];
+    }
+
+    renderAdminCoupons();
+}
+
+
+/* ============================================================
+   39u. ADMIN — COUPONS TABLE
+   ============================================================ */
+
+function renderAdminCoupons() {
+
+    const tbody =
+        document.querySelector(
+            "#admin-coupons-table tbody"
+        );
+
+    const empty =
+        document.getElementById(
+            "admin-coupons-empty"
+        );
+
+    const template =
+        document.getElementById(
+            "admin-coupon-row-template"
+        );
+
+    tbody.replaceChildren();
+
+    if (apiAdminCoupons.length === 0) {
+        empty.classList.remove("is-hidden");
+        return;
+    }
+
+    empty.classList.add("is-hidden");
+
+    apiAdminCoupons.forEach(coupon => {
+
+        const row =
+            template.content.cloneNode(true);
+
+        const root =
+            row.querySelector("tr");
+
+        root.querySelector(".admin-coupon-code")
+            .textContent = coupon.code;
+
+        root.querySelector(".admin-coupon-type")
+            .textContent =
+            coupon.discountType === "PERCENTAGE"
+                ? "Percentage"
+                : "Fixed";
+
+        root.querySelector(".admin-coupon-value")
+            .textContent =
+            coupon.discountType === "PERCENTAGE"
+                ? `${coupon.discountValue}%`
+                : fmtLKR(coupon.discountValue);
+
+        root.querySelector(".admin-coupon-min")
+            .textContent =
+            coupon.minBookingAmount != null
+                ? fmtLKR(coupon.minBookingAmount)
+                : "—";
+
+        root.querySelector(".admin-coupon-expiry")
+            .textContent =
+            coupon.expiryDate || "—";
+
+        const statusBadge =
+            root.querySelector(".admin-coupon-status");
+
+        statusBadge.textContent =
+            coupon.active ? "ACTIVE" : "INACTIVE";
+
+        statusBadge.classList.add(
+            coupon.active
+                ? "badge-available"
+                : "badge-occupied"
+        );
+
+        const deactivateButton =
+            root.querySelector("[data-deactivate]");
+
+        const deleteButton =
+            root.querySelector("[data-delete]");
+
+        deactivateButton.classList.toggle(
+            "is-hidden",
+            !coupon.active
+        );
+
+        deleteButton.classList.toggle(
+            "is-hidden",
+            !isAdmin()
+        );
+
+        deactivateButton.addEventListener(
+            "click",
+            () => deactivateCoupon(coupon.id)
+        );
+
+        deleteButton.addEventListener(
+            "click",
+            () => deleteCoupon(coupon.id)
+        );
+
+        tbody.appendChild(row);
+    });
+}
+
+
+/* ============================================================
+   39v. ADMIN — ADD COUPON BUTTON + MODAL
+   Coupons have no update endpoint on the backend, so this
+   modal only ever creates new coupons — there is no edit flow.
+   ============================================================ */
+
+document
+    .getElementById("add-coupon-btn")
+    .addEventListener(
+        "click",
+        () => {
+
+            const errorElement =
+                document.getElementById(
+                    "coupon-error"
+                );
+
+            errorElement.classList.remove(
+                "show"
+            );
+
+            document
+                .getElementById("coupon-form")
+                .reset();
+
+            openModal(
+                "coupon-modal-overlay"
+            );
+        }
+    );
+
+
+/* ============================================================
+   39w. ADMIN — SAVE COUPON
+   ============================================================ */
+
+document
+    .getElementById("coupon-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const errorElement =
+                document.getElementById(
+                    "coupon-error"
+                );
+
+            errorElement.classList.remove(
+                "show"
+            );
+
+            const payload = {
+
+                code:
+                    document
+                        .getElementById(
+                            "coupon-code"
+                        )
+                        .value
+                        .trim(),
+
+                discountType:
+                document
+                    .getElementById(
+                        "coupon-discount-type"
+                    )
+                    .value,
+
+                discountValue:
+                    Number(
+                        document
+                            .getElementById(
+                                "coupon-discount-value"
+                            )
+                            .value
+                    ),
+
+                minBookingAmount:
+                    document
+                        .getElementById(
+                            "coupon-min-booking"
+                        )
+                        .value
+                        ? Number(
+                            document
+                                .getElementById(
+                                    "coupon-min-booking"
+                                )
+                                .value
+                        )
+                        : null,
+
+                expiryDate:
+                    document
+                        .getElementById(
+                            "coupon-expiry"
+                        )
+                        .value || null
+            };
+
+            try {
+
+                const res =
+                    await authAjax(
+                        "/api/coupons",
+                        {
+                            method: "POST",
+
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    const body =
+                        await res
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    throw new Error(
+                        body.message ||
+                        "Could not save the coupon."
+                    );
+                }
+
+                closeModal(
+                    "coupon-modal-overlay"
+                );
+
+                showToast(
+                    "Coupon added."
+                );
+
+                loadAdminCoupons();
+
+            } catch (error) {
+
+                errorElement.textContent =
+                    error.message ||
+                    "Could not reach the server.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+            }
+        }
+    );
+
+
+/* ============================================================
+   39x. ADMIN — DEACTIVATE / DELETE COUPON
+   ============================================================ */
+
+async function deactivateCoupon(id) {
+
+    if (
+        !confirm(
+            "Deactivate this coupon? Guests won't be able to use it anymore."
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        const res =
+            await authAjax(
+                `/api/coupons/${id}/deactivate`,
+                {
+                    method: "PATCH"
+                }
+            );
+
+        if (
+            !res.ok &&
+            res.status !== 204
+        ) {
+
+            throw new Error(
+                "Could not deactivate the coupon."
+            );
+        }
+
+        showToast(
+            "Coupon deactivated."
+        );
+
+        loadAdminCoupons();
+
+    } catch (error) {
+
+        showToast(
+            error.message ||
+            "Could not deactivate the coupon."
+        );
+    }
+}
+
+async function deleteCoupon(id) {
+
+    if (
+        !confirm(
+            "Delete this coupon? This cannot be undone."
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        const res =
+            await authAjax(
+                `/api/coupons/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        if (
+            !res.ok &&
+            res.status !== 204
+        ) {
+
+            throw new Error(
+                "Could not delete the coupon."
+            );
+        }
+
+        showToast(
+            "Coupon deleted."
+        );
+
+        loadAdminCoupons();
+
+    } catch (error) {
+
+        showToast(
+            error.message ||
+            "Could not delete the coupon."
+        );
+    }
+}
+
+
+/* ============================================================
+   39y. ADMIN — EXTRA SERVICE HOTEL SELECT
+   ============================================================ */
+
+let selectedExtraServiceHotelId = null;
+let apiAdminExtraServices = [];
+
+function renderExtraServiceHotelSelect() {
+
+    const select =
+        document.getElementById(
+            "extra-service-hotel-select"
+        );
+
+    const current =
+        select.value;
+
+    select.innerHTML =
+        `<option value="">Select a hotel…</option>` +
+
+        apiHotels
+            .map(
+                hotel =>
+                    `<option value="${hotel.id}">${hotel.name}</option>`
+            )
+            .join("");
+
+    if (current) {
+        select.value = current;
+    }
+}
+
+document
+    .getElementById(
+        "extra-service-hotel-select"
+    )
+    .addEventListener(
+        "change",
+        event => {
+
+            selectedExtraServiceHotelId =
+                event.target.value
+                    ? Number(
+                        event.target.value
+                    )
+                    : null;
+
+            document.getElementById(
+                "add-extra-service-btn"
+            ).disabled =
+                !selectedExtraServiceHotelId;
+
+            if (
+                selectedExtraServiceHotelId
+            ) {
+
+                loadAdminExtraServices(
+                    selectedExtraServiceHotelId
+                );
+
+            } else {
+
+                document.querySelector(
+                    "#admin-extra-services-table tbody"
+                ).innerHTML = "";
+
+                const empty =
+                    document.getElementById(
+                        "admin-extra-services-empty"
+                    );
+
+                empty.classList.remove("is-hidden");
+
+                empty.textContent =
+                    "Pick a hotel above to see and manage its extra services.";
+            }
+        }
+    );
+
+
+/* ============================================================
+   39z. ADMIN — LOAD EXTRA SERVICES
+   ============================================================ */
+
+async function loadAdminExtraServices(hotelId) {
+
+    try {
+
+        const res =
+            await ajaxRequest(
+                `${API_BASE}/api/extra-services/hotel/${hotelId}`
+            );
+
+        apiAdminExtraServices =
+            res.ok
+                ? await res.json()
+                : [];
+
+    } catch (e) {
+
+        apiAdminExtraServices = [];
+    }
+
+    renderAdminExtraServices();
+}
+
+
+/* ============================================================
+   39za. ADMIN — EXTRA SERVICES TABLE
+   ============================================================ */
+
+function renderAdminExtraServices() {
+
+    const tbody =
+        document.querySelector(
+            "#admin-extra-services-table tbody"
+        );
+
+    const empty =
+        document.getElementById(
+            "admin-extra-services-empty"
+        );
+
+    const template =
+        document.getElementById(
+            "admin-extra-service-row-template"
+        );
+
+    tbody.replaceChildren();
+
+    if (apiAdminExtraServices.length === 0) {
+        empty.textContent =
+            "This hotel has no extra services yet — add the first one above.";
+        empty.classList.remove("is-hidden");
+        return;
+    }
+
+    empty.classList.add("is-hidden");
+
+    apiAdminExtraServices.forEach(service => {
+
+        const row =
+            template.content.cloneNode(true);
+
+        const root =
+            row.querySelector("tr");
+
+        root.querySelector(".admin-extra-service-name")
+            .textContent = service.name;
+
+        root.querySelector(".admin-extra-service-description")
+            .textContent = service.description || "—";
+
+        root.querySelector(".admin-extra-service-price")
+            .textContent = fmtLKR(service.price);
+
+        const editButton =
+            root.querySelector("[data-edit]");
+
+        const deleteButton =
+            root.querySelector("[data-delete]");
+
+        editButton.dataset.edit = service.id;
+        deleteButton.dataset.delete = service.id;
+
+        editButton.addEventListener(
+            "click",
+            () => openExtraServiceModal(
+                apiAdminExtraServices.find(
+                    s => s.id === service.id
+                )
+            )
+        );
+
+        deleteButton.addEventListener(
+            "click",
+            () => deleteExtraService(service.id)
+        );
+
+        tbody.appendChild(row);
+    });
+}
+
+
+/* ============================================================
+   39zb. ADMIN — ADD EXTRA SERVICE BUTTON
+   ============================================================ */
+
+document
+    .getElementById("add-extra-service-btn")
+    .addEventListener(
+        "click",
+        () => openExtraServiceModal(null)
+    );
+
+
+/* ============================================================
+   39zc. ADMIN — EXTRA SERVICE MODAL
+   ============================================================ */
+
+function openExtraServiceModal(service) {
+
+    const errorElement =
+        document.getElementById(
+            "extra-service-error"
+        );
+
+    errorElement.classList.remove(
+        "show"
+    );
+
+    document
+        .getElementById("extra-service-form")
+        .reset();
+
+    if (service) {
+
+        document.getElementById(
+            "extra-service-modal-eyebrow"
+        ).textContent =
+            "Admin · Edit extra service";
+
+        document.getElementById(
+            "extra-service-modal-title"
+        ).textContent =
+            "Edit extra service";
+
+        document.getElementById(
+            "extra-service-id"
+        ).value = service.id;
+
+        document.getElementById(
+            "extra-service-name"
+        ).value = service.name || "";
+
+        document.getElementById(
+            "extra-service-description"
+        ).value = service.description || "";
+
+        document.getElementById(
+            "extra-service-price"
+        ).value = service.price || "";
+
+    } else {
+
+        document.getElementById(
+            "extra-service-modal-eyebrow"
+        ).textContent =
+            "Admin · New extra service";
+
+        document.getElementById(
+            "extra-service-modal-title"
+        ).textContent =
+            "Add extra service";
+
+        document.getElementById(
+            "extra-service-id"
+        ).value = "";
+    }
+
+    openModal(
+        "extra-service-modal-overlay"
+    );
+}
+
+
+/* ============================================================
+   39zd. ADMIN — SAVE EXTRA SERVICE
+   ============================================================ */
+
+document
+    .getElementById("extra-service-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const errorElement =
+                document.getElementById(
+                    "extra-service-error"
+                );
+
+            errorElement.classList.remove(
+                "show"
+            );
+
+            if (!selectedExtraServiceHotelId) {
+
+                errorElement.textContent =
+                    "Pick a hotel first.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+
+                return;
+            }
+
+            const id =
+                document.getElementById(
+                    "extra-service-id"
+                ).value;
+
+            const payload = {
+
+                hotelId:
+                selectedExtraServiceHotelId,
+
+                name:
+                    document
+                        .getElementById(
+                            "extra-service-name"
+                        )
+                        .value
+                        .trim(),
+
+                description:
+                    document
+                        .getElementById(
+                            "extra-service-description"
+                        )
+                        .value
+                        .trim(),
+
+                price:
+                    Number(
+                        document
+                            .getElementById(
+                                "extra-service-price"
+                            )
+                            .value
+                    )
+            };
+
+            try {
+
+                const res =
+                    await authAjax(
+                        id
+                            ? `/api/extra-services/${id}`
+                            : "/api/extra-services",
+                        {
+                            method:
+                                id
+                                    ? "PUT"
+                                    : "POST",
+
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    const body =
+                        await res
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    throw new Error(
+                        body.message ||
+                        "Could not save the extra service."
+                    );
+                }
+
+                closeModal(
+                    "extra-service-modal-overlay"
+                );
+
+                showToast(
+                    id
+                        ? "Extra service updated."
+                        : "Extra service added."
+                );
+
+                loadAdminExtraServices(
+                    selectedExtraServiceHotelId
+                );
+
+            } catch (error) {
+
+                errorElement.textContent =
+                    error.message ||
+                    "Could not reach the server.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+            }
+        }
+    );
+
+
+/* ============================================================
+   39ze. ADMIN — DELETE EXTRA SERVICE
+   ============================================================ */
+
+async function deleteExtraService(id) {
+
+    if (
+        !confirm(
+            "Delete this extra service? This cannot be undone."
+        )
+    ) {
+        return;
+    }
+
+    try {
+
+        const res =
+            await authAjax(
+                `/api/extra-services/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+        if (
+            !res.ok &&
+            res.status !== 204
+        ) {
+
+            throw new Error(
+                "Could not delete the extra service."
+            );
+        }
+
+        showToast(
+            "Extra service deleted."
+        );
+
+        loadAdminExtraServices(
+            selectedExtraServiceHotelId
+        );
+
+    } catch (error) {
+
+        showToast(
+            error.message ||
+            "Could not delete the extra service."
+        );
+    }
+}
+
+
+/* ============================================================
    40. RULE-BASED CHATBOT
    ============================================================ */
 
@@ -3029,7 +4631,7 @@ function getBotReply(
 }
 
 
-// methods finall call
+// final call methods
 
 loadSession();
 
