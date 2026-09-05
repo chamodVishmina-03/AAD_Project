@@ -1670,10 +1670,223 @@ async function openHotelModal(hotel) {
         ).value = "";
     }
 
+    const imagesSection =
+        document.getElementById(
+            "hotel-images-section"
+        );
+
+    document
+        .getElementById("hotel-image-form")
+        .reset();
+
+    document
+        .getElementById("hotel-image-error")
+        .classList.remove("show");
+
+    if (hotel) {
+
+        imagesSection.classList.remove(
+            "is-hidden"
+        );
+
+        renderHotelImages(
+            hotel.imageUrls || []
+        );
+
+    } else {
+
+        imagesSection.classList.add(
+            "is-hidden"
+        );
+    }
+
     openModal(
         "hotel-modal-overlay"
     );
 }
+
+
+/* ============================================================
+   30b. ADMIN — HOTEL PHOTOS
+   Note: the backend has no endpoint to remove a single image,
+   so this can only add new photos to an existing hotel — new
+   (unsaved) hotels have no id yet, so the section stays hidden
+   until the hotel has been created.
+   ============================================================ */
+
+function renderHotelImages(urls) {
+
+    const list =
+        document.getElementById(
+            "hotel-images-list"
+        );
+
+    list.replaceChildren();
+
+    if (!urls || urls.length === 0) {
+
+        const empty =
+            document.createElement("div");
+
+        empty.className =
+            "hotel-images-empty";
+
+        empty.textContent =
+            "No photos yet.";
+
+        list.appendChild(empty);
+
+        return;
+    }
+
+    urls.forEach(url => {
+
+        const thumb =
+            document.createElement("div");
+
+        thumb.className =
+            "hotel-image-thumb";
+
+        const img =
+            document.createElement("img");
+
+        img.src = url;
+        img.alt = "Hotel photo";
+
+        thumb.appendChild(img);
+        list.appendChild(thumb);
+    });
+}
+
+document
+    .getElementById("hotel-image-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+            const errorElement =
+                document.getElementById(
+                    "hotel-image-error"
+                );
+
+            errorElement.classList.remove(
+                "show"
+            );
+
+            const hotelId =
+                document.getElementById(
+                    "hotel-id"
+                ).value;
+
+            if (!hotelId) {
+
+                errorElement.textContent =
+                    "Save the hotel first, then add photos.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+
+                return;
+            }
+
+            const payload = {
+
+                imageUrl:
+                    document
+                        .getElementById(
+                            "hotel-image-url"
+                        )
+                        .value
+                        .trim(),
+
+                caption:
+                    document
+                        .getElementById(
+                            "hotel-image-caption"
+                        )
+                        .value
+                        .trim()
+            };
+
+            try {
+
+                const res =
+                    await authAjax(
+                        `/api/hotels/${hotelId}/images`,
+                        {
+                            method: "POST",
+
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+                        }
+                    );
+
+                if (!res.ok) {
+
+                    const body =
+                        await res
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    throw new Error(
+                        body.message ||
+                        "Could not add the photo."
+                    );
+                }
+
+                const existingHotel =
+                    apiHotels.find(
+                        h =>
+                            h.id ===
+                            Number(hotelId)
+                    );
+
+                const updatedUrls =
+                    existingHotel
+                        ? [
+                            ...(existingHotel.imageUrls || []),
+                            payload.imageUrl
+                        ]
+                        : [payload.imageUrl];
+
+                if (existingHotel) {
+                    existingHotel.imageUrls =
+                        updatedUrls;
+                }
+
+                renderHotelImages(
+                    updatedUrls
+                );
+
+                document
+                    .getElementById(
+                        "hotel-image-form"
+                    )
+                    .reset();
+
+                showToast(
+                    "Photo added."
+                );
+
+            } catch (error) {
+
+                errorElement.textContent =
+                    error.message ||
+                    "Could not reach the server.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+            }
+        }
+    );
 
 
 /* ============================================================
@@ -4631,7 +4844,9 @@ function getBotReply(
 }
 
 
-// final call methods
+
+
+// final methods call
 
 loadSession();
 
