@@ -415,6 +415,18 @@
             </div>
             <button type="submit" class="btn btn-primary btn-block modal-submit">Save hotel</button>
         </form>
+
+        <div id="hotel-images-section" class="hotel-images-section is-hidden">
+            <div class="hotel-images-divider"></div>
+            <div class="field-label-strong">Photos</div>
+            <div id="hotel-images-list" class="hotel-images-list"></div>
+            <div class="modal-error" id="hotel-image-error"></div>
+            <form id="hotel-image-form" class="hotel-image-form">
+                <div class="field"><label>Image URL</label><input type="url" id="hotel-image-url" required placeholder="https://…" /></div>
+                <div class="field"><label>Caption (optional)</label><input type="text" id="hotel-image-caption" /></div>
+                <button type="submit" class="btn btn-ghost btn-block">Add photo</button>
+            </form>
+        </div>
     </div>
 </div>
 
