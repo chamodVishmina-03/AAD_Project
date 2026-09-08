@@ -629,19 +629,12 @@ function clearSession() {
 
 function renderAuthState() {
 
-    const buttons =
-        document.getElementById(
-            "auth-buttons"
-        );
-
     const chip =
         document.getElementById(
             "user-chip"
         );
 
     if (session) {
-
-        buttons.classList.add("is-hidden");
 
         chip.classList.add("is-flex");
 
@@ -673,8 +666,6 @@ function renderAuthState() {
 
     } else {
 
-        buttons.classList.remove("is-hidden");
-
         chip.classList.remove("is-flex");
 
         document
@@ -690,20 +681,6 @@ function renderAuthState() {
 
 
 //====  authentication medel =====
-
-document
-    .getElementById("open-login")
-    .addEventListener(
-        "click",
-        () => openModal("login-overlay")
-    );
-
-document
-    .getElementById("open-register")
-    .addEventListener(
-        "click",
-        () => openModal("register-overlay")
-    );
 
 document
     .getElementById("gate-login-btn")
