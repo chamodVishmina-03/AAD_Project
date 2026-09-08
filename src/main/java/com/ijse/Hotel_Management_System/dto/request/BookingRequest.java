@@ -9,12 +9,27 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record BookingRequest(
-        @NotNull Long roomId,
-        @FutureOrPresent @NotNull LocalDate checkInDate,
-        @Future @NotNull LocalDate checkOutDate,
-        @NotNull @Positive Integer numberOfGuests,
+        @NotNull
+        Long roomId,
+
+        @FutureOrPresent
+        @NotNull
+        LocalDate checkInDate,
+
+        @Future
+        @NotNull
+        LocalDate checkOutDate,
+
+        @NotNull
+        @Positive
+        int numberOfGuests,
+
         String couponCode,
+
         List<ExtraServiceLine> extraServices
 ) {
+
+
     public record ExtraServiceLine(@NotNull Long extraServiceId, @NotNull @Positive Integer quantity) {}
+
 }

@@ -27,12 +27,14 @@ public class AmenityController {
         return new CommonResponse(OPERATION_SUCCESS, amenities, SUCCESS_MESSAGE);
     }
 
+
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     public CommonResponse create(@Valid @RequestBody AmenityRequest request) {
         Amenity amenity = amenityService.create(request);
         return new CommonResponse(OPERATION_SUCCESS, amenity, SUCCESS_MESSAGE);
     }
+
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
@@ -47,4 +49,7 @@ public class AmenityController {
         amenityService.delete(id);
         return new CommonResponse(SUCCESS_MESSAGE, OPERATION_SUCCESS);
     }
+
+
+
 }
