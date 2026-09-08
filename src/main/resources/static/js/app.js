@@ -473,6 +473,22 @@ function openHotel(id) {
 
 function showView(name) {
 
+    // Guests must log in or sign up before they can browse
+    // hotels / room details — bounce them to the gate instead.
+    if (
+        !session &&
+        (name === "home" || name === "detail")
+    ) {
+        name = "gate";
+    }
+
+    document
+        .getElementById("view-gate")
+        .classList.toggle(
+        "active",
+        name === "gate"
+    );
+
     document
         .getElementById("view-home")
         .classList.toggle(
@@ -690,6 +706,20 @@ document
     );
 
 document
+    .getElementById("gate-login-btn")
+    .addEventListener(
+        "click",
+        () => openModal("login-overlay")
+    );
+
+document
+    .getElementById("gate-register-btn")
+    .addEventListener(
+        "click",
+        () => openModal("register-overlay")
+    );
+
+document
     .querySelectorAll("[data-close]")
     .forEach(button => {
 
@@ -893,6 +923,8 @@ document
                     }.`
                 );
 
+                showView("home");
+
             } catch (error) {
 
                 errorElement.textContent =
@@ -1019,6 +1051,8 @@ document
                             .split(" ")[0]
                     }.`
                 );
+
+                showView("home");
 
             } catch (error) {
 
@@ -1185,6 +1219,11 @@ function refreshAdminNavVisibility() {
     document.getElementById("nav-admin").classList.toggle("is-hidden", !show);
 
     document.getElementById("admin-menu-link").classList.toggle("is-hidden", !show);
+
+    // "Hotels" / "Contact" only make sense once the guest is logged in
+    document.getElementById("nav-hotels").classList.toggle("is-hidden", !session);
+
+    document.getElementById("nav-contact").classList.toggle("is-hidden", !session);
 }
 
 const originalRenderAuthState =
@@ -4851,3 +4890,5 @@ function getBotReply(
 loadSession();
 
 refreshAdminNavVisibility();
+
+showView(session ? "home" : "gate");
