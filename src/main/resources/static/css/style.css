@@ -1536,6 +1536,30 @@ footer {
 .hotel-banner.gradient-4,.detail-banner.gradient-4{background:linear-gradient(135deg,#EC4899,#7C3AED);}
 
 
+/* ===== Gate (login required) view ===== */
+.gate-hero{
+    min-height:70vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.gate-actions{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    margin-top:28px;
+    flex-wrap:wrap;
+}
+.gate-btn-ghost{
+    background:rgba(255,255,255,0.14);
+    color:#fff;
+    border-color:rgba(255,255,255,0.45);
+}
+.gate-btn-ghost:hover{
+    background:rgba(255,255,255,0.24);
+}
+
+
 /* ===== Hotel photos (admin) ===== */
 .hotel-images-section.is-hidden{ display:none; }
 .hotel-images-divider{ height:1px; background:var(--border-soft); margin:20px 0 16px; }
