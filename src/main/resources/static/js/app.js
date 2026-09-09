@@ -180,6 +180,8 @@ async function loadPublicHotels() {
 
                     gradientClass: `gradient-${i % GRADIENT_COUNT}`,
 
+                    imageUrls: h.imageUrls || [],
+
                     rooms: rooms.map(r => ({
                         id: r.id,
                         roomNumber: r.roomNumber,
@@ -263,6 +265,16 @@ function renderHotelGrid() {
 
         root.dataset.id = h.id;
         banner.classList.add(h.gradientClass);
+
+        const photoUrl = h.imageUrls && h.imageUrls[0];
+        const photoImg = card.querySelector(".hotel-photo");
+
+        if (photoUrl) {
+            photoImg.onload = () => banner.classList.add("has-photo");
+            photoImg.onerror = () => banner.classList.remove("has-photo");
+            photoImg.src = photoUrl;
+        }
+
         card.querySelector(".monogram").textContent = initials;
         card.querySelector(".rating-badge").textContent = `★ ${h.starRating != null ? h.starRating : "—"}`;
         card.querySelector(".hotel-name").textContent = h.name;
@@ -373,10 +385,21 @@ function openHotel(id) {
     currentHotel = hotel;
 
     const detailBanner = document.getElementById("d-banner");
+    const detailPhotoImg = document.getElementById("d-photo");
+
     detailBanner.classList.remove(
-        "gradient-0", "gradient-1", "gradient-2", "gradient-3", "gradient-4"
+        "gradient-0", "gradient-1", "gradient-2", "gradient-3", "gradient-4", "has-photo"
     );
     detailBanner.classList.add(hotel.gradientClass);
+    detailPhotoImg.removeAttribute("src");
+
+    const detailPhotoUrl = hotel.imageUrls && hotel.imageUrls[0];
+
+    if (detailPhotoUrl) {
+        detailPhotoImg.onload = () => detailBanner.classList.add("has-photo");
+        detailPhotoImg.onerror = () => detailBanner.classList.remove("has-photo");
+        detailPhotoImg.src = detailPhotoUrl;
+    }
 
     document.getElementById(
         "d-eyebrow"
@@ -1141,6 +1164,60 @@ function authAjax(
 
 
 /* ============================================================
+   17b. AUTHENTICATED FILE UPLOAD HELPER
+   Sends a File as multipart/form-data (no JSON Content-Type —
+   the browser sets the correct multipart boundary itself).
+   Used for uploading actual photo files instead of pasting URLs.
+   ============================================================ */
+
+function uploadFile(path, file) {
+
+    return new Promise((resolve, reject) => {
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.open("POST", `${API_BASE}${path}`, true);
+
+        if (session && session.accessToken) {
+            xhr.setRequestHeader(
+                "Authorization",
+                `Bearer ${session.accessToken}`
+            );
+        }
+
+        xhr.onload = function () {
+
+            const status = xhr.status;
+            const ok = status >= 200 && status < 300;
+
+            resolve({
+                ok,
+                status,
+                json: function () {
+                    return new Promise((res, rej) => {
+                        try {
+                            res(xhr.responseText ? JSON.parse(xhr.responseText) : {});
+                        } catch (e) {
+                            rej(e);
+                        }
+                    });
+                }
+            });
+        };
+
+        xhr.onerror = function () {
+            reject(new Error("Network error — could not reach the server."));
+        };
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        xhr.send(formData);
+    });
+}
+
+
+/* ============================================================
    19. ADMIN — GLOBAL DATA
    ============================================================ */
 
@@ -1808,26 +1885,73 @@ document
                 return;
             }
 
-            const payload = {
+            const fileInput =
+                document.getElementById(
+                    "hotel-image-file"
+                );
 
-                imageUrl:
-                    document
-                        .getElementById(
-                            "hotel-image-url"
-                        )
-                        .value
-                        .trim(),
+            const file =
+                fileInput.files &&
+                fileInput.files[0];
 
-                caption:
-                    document
-                        .getElementById(
-                            "hotel-image-caption"
-                        )
-                        .value
-                        .trim()
-            };
+            if (!file) {
+
+                errorElement.textContent =
+                    "Choose a photo to upload.";
+
+                errorElement.classList.add(
+                    "show"
+                );
+
+                return;
+            }
+
+            const caption =
+                document
+                    .getElementById(
+                        "hotel-image-caption"
+                    )
+                    .value
+                    .trim();
+
+            const submitButton =
+                document.getElementById(
+                    "hotel-image-submit"
+                );
+
+            submitButton.disabled = true;
+            submitButton.textContent = "Uploading…";
 
             try {
+
+                const uploadRes =
+                    await uploadFile(
+                        "/api/uploads/image",
+                        file
+                    );
+
+                if (!uploadRes.ok) {
+
+                    const uploadBody =
+                        await uploadRes
+                            .json()
+                            .catch(
+                                () => ({})
+                            );
+
+                    throw new Error(
+                        uploadBody.message ||
+                        "Could not upload the photo."
+                    );
+                }
+
+                const uploadData =
+                    await uploadRes.json();
+
+                const payload = {
+                    imageUrl: uploadData.body.url,
+                    caption
+                };
 
                 const res =
                     await authAjax(
@@ -1877,6 +2001,20 @@ document
                         updatedUrls;
                 }
 
+                const publicHotel =
+                    hotels.find(
+                        h =>
+                            h.id ===
+                            Number(hotelId)
+                    );
+
+                if (publicHotel) {
+                    publicHotel.imageUrls =
+                        updatedUrls;
+
+                    renderHotelGrid();
+                }
+
                 renderHotelImages(
                     updatedUrls
                 );
@@ -1900,6 +2038,11 @@ document
                 errorElement.classList.add(
                     "show"
                 );
+
+            } finally {
+
+                submitButton.disabled = false;
+                submitButton.textContent = "Add photo";
             }
         }
     );

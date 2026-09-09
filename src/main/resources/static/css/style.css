@@ -1536,6 +1536,32 @@ footer {
 .hotel-banner.gradient-3,.detail-banner.gradient-3{background:linear-gradient(135deg,#0EA5E9,#4F46E5);}
 .hotel-banner.gradient-4,.detail-banner.gradient-4{background:linear-gradient(135deg,#EC4899,#7C3AED);}
 
+/* ===== Real hotel photos (replace the gradient placeholder) ===== */
+.hotel-photo,
+.detail-photo{
+    display:none;
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.hotel-banner.has-photo .hotel-photo,
+.detail-banner.has-photo .detail-photo{
+    display:block;
+}
+.hotel-banner.has-photo .monogram{
+    display:none;
+}
+.detail-banner-scrim{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+}
+.detail-banner.has-photo .detail-banner-scrim{
+    background:linear-gradient(180deg, rgba(15,23,42,0.15), rgba(15,23,42,0.55));
+}
+
 
 /* ===== Gate (login required) view ===== */
 .gate-hero{
