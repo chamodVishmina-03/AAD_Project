@@ -1,16 +1,18 @@
 package com.ijse.Hotel_Management_System.controller;
 
+import com.ijse.Hotel_Management_System.constant.CommonResponse;
 import com.ijse.Hotel_Management_System.dto.request.ExtraServiceRequest;
-import com.ijse.Hotel_Management_System.entity.ExtraService;
+import com.ijse.Hotel_Management_System.dto.response.ExtraServiceResponse;
 import com.ijse.Hotel_Management_System.service.ExtraServiceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.ijse.Hotel_Management_System.constant.ResponseCode.OPERATION_SUCCESS;
+import static com.ijse.Hotel_Management_System.constant.ResponseMessage.SUCCESS_MESSAGE;
 
 @RestController
 @RequestMapping("/api/extra-services")
@@ -19,32 +21,40 @@ public class ExtraServiceController {
 
     private final ExtraServiceService extraServiceService;
 
+
     @GetMapping("/hotel/{hotelId}")
-    public ResponseEntity<List<ExtraService>> findByHotel(@PathVariable Long hotelId) {
-        return ResponseEntity.ok(extraServiceService.findByHotel(hotelId));
+    public CommonResponse findByHotel(@PathVariable Long hotelId) {
+        List<ExtraServiceResponse> services = extraServiceService.findByHotel(hotelId);
+        return new CommonResponse(OPERATION_SUCCESS, services, SUCCESS_MESSAGE);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ExtraService> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(extraServiceService.findById(id));
+    public CommonResponse findById(@PathVariable Long id) {
+        ExtraServiceResponse service = extraServiceService.findById(id);
+        return new CommonResponse(OPERATION_SUCCESS, service, SUCCESS_MESSAGE);
     }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
-    public ResponseEntity<ExtraService> create(@Valid @RequestBody ExtraServiceRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(extraServiceService.create(request));
+    public CommonResponse create(@Valid @RequestBody ExtraServiceRequest request) {
+        ExtraServiceResponse service = extraServiceService.create(request);
+        return new CommonResponse(OPERATION_SUCCESS, service, SUCCESS_MESSAGE);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
-    public ResponseEntity<ExtraService> update(@PathVariable Long id, @Valid @RequestBody ExtraServiceRequest request) {
-        return ResponseEntity.ok(extraServiceService.update(id, request));
+    public CommonResponse update(@PathVariable Long id, @Valid @RequestBody ExtraServiceRequest request) {
+        ExtraServiceResponse service = extraServiceService.update(id, request);
+        return new CommonResponse(OPERATION_SUCCESS, service, SUCCESS_MESSAGE);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public CommonResponse delete(@PathVariable Long id) {
         extraServiceService.delete(id);
-        return ResponseEntity.noContent().build();
+        return new CommonResponse(SUCCESS_MESSAGE, OPERATION_SUCCESS);
     }
 }
+
+
+
