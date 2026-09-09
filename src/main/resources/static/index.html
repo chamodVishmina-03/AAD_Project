@@ -197,6 +197,35 @@
             </div>
             <div class="type-row" id="type-cards"></div>
         </section>
+
+        <section class="card-section">
+            <div class="section-head section-head-tight">
+                <div><h2>Book a room</h2><p>Pick your dates to see rooms that are actually free — booked rooms drop off the list automatically.</p></div>
+            </div>
+            <div class="search-card">
+                <div class="search-field">
+                    <label>Check-in</label>
+                    <input type="date" id="book-checkin" />
+                </div>
+                <div class="search-field">
+                    <label>Check-out</label>
+                    <input type="date" id="book-checkout" />
+                </div>
+                <div class="search-field">
+                    <label>Guests</label>
+                    <input type="number" id="book-guests" min="1" value="2" />
+                </div>
+                <button class="btn btn-primary search-btn" id="check-availability-btn" type="button">Check availability</button>
+            </div>
+            <div class="modal-error" id="availability-error"></div>
+            <div class="table-card">
+                <table id="available-rooms-table">
+                    <thead><tr><th>Room No.</th><th>Floor</th><th>Type</th><th>Price / night</th><th>Amenities</th><th></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="empty-state" id="available-rooms-empty">Pick your dates above and check availability to see bookable rooms.</div>
+        </section>
     </div>
 
     <!-- ============================================================
@@ -469,6 +498,29 @@
 </div>
 
 
+<!-- =====    Booking    ===== -->
+<div class="modal-overlay" id="booking-modal-overlay">
+    <div class="modal-box">
+        <button class="modal-close" data-close>×</button>
+        <div class="modal-eyebrow" id="booking-modal-eyebrow">Confirm your stay</div>
+        <h3 id="booking-modal-title">Book room</h3>
+        <form id="booking-form">
+            <div class="modal-error" id="booking-error"></div>
+            <input type="hidden" id="booking-room-id" />
+            <div class="field-row">
+                <div class="field"><label>Check-in</label><input type="date" id="booking-checkin" required /></div>
+                <div class="field"><label>Check-out</label><input type="date" id="booking-checkout" required /></div>
+            </div>
+            <div class="field"><label>Guests</label><input type="number" id="booking-guests" min="1" value="2" required /></div>
+            <div class="field"><label>Coupon code (optional)</label><input type="text" id="booking-coupon" placeholder="e.g. WELCOME10" /></div>
+            <div class="field-label-strong">Estimated total</div>
+            <div class="mono-cell" id="booking-total-preview">—</div>
+            <button type="submit" class="btn btn-primary btn-block modal-submit">Confirm booking</button>
+        </form>
+    </div>
+</div>
+
+
 <!-- =====   City     ===== -->
 <div class="modal-overlay" id="city-modal-overlay">
     <div class="modal-box">
@@ -636,6 +688,25 @@
 <template id="room-empty-row-template">
     <tr class="empty-table-row">
         <td colspan="6">No rooms added for this hotel yet.</td>
+    </tr>
+</template>
+
+<template id="available-room-row-template">
+    <tr>
+        <td class="mono-cell avail-room-number"></td>
+        <td class="mono-cell avail-room-floor"></td>
+        <td class="avail-room-type"></td>
+        <td class="mono-cell avail-room-price"></td>
+        <td class="avail-room-amenities"></td>
+        <td class="row-actions">
+            <button class="btn btn-primary btn-sm" data-book type="button">Book</button>
+        </td>
+    </tr>
+</template>
+
+<template id="available-room-empty-row-template">
+    <tr class="empty-table-row">
+        <td colspan="6">No rooms are free for those dates — try different dates.</td>
     </tr>
 </template>
 

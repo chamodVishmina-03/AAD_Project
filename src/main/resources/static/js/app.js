@@ -11,6 +11,9 @@ let currentHotel = null;
 
 let session = null;
 
+let currentAvailableRooms = [];
+let bookingModalRoom = null;
+
 
 
 
@@ -484,8 +487,271 @@ function openHotel(id) {
         typeWrap.appendChild(card);
     });
 
+    resetBookingWidget();
+
     showView("detail");
 }
+
+
+
+
+// ============================================================
+// BOOKING — live availability + booking modal
+// ============================================================
+
+function isoDateInDays(days) {
+    const d = new Date();
+    d.setDate(d.getDate() + days);
+    return d.toISOString().slice(0, 10);
+}
+
+function resetBookingWidget() {
+
+    currentAvailableRooms = [];
+
+    document.getElementById("book-checkin").value = isoDateInDays(1);
+    document.getElementById("book-checkout").value = isoDateInDays(2);
+    document.getElementById("book-guests").value = 2;
+
+    document.getElementById("availability-error").classList.remove("show");
+
+    const tbody = document.querySelector("#available-rooms-table tbody");
+    tbody.replaceChildren();
+
+    const empty = document.getElementById("available-rooms-empty");
+    empty.textContent = "Pick your dates above and check availability to see bookable rooms.";
+    empty.classList.remove("is-hidden");
+}
+
+document
+    .getElementById("check-availability-btn")
+    .addEventListener("click", () => checkAvailability());
+
+async function checkAvailability() {
+
+    const errorElement = document.getElementById("availability-error");
+    errorElement.classList.remove("show");
+
+    if (!currentHotel) return;
+
+    const checkIn = document.getElementById("book-checkin").value;
+    const checkOut = document.getElementById("book-checkout").value;
+
+    if (!checkIn || !checkOut) {
+        errorElement.textContent = "Pick both a check-in and check-out date.";
+        errorElement.classList.add("show");
+        return;
+    }
+
+    if (checkIn >= checkOut) {
+        errorElement.textContent = "Check-out date must be after check-in date.";
+        errorElement.classList.add("show");
+        return;
+    }
+
+    const tbody = document.querySelector("#available-rooms-table tbody");
+    const empty = document.getElementById("available-rooms-empty");
+
+    tbody.replaceChildren();
+    empty.textContent = "Checking availability…";
+    empty.classList.remove("is-hidden");
+
+    try {
+
+        const res = await ajaxRequest(
+            `${API_BASE}/api/rooms/available?hotelId=${currentHotel.id}&checkIn=${checkIn}&checkOut=${checkOut}`
+        );
+
+        if (!res.ok) {
+            throw new Error("Could not check availability right now.");
+        }
+
+        currentAvailableRooms = await res.json();
+        renderAvailableRooms();
+
+    } catch (error) {
+
+        currentAvailableRooms = [];
+        tbody.replaceChildren();
+
+        errorElement.textContent =
+            error.message || "Could not reach the server.";
+        errorElement.classList.add("show");
+
+        empty.textContent = "Could not load availability.";
+        empty.classList.remove("is-hidden");
+    }
+}
+
+function renderAvailableRooms() {
+
+    const tbody = document.querySelector("#available-rooms-table tbody");
+    const empty = document.getElementById("available-rooms-empty");
+    const template = document.getElementById("available-room-row-template");
+
+    tbody.replaceChildren();
+
+    if (!currentAvailableRooms.length) {
+        empty.textContent = "No rooms are free for those dates — try different dates.";
+        empty.classList.remove("is-hidden");
+        return;
+    }
+
+    empty.classList.add("is-hidden");
+
+    currentAvailableRooms.forEach(room => {
+
+        const row = template.content.cloneNode(true);
+        const tr = row.querySelector("tr");
+        tr.dataset.roomId = room.id;
+
+        row.querySelector(".avail-room-number").textContent = room.roomNumber;
+        row.querySelector(".avail-room-floor").textContent = room.floorNo != null ? room.floorNo : "—";
+        row.querySelector(".avail-room-type").textContent = room.roomType;
+        row.querySelector(".avail-room-price").textContent = fmtLKR(room.pricePerNight);
+
+        const amenities = row.querySelector(".avail-room-amenities");
+        (room.amenities ? Array.from(room.amenities) : []).forEach(amenity => {
+            const tag = document.createElement("span");
+            tag.className = "amenity-tag";
+            tag.textContent = amenity;
+            amenities.appendChild(tag);
+        });
+
+        row.querySelector("[data-book]").addEventListener(
+            "click",
+            () => openBookingModal(room)
+        );
+
+        tbody.appendChild(row);
+    });
+}
+
+function updateBookingTotalPreview() {
+
+    if (!bookingModalRoom) return;
+
+    const checkIn = document.getElementById("booking-checkin").value;
+    const checkOut = document.getElementById("booking-checkout").value;
+    const preview = document.getElementById("booking-total-preview");
+
+    if (!checkIn || !checkOut || checkIn >= checkOut) {
+        preview.textContent = "—";
+        return;
+    }
+
+    const nights = Math.round(
+        (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24)
+    );
+
+    preview.textContent =
+        `${fmtLKR(nights * bookingModalRoom.pricePerNight)} for ${nights} night${nights > 1 ? "s" : ""}`;
+}
+
+function openBookingModal(room) {
+
+    if (!session) {
+        showToast("Please log in to book a room.");
+        return;
+    }
+
+    bookingModalRoom = room;
+
+    document.getElementById("booking-error").classList.remove("show");
+    document.getElementById("booking-room-id").value = room.id;
+    document.getElementById("booking-modal-title").textContent =
+        `Book room ${room.roomNumber} — ${room.roomType}`;
+
+    document.getElementById("booking-checkin").value =
+        document.getElementById("book-checkin").value;
+    document.getElementById("booking-checkout").value =
+        document.getElementById("book-checkout").value;
+    document.getElementById("booking-guests").value =
+        document.getElementById("book-guests").value || 2;
+    document.getElementById("booking-coupon").value = "";
+
+    updateBookingTotalPreview();
+
+    openModal("booking-modal-overlay");
+}
+
+document
+    .getElementById("booking-checkin")
+    .addEventListener("change", updateBookingTotalPreview);
+
+document
+    .getElementById("booking-checkout")
+    .addEventListener("change", updateBookingTotalPreview);
+
+document
+    .getElementById("booking-form")
+    .addEventListener("submit", async event => {
+
+        event.preventDefault();
+
+        const errorElement = document.getElementById("booking-error");
+        errorElement.classList.remove("show");
+
+        const roomId = Number(document.getElementById("booking-room-id").value);
+        const checkInDate = document.getElementById("booking-checkin").value;
+        const checkOutDate = document.getElementById("booking-checkout").value;
+        const numberOfGuests = Number(document.getElementById("booking-guests").value);
+        const couponCode = document.getElementById("booking-coupon").value.trim();
+
+        if (checkInDate >= checkOutDate) {
+            errorElement.textContent = "Check-out date must be after check-in date.";
+            errorElement.classList.add("show");
+            return;
+        }
+
+        try {
+
+            const res = await authAjax("/api/bookings", {
+                method: "POST",
+                body: JSON.stringify({
+                    roomId,
+                    checkInDate,
+                    checkOutDate,
+                    numberOfGuests,
+                    couponCode: couponCode || null,
+                    extraServices: []
+                })
+            });
+
+            if (!res.ok) {
+
+                const body = await res.json().catch(() => ({}));
+
+                throw new Error(
+                    body.message ||
+                    "This room is no longer available for those dates."
+                );
+            }
+
+            const booking = await res.json();
+
+            closeModal("booking-modal-overlay");
+            document.getElementById("booking-form").reset();
+            bookingModalRoom = null;
+
+            showToast(
+                `Booked! Room ${booking.roomNumber} is confirmed for ${booking.checkInDate} → ${booking.checkOutDate}.`
+            );
+
+            // The room is now taken for these dates — refresh the
+            // availability list so it drops out of the inventory shown.
+            checkAvailability();
+
+        } catch (error) {
+
+            errorElement.textContent =
+                error.message ||
+                "Could not reach the server. Is the backend running?";
+
+            errorElement.classList.add("show");
+        }
+
+    });
 
 
 
