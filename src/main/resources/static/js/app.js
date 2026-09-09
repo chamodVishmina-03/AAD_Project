@@ -2189,6 +2189,8 @@ document
 
                 loadAdminHotels();
 
+                loadPublicHotels();
+
             } catch (error) {
 
                 errorElement.textContent =
@@ -2241,6 +2243,8 @@ async function deleteHotel(id) {
         );
 
         loadAdminHotels();
+
+        loadPublicHotels();
 
     } catch (error) {
 
@@ -2647,6 +2651,8 @@ document
                     selectedRoomHotelId
                 );
 
+                loadPublicHotels();
+
             } catch (error) {
 
                 errorElement.textContent =
@@ -2702,6 +2708,8 @@ async function deleteRoom(id) {
         loadAdminRooms(
             selectedRoomHotelId
         );
+
+        loadPublicHotels();
 
     } catch (error) {
 
@@ -4251,10 +4259,13 @@ async function loadAdminExtraServices(hotelId) {
                 `${API_BASE}/api/extra-services/hotel/${hotelId}`
             );
 
-        apiAdminExtraServices =
+        const data =
             res.ok
                 ? await res.json()
-                : [];
+                : null;
+
+        apiAdminExtraServices =
+            (data && data.body) || [];
 
     } catch (e) {
 
