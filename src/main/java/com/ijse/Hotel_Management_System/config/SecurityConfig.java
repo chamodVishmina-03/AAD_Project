@@ -80,7 +80,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/index.html", "/favicon.ico",
+                        .requestMatchers("/", "/index.html", "/login.html", "/register.html",
+                                "/hotel.html", "/bookings.html", "/admin.html", "/favicon.ico",
                                 "/css/**", "/js/**", "/assets/**", "/uploads/**").permitAll()
 
                         .requestMatchers("/api/auth/**").permitAll()

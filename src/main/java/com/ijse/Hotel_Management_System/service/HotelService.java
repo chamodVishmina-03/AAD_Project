@@ -13,5 +13,6 @@ public interface HotelService {
     List<HotelResponse> findAll();
     List<HotelResponse> search(String name, Long cityId);
     void addImage(Long hotelId, ImageRequest request);
+    void deleteImage(Long hotelId, Long imageId);
     void delete(Long id);
 }

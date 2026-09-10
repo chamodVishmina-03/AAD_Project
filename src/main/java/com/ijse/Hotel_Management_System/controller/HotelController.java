@@ -22,7 +22,7 @@ public class HotelController {
 
     @GetMapping
     public ResponseEntity<List<HotelResponse>> search(@RequestParam(required = false) String name,
-                                                        @RequestParam(required = false) Long cityId) {
+                                                      @RequestParam(required = false) Long cityId) {
         return ResponseEntity.ok(hotelService.search(name, cityId));
     }
 
@@ -48,6 +48,13 @@ public class HotelController {
     public ResponseEntity<Void> addImage(@PathVariable Long id, @Valid @RequestBody ImageRequest request) {
         hotelService.addImage(id, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/{hotelId}/images/{imageId}")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
+    public ResponseEntity<Void> deleteImage(@PathVariable Long hotelId, @PathVariable Long imageId) {
+        hotelService.deleteImage(hotelId, imageId);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")

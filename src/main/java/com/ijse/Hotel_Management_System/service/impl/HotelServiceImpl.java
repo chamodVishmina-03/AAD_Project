@@ -2,12 +2,15 @@ package com.ijse.Hotel_Management_System.service.impl;
 
 import com.ijse.Hotel_Management_System.dto.request.HotelRequest;
 import com.ijse.Hotel_Management_System.dto.request.ImageRequest;
+import com.ijse.Hotel_Management_System.dto.response.HotelImageResponse;
 import com.ijse.Hotel_Management_System.dto.response.HotelResponse;
 import com.ijse.Hotel_Management_System.entity.City;
 import com.ijse.Hotel_Management_System.entity.Hotel;
 import com.ijse.Hotel_Management_System.entity.HotelImage;
+import com.ijse.Hotel_Management_System.exception.BadRequestException;
 import com.ijse.Hotel_Management_System.exception.ResourceNotFoundException;
 import com.ijse.Hotel_Management_System.repository.CityRepository;
+import com.ijse.Hotel_Management_System.repository.HotelImageRepository;
 import com.ijse.Hotel_Management_System.repository.HotelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,7 @@ public class HotelServiceImpl implements com.ijse.Hotel_Management_System.servic
 
     private final HotelRepository hotelRepository;
     private final CityRepository cityRepository;
+    private final HotelImageRepository hotelImageRepository;
 
     @Override
     @Transactional
@@ -106,6 +110,22 @@ public class HotelServiceImpl implements com.ijse.Hotel_Management_System.servic
 
     @Override
     @Transactional
+    public void deleteImage(Long hotelId, Long imageId) {
+        Hotel hotel = getHotelOrThrow(hotelId);
+        HotelImage image = hotelImageRepository.findById(imageId)
+                .orElseThrow(() -> new ResourceNotFoundException("Image not found with id: " + imageId));
+
+        if (!image.getHotel().getId().equals(hotel.getId())) {
+            throw new BadRequestException("This image does not belong to hotel id: " + hotelId);
+        }
+
+        hotel.getImages().remove(image);
+        hotelImageRepository.delete(image);
+        log.info("Deleted image id={} from hotel id={}", imageId, hotelId);
+    }
+
+    @Override
+    @Transactional
     public void delete(Long id) {
         if (!hotelRepository.existsById(id)) {
             throw new ResourceNotFoundException("Hotel not found with id: " + id);
@@ -132,6 +152,13 @@ public class HotelServiceImpl implements com.ijse.Hotel_Management_System.servic
                 .email(hotel.getEmail())
                 .active(hotel.isActive())
                 .imageUrls(hotel.getImages().stream().map(HotelImage::getImageUrl).collect(Collectors.toList()))
+                .images(hotel.getImages().stream()
+                        .map(img -> HotelImageResponse.builder()
+                                .id(img.getId())
+                                .imageUrl(img.getImageUrl())
+                                .caption(img.getCaption())
+                                .build())
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

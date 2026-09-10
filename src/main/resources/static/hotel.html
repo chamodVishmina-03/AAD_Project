@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel — Just Click</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <div id="app-header" style="display:contents;"></div>
+</header>
+
+<div id="toast"></div>
+
+<main>
+    <a href="index.html" class="link-btn" style="text-decoration:none;">&larr; All hotels</a>
+
+    <div class="page-head" style="margin-top:14px;">
+        <h2 id="hotel-name">—</h2>
+        <p id="hotel-meta">—</p>
+    </div>
+
+    <div class="card">
+        <div class="section-title">About</div>
+        <p id="hotel-description" class="text-muted">—</p>
+        <div class="field-row" style="margin-top:12px;">
+            <div><div class="text-muted" style="font-size:12px;">Address</div><div id="hotel-address">—</div></div>
+            <div><div class="text-muted" style="font-size:12px;">Phone</div><div id="hotel-phone">—</div></div>
+            <div><div class="text-muted" style="font-size:12px;">Email</div><div id="hotel-email">—</div></div>
+        </div>
+    </div>
+
+    <div class="card hidden" id="hotel-photos-card">
+        <div class="section-title">Photos</div>
+        <div class="gallery-grid" id="hotel-photos-gallery"></div>
+    </div>
+
+    <div class="card">
+        <div class="section-title">Rooms</div>
+        <div class="table-wrap">
+            <table id="hotel-rooms-table">
+                <thead><tr><th>Room</th><th>Floor</th><th>Type</th><th>Price / night</th><th>Status</th><th>Amenities</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-title">Check availability &amp; book</div>
+        <div class="toolbar">
+            <div class="field" style="margin:0;">
+                <label>Check-in</label>
+                <input type="date" id="avail-checkin" />
+            </div>
+            <div class="field" style="margin:0;">
+                <label>Check-out</label>
+                <input type="date" id="avail-checkout" />
+            </div>
+            <div class="field" style="margin:0; max-width:100px;">
+                <label>Guests</label>
+                <input type="number" id="avail-guests" min="1" value="2" />
+            </div>
+            <button class="btn btn-primary" id="check-availability-btn" type="button">Check availability</button>
+        </div>
+        <div class="form-error" id="availability-error"></div>
+        <div class="table-wrap">
+            <table id="available-rooms-table">
+                <thead><tr><th>Room</th><th>Type</th><th>Price / night</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <p class="text-muted" id="available-rooms-empty">Pick your dates and check availability to see bookable rooms.</p>
+    </div>
+
+    <div class="card">
+        <div class="section-title">Extra services</div>
+        <div class="table-wrap">
+            <table id="hotel-extra-services-table">
+                <thead><tr><th>Service</th><th>Description</th><th>Price</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="section-title" style="display:flex; align-items:center; justify-content:space-between;">
+            <span>Reviews</span>
+            <button class="btn btn-outline btn-sm" id="ai-summary-btn" type="button">✨ AI summary</button>
+        </div>
+        <div class="card hidden" id="ai-summary-box" style="background: var(--info-bg); margin-bottom:12px;">
+            <p id="ai-summary-text" class="text-muted"></p>
+        </div>
+        <div id="hotel-reviews-list"></div>
+        <p class="text-muted hidden" id="hotel-reviews-empty">No reviews yet.</p>
+
+        <div style="margin-top:14px; border-top:1px solid var(--border); padding-top:14px;">
+            <div class="field-row">
+                <div class="field">
+                    <label>Your rating</label>
+                    <select id="review-rating">
+                        <option value="5">5 — Excellent</option>
+                        <option value="4">4 — Good</option>
+                        <option value="3">3 — Okay</option>
+                        <option value="2">2 — Poor</option>
+                        <option value="1">1 — Terrible</option>
+                    </select>
+                </div>
+            </div>
+            <div class="field">
+                <label>Comment</label>
+                <textarea id="review-comment" placeholder="How was your stay?"></textarea>
+            </div>
+            <button class="btn btn-outline" id="submit-review-btn" type="button">Post review</button>
+        </div>
+    </div>
+</main>
+
+
+<!-- Generic modal, used here for the booking form -->
+<dialog id="modal">
+    <div class="modal-inner">
+        <div class="modal-head">
+            <h3 id="modal-title">Title</h3>
+            <button class="modal-close" id="modal-close-btn" type="button">&times;</button>
+        </div>
+        <div class="form-error" id="modal-error"></div>
+        <div id="modal-body"></div>
+    </div>
+</dialog>
+
+<script src="js/common.js"></script>
+<script src="js/hotel.js"></script>
+</body>
+</html>

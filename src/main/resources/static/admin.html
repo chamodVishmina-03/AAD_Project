@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Just Click</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <div id="app-header" style="display:contents;"></div>
+</header>
+
+<div id="toast"></div>
+
+<main>
+    <div class="page-head">
+        <h2>Admin</h2>
+        <p>Manage hotels, rooms, lookups, bookings and users.</p>
+    </div>
+
+    <div class="admin-tabs" id="admin-tabs">
+        <button data-tab="hotels" type="button">Hotels</button>
+        <button data-tab="rooms" type="button">Rooms</button>
+        <button data-tab="roomTypes" type="button">Room types</button>
+        <button data-tab="amenities" type="button">Amenities</button>
+        <button data-tab="cities" type="button">Cities</button>
+        <button data-tab="coupons" type="button">Coupons</button>
+        <button data-tab="extraServices" type="button">Extra services</button>
+        <button data-tab="bookings" type="button">Bookings</button>
+        <button data-tab="users" id="admin-tab-users" type="button">Users</button>
+    </div>
+
+    <div class="form-error" id="admin-error"></div>
+
+    <div class="card">
+        <div class="toolbar" id="admin-toolbar"></div>
+        <div class="table-wrap">
+            <table id="admin-table">
+                <thead id="admin-table-head"></thead>
+                <tbody id="admin-table-body">
+                    <tr class="empty-row"><td>Loading…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<!-- Generic modal, used for every admin create/edit form -->
+<dialog id="modal">
+    <div class="modal-inner">
+        <div class="modal-head">
+            <h3 id="modal-title">Title</h3>
+            <button class="modal-close" id="modal-close-btn" type="button">&times;</button>
+        </div>
+        <div class="form-error" id="modal-error"></div>
+        <div id="modal-body"></div>
+    </div>
+</dialog>
+
+<script src="js/common.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

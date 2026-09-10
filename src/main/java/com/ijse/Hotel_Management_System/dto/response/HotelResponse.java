@@ -10,6 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class HotelResponse {
+
     private Long id;
     private String name;
     private String description;
@@ -21,4 +22,8 @@ public class HotelResponse {
     private String email;
     private boolean active;
     private List<String> imageUrls;
+    private List<HotelImageResponse> images;
+
+
+
 }

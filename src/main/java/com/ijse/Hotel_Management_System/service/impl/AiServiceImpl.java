@@ -27,16 +27,9 @@ public class AiServiceImpl implements AiService {
 
     private static final String REVIEW_SUMMARY_SYSTEM_PROMPT =
             "You are a concise, neutral review summarizer for a hotel booking platform called Havenstay. " +
-            "Given a hotel's guest reviews, write a 2-3 sentence summary in plain English covering the " +
-            "common positive and negative themes. Do not invent details that are not present in the reviews. " +
-            "Do not use markdown formatting.";
-
-    private static final String CONCIERGE_SYSTEM_PROMPT_PREFIX =
-            "You are Concierge, the friendly booking assistant for a hotel platform called Havenstay. " +
-            "Only recommend hotels from the catalogue provided below - never invent a hotel that isn't listed. " +
-            "You do not have access to live prices or availability, so if asked about those, tell the guest " +
-            "to open the hotel's page and use the date search there. Keep replies under 120 words and do not " +
-            "use markdown formatting.\n\nCurrent hotel catalogue:\n";
+                    "Given a hotel's guest reviews, write a 2-3 sentence summary in plain English covering the " +
+                    "common positive and negative themes. Do not invent details that are not present in the reviews. " +
+                    "Do not use markdown formatting.";
 
     private final ChatClient aiClient;
     private final HotelRepository hotelRepository;
@@ -45,30 +38,28 @@ public class AiServiceImpl implements AiService {
     private final ConcurrentHashMap<Long, String> reviewSummaryCache = new ConcurrentHashMap<>();
 
     @Override
-    public void summarizeHotelReviews(Long hotelId, boolean forceRegenerate) {
+    public ReviewSummaryResponse summarizeHotelReviews(Long hotelId, boolean forceRegenerate) {
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
 
         List<Review> reviews = reviewRepository.findByHotelId(hotelId);
 
         if (reviews.isEmpty()) {
-            ReviewSummaryResponse.builder()
+            return ReviewSummaryResponse.builder()
                     .hotelId(hotelId)
                     .summary("No reviews yet for this hotel.")
                     .reviewCount(0)
                     .cached(false)
                     .build();
-            return;
         }
 
         if (!forceRegenerate && reviewSummaryCache.containsKey(hotelId)) {
-            ReviewSummaryResponse.builder()
+            return ReviewSummaryResponse.builder()
                     .hotelId(hotelId)
                     .summary(reviewSummaryCache.get(hotelId))
                     .reviewCount(reviews.size())
                     .cached(true)
                     .build();
-            return;
         }
 
         String reviewLines = reviews.stream()
@@ -81,7 +72,7 @@ public class AiServiceImpl implements AiService {
         reviewSummaryCache.put(hotelId, summary);
         log.info("Generated AI review summary for hotel id={} ({} reviews)", hotelId, reviews.size());
 
-        ReviewSummaryResponse.builder()
+        return ReviewSummaryResponse.builder()
                 .hotelId(hotelId)
                 .summary(summary)
                 .reviewCount(reviews.size())
@@ -91,19 +82,63 @@ public class AiServiceImpl implements AiService {
 
     @Override
     public ChatResponse chat(String message) {
-        List<Hotel> hotels = hotelRepository.findAll();
-        String catalogue = hotels.isEmpty()
-                ? "(no hotels are currently listed)"
-                : hotels.stream()
-                    .limit(25)
-                    .map(h -> "- " + h.getName() + " (" + (h.getCity() != null ? h.getCity().getName() : "unknown city")
-                            + "), rating " + (h.getStarRating() != null ? h.getStarRating() : "n/a") + "/5")
-                    .collect(Collectors.joining("\n"));
-
-        String systemPrompt = CONCIERGE_SYSTEM_PROMPT_PREFIX + catalogue;
-        String reply = aiClient.complete(systemPrompt, message);
-        log.info("Concierge chat reply generated ({} chars)", reply.length());
-
+        String reply = buildRuleBasedReply(message);
+        log.info("Concierge chat reply generated ({} chars) via rule-based engine", reply.length());
         return ChatResponse.builder().reply(reply).build();
+    }
+
+    private String buildRuleBasedReply(String message) {
+        String msg = message == null ? "" : message.toLowerCase();
+
+        if (containsAny(msg, "hi", "hello", "hey")) {
+            return "Hello! I'm Concierge. Ask me about our hotels, rooms, prices, or how to make a booking.";
+
+        } else if (containsAny(msg, "bye", "goodbye", "see you")) {
+            return "Goodbye! Have a great stay with Just Click.";
+
+        } else if (containsAny(msg, "thank", "thanks")) {
+            return "You're welcome! Let me know if you need anything else.";
+
+        } else if (containsAny(msg, "hotel", "hotels")) {
+            List<Hotel> hotels = hotelRepository.findAll();
+            if (hotels.isEmpty()) {
+                return "We don't have any hotels listed right now — please check back later.";
+            }
+            String names = hotels.stream()
+                    .limit(5)
+                    .map(Hotel::getName)
+                    .collect(Collectors.joining(", "));
+            return "Here are some of our hotels: " + names + ". Open a hotel's page to see its rooms and availability.";
+
+        } else if (containsAny(msg, "price", "cost", "how much", "rate")) {
+            return "Room prices vary by hotel and room type. Open a hotel's page and check its room list to see the price per night.";
+
+        } else if (containsAny(msg, "book", "booking", "reserve")) {
+            return "To book a room: open a hotel's page, pick your check-in/check-out dates, click \"Check availability\", then choose a room to reserve it.";
+
+        } else if (containsAny(msg, "cancel")) {
+            return "You can cancel a booking from the \"My bookings\" page as long as it's still pending or confirmed.";
+
+        } else if (containsAny(msg, "room", "rooms")) {
+            return "Each hotel lists its rooms with room type, floor, price per night and amenities on the hotel's page.";
+
+        } else if (containsAny(msg, "review", "rating")) {
+            return "You can read guest reviews at the bottom of every hotel's page, and leave your own after checking availability there.";
+
+        } else if (containsAny(msg, "contact", "phone", "email", "support")) {
+            return "Each hotel's page lists its address, phone number and email under the \"About\" section.";
+
+        } else {
+            return "Sorry, I didn't quite get that. You can ask me about hotels, rooms, prices, bookings, or reviews.";
+        }
+    }
+
+    private boolean containsAny(String message, String... keywords) {
+        for (String keyword : keywords) {
+            if (message.contains(keyword)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
