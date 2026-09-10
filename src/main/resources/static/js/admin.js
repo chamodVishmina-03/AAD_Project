@@ -1018,6 +1018,8 @@ const usersTab = {
 };
 
 
+
+
 const ADMIN_TABS = {
     hotels: hotelsTab,
     rooms: roomsTab,

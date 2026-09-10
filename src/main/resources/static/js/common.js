@@ -1,9 +1,4 @@
-// ============================================================
-// common.js — shared by every page.
-// Session handling, auth guards, the shared header, the generic
-// modal, and small fetch helpers all live here so each page's
-// own script only has to worry about its own content.
-// ============================================================
+
 
 const API_BASE = "";
 
@@ -40,8 +35,11 @@ function isStaffOrAdmin() {
     return !!(session && session.roles && (session.roles.includes("ADMIN") || session.roles.includes("STAFF")));
 }
 
-// Call at the very top of any page that needs a logged-in user.
-// Sends the visitor straight to the login page if there's no session.
+
+
+
+
+
 function requireAuth() {
     loadSession();
     if (!isLoggedIn()) {
@@ -49,8 +47,9 @@ function requireAuth() {
     }
 }
 
-// Call at the top of login.html / register.html — if the visitor is
-// already signed in there's no reason to show the auth form again.
+
+
+
 function redirectIfAuthed() {
     loadSession();
     if (isLoggedIn()) {
@@ -82,11 +81,9 @@ async function logout() {
 }
 
 
-// ============================================================
-// Shared header (brand + nav + who's signed in + logout)
-// Every protected page has <div id="app-header"></div> — this
-// fills it in consistently so the nav never drifts between pages.
-// ============================================================
+
+
+
 
 function renderHeader(activePage) {
     const header = document.getElementById("app-header");
@@ -116,12 +113,9 @@ function renderHeader(activePage) {
 }
 
 
-// ============================================================
-// Concierge chat widget (floating button + panel)
-// Talks to POST /api/ai/chat. Injected once per page, on top of
-// whatever markup the page already has, so no page needs its own
-// chat HTML — renderHeader() turns it on automatically.
-// ============================================================
+
+
+
 
 let conciergeChatHistory = [];
 
@@ -239,9 +233,10 @@ async function authAjax(path, options = {}) {
     }
 }
 
-// Like authAjax, but for multipart file uploads — the browser must set its
-// own "Content-Type: multipart/form-data; boundary=..." header, so we only
-// attach the auth header here and let fetch handle the rest.
+
+
+
+
 async function authUpload(path, formData) {
     const headers = {};
     if (session && session.accessToken) {
@@ -264,11 +259,7 @@ async function errorMessage(res, fallback) {
 }
 
 
-// ============================================================
-// Generic modal (dialog) — used on hotel.html and admin.html
-// Both pages include <dialog id="modal">...</dialog> from the
-// same markup block, so this code works on either page unchanged.
-// ============================================================
+
 
 function openModal(title, bodyHtml) {
     document.getElementById("modal-title").textContent = title;
