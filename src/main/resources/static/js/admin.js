@@ -55,11 +55,12 @@ function switchAdminTab(tab) {
 }
 
 
-// ============================================================
-// Generic CRUD engine (Cities, Room types, Amenities, Coupons)
-// ============================================================
+
+// generatic
+
 
 const RESOURCES = {
+
 
     cities: {
         title: "City",
@@ -78,6 +79,7 @@ const RESOURCES = {
         deletePath: id => `/api/cities/${id}`,
         canDelete: () => isAdmin()
     },
+
 
     roomTypes: {
         title: "Room type",
@@ -159,6 +161,8 @@ const RESOURCES = {
     }
 };
 
+
+
 function renderField(f, item) {
     const value = item ? (item[f.key] != null ? item[f.key] : "") : "";
 
@@ -238,6 +242,7 @@ async function deleteResourceItem(cfg, id) {
     }
 }
 
+
 function renderGenericRows(cfg, items) {
     const tbody = document.getElementById("admin-table-body");
 
@@ -276,6 +281,7 @@ function renderGenericRows(cfg, items) {
     });
 }
 
+
 function makeGenericTab(cfg) {
     return {
         async render() {
@@ -302,9 +308,9 @@ function makeGenericTab(cfg) {
 }
 
 
-// ============================================================
-// Hotels (custom: needs a city select)
-// ============================================================
+
+
+//  ----   hotels ------------
 
 const hotelsTab = {
     async render() {
@@ -429,9 +435,9 @@ async function deleteHotel(id) {
 }
 
 
-// ============================================================
-// Hotel images (upload + gallery + delete)
-// ============================================================
+
+
+// ----  hotel img -------
 
 function hotelImagesModalBody(hotel) {
     const images = hotel.images || [];
@@ -541,9 +547,11 @@ async function refreshHotelImagesModal(hotel, onUpdate) {
 }
 
 
-// ============================================================
-// Rooms (custom: scoped to a chosen hotel)
-// ============================================================
+
+
+
+
+// ------  hotels   ---------------
 
 const roomsTab = {
     async render() {
@@ -713,9 +721,13 @@ async function deleteRoom(id) {
 }
 
 
-// ============================================================
-// Extra services (custom: scoped to a chosen hotel)
-// ============================================================
+
+
+
+
+
+
+// --------       extra services   --------
 
 const extraServicesTab = {
     async render() {
@@ -859,9 +871,9 @@ async function deleteExtraService(id) {
 }
 
 
-// ============================================================
-// Bookings (custom: status changer, no create/delete)
-// ============================================================
+
+
+// -------  booking --------
 
 const bookingsTab = {
     async render() {
@@ -918,9 +930,9 @@ const bookingsTab = {
 };
 
 
-// ============================================================
-// Users (custom: ADMIN only)
-// ============================================================
+
+
+//---------   USers   ------------------
 
 const usersTab = {
     async render() {
