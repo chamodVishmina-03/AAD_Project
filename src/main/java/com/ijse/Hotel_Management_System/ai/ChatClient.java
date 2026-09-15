@@ -85,8 +85,6 @@ public class ChatClient {
         }
 
 
-
-
         try {
             Map<String, Object> requestBody = Map.of(
                     "model", model,
