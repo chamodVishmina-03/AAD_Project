@@ -25,15 +25,26 @@
         <div class="table-wrap">
             <table id="bookings-table">
                 <thead>
-                    <tr><th>Hotel</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Guests</th><th>Total</th><th>Status</th><th></th></tr>
+                <tr><th>Hotel</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Guests</th><th>Total</th><th>Status</th><th></th></tr>
                 </thead>
                 <tbody id="bookings-table-body">
-                    <tr class="empty-row"><td colspan="8">Loading…</td></tr>
+                <tr class="empty-row"><td colspan="8">Loading…</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 </main>
+
+<dialog id="modal">
+    <div class="modal-inner">
+        <div class="modal-head">
+            <h3 id="modal-title">Title</h3>
+            <button class="modal-close" id="modal-close-btn" type="button">&times;</button>
+        </div>
+        <div class="form-error" id="modal-error"></div>
+        <div id="modal-body"></div>
+    </div>
+</dialog>
 
 <script src="js/common.js"></script>
 <script src="js/bookings.js"></script>

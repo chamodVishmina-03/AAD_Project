@@ -3,6 +3,8 @@ package com.ijse.Hotel_Management_System.ai;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import com.ijse.Hotel_Management_System.exception.ChatServiceException;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -48,6 +50,32 @@ public class ChatClient {
     }
 
 
+
+
+    @PostConstruct
+    public void init() {
+        if (!enabled) {
+            log.warn("AI feature is disabled (ai.enabled=false). Chat/summary endpoints will reject requests.");
+            return;
+        }
+        if (apiKey == null || apiKey.isBlank() || apiKey.startsWith("CHANGE_ME")) {
+            log.warn("AI feature: ANTHROPIC_API_KEY is not set properly. Calls to {} will fail.", baseUrl);
+        } else {
+            log.info("ChatClient initialized — ready to call {} using model {}", baseUrl, model);
+        }
+    }
+
+
+
+
+    @PreDestroy
+    public void cleanup() {
+        log.info("ChatClient shutting down — no open connections to release (HttpClient is per-request).");
+    }
+
+
+
+
     public String complete(String systemPrompt, String userPrompt) {
         if (!enabled) {
             throw new ChatServiceException("AI features are currently disabled.");
@@ -55,6 +83,9 @@ public class ChatClient {
         if (apiKey == null || apiKey.isBlank() || apiKey.startsWith("CHANGE_ME")) {
             throw new ChatServiceException("AI service is not configured. Set the ANTHROPIC_API_KEY environment variable.");
         }
+
+
+
 
         try {
             Map<String, Object> requestBody = Map.of(
@@ -99,6 +130,8 @@ public class ChatClient {
             }
 
             return text.toString().trim();
+
+
 
         } catch (ChatServiceException e) {
             throw e;

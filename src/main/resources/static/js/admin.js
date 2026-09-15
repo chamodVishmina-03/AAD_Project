@@ -566,7 +566,7 @@ const roomsTab = {
         `;
 
         document.getElementById("admin-table-head").innerHTML =
-            "<tr><th>Room No.</th><th>Floor</th><th>Type</th><th>Price / night</th><th>Status</th><th></th></tr>";
+            "<tr><th>Room No.</th><th>Floor</th><th>Type</th><th>Price / night</th><th>Status</th><th>Photos</th><th></th></tr>";
 
         let hotelsList = [];
         try {
@@ -594,14 +594,14 @@ const roomsTab = {
             await loadAdminRooms();
         } else {
             document.getElementById("admin-table-body").innerHTML =
-                `<tr class="empty-row"><td colspan="6">Pick a hotel above to see its rooms.</td></tr>`;
+                `<tr class="empty-row"><td colspan="7">Pick a hotel above to see its rooms.</td></tr>`;
         }
     }
 };
 
 async function loadAdminRooms() {
     const tbody = document.getElementById("admin-table-body");
-    tbody.innerHTML = `<tr class="empty-row"><td colspan="6">Loading…</td></tr>`;
+    tbody.innerHTML = `<tr class="empty-row"><td colspan="7">Loading…</td></tr>`;
 
     try {
         const res = await authAjax(`/api/rooms/hotel/${adminRoomsHotelId}`);
@@ -609,7 +609,7 @@ async function loadAdminRooms() {
         adminRoomsCache = await res.json();
         renderAdminRoomsTable();
     } catch (e) {
-        tbody.innerHTML = `<tr class="empty-row"><td colspan="6">${e.message}</td></tr>`;
+        tbody.innerHTML = `<tr class="empty-row"><td colspan="7">${e.message}</td></tr>`;
     }
 }
 
@@ -617,7 +617,7 @@ function renderAdminRoomsTable() {
     const tbody = document.getElementById("admin-table-body");
 
     if (!adminRoomsCache.length) {
-        tbody.innerHTML = `<tr class="empty-row"><td colspan="6">No rooms yet for this hotel.</td></tr>`;
+        tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No rooms yet for this hotel.</td></tr>`;
         return;
     }
 
@@ -628,7 +628,9 @@ function renderAdminRoomsTable() {
             <td>${r.roomType}</td>
             <td>${fmtLKR(r.pricePerNight)}</td>
             <td><span class="badge badge-${(r.status || "").toLowerCase()}">${r.status}</span></td>
+            <td>${(r.imageUrls || []).length}</td>
             <td class="row-actions">
+                <button class="btn btn-sm btn-outline" data-act="images" data-id="${r.id}">Photos</button>
                 <button class="btn btn-sm btn-outline" data-act="edit" data-id="${r.id}">Edit</button>
                 <button class="btn btn-sm btn-danger" data-act="delete" data-id="${r.id}">Delete</button>
             </td>
@@ -640,9 +642,99 @@ function renderAdminRoomsTable() {
             const id = Number(btn.dataset.id);
             const room = adminRoomsCache.find(r => r.id === id);
             if (btn.dataset.act === "edit") openRoomForm(room);
+            else if (btn.dataset.act === "images") openRoomImagesModal(room);
             else deleteRoom(id);
         });
     });
+}
+
+
+// ---- room img ----
+
+function roomImagesModalBody(room) {
+    const images = room.imageUrls || [];
+    const galleryHtml = images.length
+        ? `<div class="gallery-grid">
+            ${images.map(url => `
+                <div class="gallery-item">
+                    <img src="${url}" alt="Room ${room.roomNumber}" />
+                </div>
+            `).join("")}
+        </div>`
+        : `<p class="text-muted">No photos yet — add this room's first photo below.</p>`;
+
+    return `
+        ${galleryHtml}
+        <form id="room-image-upload-form" style="margin-top:16px; border-top:1px solid var(--border); padding-top:14px;">
+            <div class="field"><label>Photo</label><input type="file" id="field-room-image-file" accept="image/*" required /></div>
+            <button type="submit" class="btn btn-primary btn-block" id="room-image-upload-btn">Upload &amp; add photo</button>
+        </form>
+    `;
+}
+
+async function openRoomImagesModal(room) {
+    let currentRoom = room;
+    openModal(`Photos — Room ${room.roomNumber}`, roomImagesModalBody(currentRoom));
+    wireRoomImagesModal(currentRoom, (updated) => {
+        currentRoom = updated;
+    });
+}
+
+function wireRoomImagesModal(room, onUpdate) {
+    document.getElementById("room-image-upload-form").addEventListener("submit", async event => {
+        event.preventDefault();
+        document.getElementById("modal-error").classList.remove("show");
+
+        const fileInput = document.getElementById("field-room-image-file");
+        const file = fileInput.files[0];
+
+        if (!file) {
+            modalErrorText("Choose a photo to upload.");
+            return;
+        }
+
+        const uploadBtn = document.getElementById("room-image-upload-btn");
+        uploadBtn.disabled = true;
+        uploadBtn.textContent = "Uploading…";
+
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const uploadRes = await authUpload("/api/uploads/image", formData);
+            if (!uploadRes.ok) throw new Error(await errorMessage(uploadRes, "Could not upload that photo."));
+            const uploadBody = await uploadRes.json();
+            const imageUrl = (uploadBody.body || uploadBody).url;
+
+            const addRes = await authAjax(`/api/rooms/${room.id}/images`, {
+                method: "POST",
+                body: JSON.stringify({ imageUrl, caption: null })
+            });
+            if (!addRes.ok) throw new Error(await errorMessage(addRes, "Could not attach that photo to the room."));
+
+            showToast("Photo added.");
+            await refreshRoomImagesModal(room, onUpdate);
+            loadAdminRooms();
+        } catch (e) {
+            modalErrorText(e.message);
+        } finally {
+            uploadBtn.disabled = false;
+            uploadBtn.textContent = "Upload & add photo";
+        }
+    });
+}
+
+async function refreshRoomImagesModal(room, onUpdate) {
+    try {
+        const res = await authAjax(`/api/rooms/${room.id}`);
+        if (!res.ok) throw new Error("Could not refresh photos.");
+        const updated = await res.json();
+        onUpdate(updated);
+        document.getElementById("modal-body").innerHTML = roomImagesModalBody(updated);
+        wireRoomImagesModal(updated, onUpdate);
+    } catch (e) {
+        modalErrorText(e.message);
+    }
 }
 
 function openRoomForm(room) {
@@ -879,10 +971,10 @@ const bookingsTab = {
     async render() {
         document.getElementById("admin-toolbar").innerHTML = "";
         document.getElementById("admin-table-head").innerHTML =
-            "<tr><th>Guest</th><th>Hotel</th><th>Room</th><th>Dates</th><th>Guests</th><th>Total</th><th>Status</th></tr>";
+            "<tr><th>Guest</th><th>Hotel</th><th>Room</th><th>Dates</th><th>Guests</th><th>Total</th><th>Status</th><th></th></tr>";
 
         const tbody = document.getElementById("admin-table-body");
-        tbody.innerHTML = `<tr class="empty-row"><td colspan="7">Loading…</td></tr>`;
+        tbody.innerHTML = `<tr class="empty-row"><td colspan="8">Loading…</td></tr>`;
 
         try {
             const res = await authAjax("/api/bookings");
@@ -890,7 +982,7 @@ const bookingsTab = {
             const bookings = await res.json();
 
             if (!bookings.length) {
-                tbody.innerHTML = `<tr class="empty-row"><td colspan="7">No bookings yet.</td></tr>`;
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="8">No bookings yet.</td></tr>`;
                 return;
             }
 
@@ -909,6 +1001,9 @@ const bookingsTab = {
                             ${statuses.map(s => `<option value="${s}" ${s === b.status ? "selected" : ""}>${s}</option>`).join("")}
                         </select>
                     </td>
+                    <td class="row-actions">
+                        <button class="btn btn-sm btn-outline" data-view-invoice="${b.id}">Invoice</button>
+                    </td>
                 </tr>
             `).join("");
 
@@ -923,11 +1018,58 @@ const bookingsTab = {
                     }
                 });
             });
+
+            tbody.querySelectorAll("[data-view-invoice]").forEach(btn => {
+                btn.addEventListener("click", () => openAdminInvoiceModal(Number(btn.dataset.viewInvoice)));
+            });
         } catch (e) {
-            tbody.innerHTML = `<tr class="empty-row"><td colspan="7">${e.message}</td></tr>`;
+            tbody.innerHTML = `<tr class="empty-row"><td colspan="8">${e.message}</td></tr>`;
         }
     }
 };
+
+async function openAdminInvoiceModal(bookingId) {
+    openModal("Payment & invoice", `<p class="text-muted">Loading…</p>`);
+    const body = document.getElementById("modal-body");
+
+    let paymentHtml = `<p class="text-muted">No payment recorded yet — guest hasn't paid.</p>`;
+    try {
+        const payRes = await authAjax(`/api/payments/booking/${bookingId}`);
+        if (payRes.ok) {
+            const p = await payRes.json();
+            paymentHtml = `
+                <div class="field-row"><strong>Method</strong><span>${p.method}</span></div>
+                <div class="field-row"><strong>Status</strong><span>${p.status}</span></div>
+                <div class="field-row"><strong>Amount</strong><span>${fmtLKR(p.amount)}</span></div>
+                <div class="field-row"><strong>Transaction ID</strong><span>${p.transactionId}</span></div>
+                <div class="field-row"><strong>Paid at</strong><span>${p.paidAt || "—"}</span></div>
+            `;
+        }
+    } catch (e) { /* no payment yet — keep default message */ }
+
+    let invoiceHtml = `<p class="text-muted">No invoice yet.</p>`;
+    try {
+        const invRes = await authAjax(`/api/invoices/booking/${bookingId}`);
+        if (invRes.ok) {
+            const inv = await invRes.json();
+            invoiceHtml = `
+                <div class="field-row"><strong>Invoice #</strong><span>${inv.invoiceNumber}</span></div>
+                <div class="field-row"><strong>Issued</strong><span>${inv.issuedDate}</span></div>
+                <div class="field-row"><span>Subtotal</span><span>${fmtLKR(inv.subTotal)}</span></div>
+                <div class="field-row"><span>Tax</span><span>${fmtLKR(inv.taxAmount)}</span></div>
+                <div class="field-row"><strong>Total</strong><strong>${fmtLKR(inv.totalAmount)}</strong></div>
+            `;
+        }
+    } catch (e) { /* no invoice yet — keep default message */ }
+
+    body.innerHTML = `
+        <h4>Payment</h4>
+        ${paymentHtml}
+        <hr style="margin:16px 0;" />
+        <h4>Invoice</h4>
+        ${invoiceHtml}
+    `;
+}
 
 
 
