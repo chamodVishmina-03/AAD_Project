@@ -15,6 +15,7 @@ let adminRoomsHotelId = null;
 let adminRoomsCache = [];
 let adminExtraServicesHotelId = null;
 let adminExtraServicesCache = [];
+let currentInvoiceModalBookingId = null; // guards against stale async responses overwriting the modal
 
 (async function init() {
     await loadLookupCaches();
@@ -1029,8 +1030,10 @@ const bookingsTab = {
 };
 
 async function openAdminInvoiceModal(bookingId) {
+
+    currentInvoiceModalBookingId = bookingId;
+
     openModal("Payment & invoice", `<p class="text-muted">Loading…</p>`);
-    const body = document.getElementById("modal-body");
 
     let paymentHtml = `<p class="text-muted">No payment recorded yet — guest hasn't paid.</p>`;
     try {
@@ -1044,8 +1047,11 @@ async function openAdminInvoiceModal(bookingId) {
                 <div class="field-row"><strong>Transaction ID</strong><span>${p.transactionId}</span></div>
                 <div class="field-row"><strong>Paid at</strong><span>${p.paidAt || "—"}</span></div>
             `;
+        } else if (payRes.status !== 404) {
+
+            paymentHtml = `<p class="text-danger">Could not load payment info (server error).</p>`;
         }
-    } catch (e) { /* no payment yet — keep default message */ }
+    } catch (e) {  }
 
     let invoiceHtml = `<p class="text-muted">No invoice yet.</p>`;
     try {
@@ -1059,10 +1065,15 @@ async function openAdminInvoiceModal(bookingId) {
                 <div class="field-row"><span>Tax</span><span>${fmtLKR(inv.taxAmount)}</span></div>
                 <div class="field-row"><strong>Total</strong><strong>${fmtLKR(inv.totalAmount)}</strong></div>
             `;
+        } else if (invRes.status !== 404) {
+            invoiceHtml = `<p class="text-danger">Could not load invoice info (server error).</p>`;
         }
-    } catch (e) { /* no invoice yet — keep default message */ }
+    } catch (e) { }
 
-    body.innerHTML = `
+
+    if (currentInvoiceModalBookingId !== bookingId) return;
+
+    document.getElementById("modal-body").innerHTML = `
         <h4>Payment</h4>
         ${paymentHtml}
         <hr style="margin:16px 0;" />
@@ -1085,6 +1096,8 @@ const usersTab = {
         const tbody = document.getElementById("admin-table-body");
         tbody.innerHTML = `<tr class="empty-row"><td colspan="6">Loading…</td></tr>`;
 
+
+
         try {
             const res = await authAjax("/api/users");
             if (!res.ok) throw new Error("Could not load users.");
@@ -1095,7 +1108,12 @@ const usersTab = {
                 return;
             }
 
+
+
             const roles = ["ADMIN", "STAFF", "CUSTOMER", "GUEST"];
+
+
+
 
             tbody.innerHTML = users.map(u => `
                 <tr>
@@ -1115,6 +1133,9 @@ const usersTab = {
                 </tr>
             `).join("");
 
+
+
+
             tbody.querySelectorAll("[data-user-role]").forEach(sel => {
                 sel.addEventListener("change", async () => {
                     try {
@@ -1126,6 +1147,8 @@ const usersTab = {
                     }
                 });
             });
+
+
 
             tbody.querySelectorAll("[data-deactivate]").forEach(btn => {
                 btn.addEventListener("click", async () => {
@@ -1140,6 +1163,9 @@ const usersTab = {
                 });
             });
 
+
+
+
             tbody.querySelectorAll("[data-delete-user]").forEach(btn => {
                 btn.addEventListener("click", async () => {
                     if (!confirm("Delete this user?")) return;
@@ -1153,10 +1179,15 @@ const usersTab = {
                     }
                 });
             });
+
+
+
         } catch (e) {
             tbody.innerHTML = `<tr class="empty-row"><td colspan="6">${e.message}</td></tr>`;
         }
     }
+
+
 };
 
 

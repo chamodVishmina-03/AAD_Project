@@ -43,6 +43,9 @@ async function loadHotel() {
     await loadHotelReviews();
 }
 
+
+
+
 function renderHotelPhotos(hotel) {
     const card = document.getElementById("hotel-photos-card");
     const gallery = document.getElementById("hotel-photos-gallery");
@@ -61,6 +64,9 @@ function renderHotelPhotos(hotel) {
         </div>
     `).join("");
 }
+
+
+
 
 async function loadHotelRooms() {
     const tbody = document.querySelector("#hotel-rooms-table tbody");
@@ -91,6 +97,9 @@ async function loadHotelRooms() {
     }
 }
 
+
+
+
 function resetAvailabilityWidget() {
     document.getElementById("avail-checkin").value = isoDateInDays(1);
     document.getElementById("avail-checkout").value = isoDateInDays(2);
@@ -102,6 +111,9 @@ function resetAvailabilityWidget() {
     empty.textContent = "Pick your dates and check availability to see bookable rooms.";
     empty.classList.remove("hidden");
 }
+
+
+
 
 document.getElementById("check-availability-btn").addEventListener("click", checkAvailability);
 
@@ -162,6 +174,10 @@ async function checkAvailability() {
     }
 }
 
+
+
+
+
 async function loadHotelExtraServices() {
     const tbody = document.querySelector("#hotel-extra-services-table tbody");
     tbody.innerHTML = `<tr class="empty-row"><td colspan="3">Loading…</td></tr>`;
@@ -185,6 +201,10 @@ async function loadHotelExtraServices() {
         tbody.innerHTML = `<tr class="empty-row"><td colspan="3">${e.message}</td></tr>`;
     }
 }
+
+
+
+
 
 async function loadHotelReviews() {
     const list = document.getElementById("hotel-reviews-list");
@@ -218,6 +238,10 @@ async function loadHotelReviews() {
     }
 }
 
+
+
+
+
 document.getElementById("ai-summary-btn").addEventListener("click", async () => {
     const btn = document.getElementById("ai-summary-btn");
     const box = document.getElementById("ai-summary-box");
@@ -242,6 +266,10 @@ document.getElementById("ai-summary-btn").addEventListener("click", async () => 
     }
 });
 
+
+
+
+
 document.getElementById("submit-review-btn").addEventListener("click", async () => {
     const rating = Number(document.getElementById("review-rating").value);
     const comment = document.getElementById("review-comment").value.trim();
@@ -262,9 +290,8 @@ document.getElementById("submit-review-btn").addEventListener("click", async () 
 });
 
 
-// ------------------------------------------------------------
 // Booking modal
-// ------------------------------------------------------------
+
 
 function openBookingModal(room, checkIn, checkOut) {
     const servicesHtml = hotelExtraServicesCache.length
@@ -283,6 +310,10 @@ function openBookingModal(room, checkIn, checkOut) {
         </div>`
         : "";
 
+
+
+
+
     const bodyHtml = `
         <form id="modal-form">
             <div class="field-row">
@@ -296,6 +327,9 @@ function openBookingModal(room, checkIn, checkOut) {
         </form>
     `;
 
+
+
+
     openModal(`Book room ${room.roomNumber} — ${room.roomType}`, bodyHtml);
 
     document.querySelectorAll(".extra-service-check").forEach(cb => {
@@ -304,6 +338,10 @@ function openBookingModal(room, checkIn, checkOut) {
             if (qtyInput) qtyInput.disabled = !cb.checked;
         });
     });
+
+
+
+
 
     document.getElementById("modal-form").addEventListener("submit", async event => {
         event.preventDefault();
@@ -340,12 +378,23 @@ function openBookingModal(room, checkIn, checkOut) {
             });
             if (!res.ok) throw new Error(await errorMessage(res, "This room is no longer available for those dates."));
 
+
             const booking = await res.json();
             closeModal();
             showToast(`Booked! Room ${booking.roomNumber}, ${booking.checkInDate} → ${booking.checkOutDate}.`);
             checkAvailability();
+
+
+
+
         } catch (e) {
             modalErrorText(e.message);
         }
+
     });
 }
+
+
+
+
+

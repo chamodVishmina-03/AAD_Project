@@ -21,7 +21,7 @@ async function loadCities() {
             `<option value="">All cities</option>` +
             cities.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
     } catch (e) {
-        // city filter just stays on "All cities" if this fails
+
     }
 }
 
@@ -48,8 +48,7 @@ async function loadHotels() {
             return;
         }
 
-        // Pull rooms + today's availability for every hotel in parallel so the
-        // panel's numbers reflect exactly what's in the database right now.
+
         const todayIso = isoDateInDays(0);
         const tomorrowIso = isoDateInDays(1);
 

@@ -1,8 +1,3 @@
-/* ============================================================
-   Just Click — Hotel Management System
-   Simple, plain UI. No gradients, no animations, no fluff —
-   just enough style to make the backend's data readable.
-   ============================================================ */
 
 :root {
     --primary: #3949ab;
@@ -528,7 +523,7 @@ tbody tr:hover {
     transform: translate(-50%, 0);
 }
 
-/* ---------- Modal (dialog) ---------- */
+/* ---------- Modal  ---------- */
 
 dialog#modal {
     border: none;
@@ -597,7 +592,7 @@ dialog#modal::backdrop {
     color: #fff;
 }
 
-/* ---------- Gate (logged out landing) ---------- */
+/* ---------- Gate ---------- */
 
 .gate-card {
     max-width: 420px;
@@ -662,9 +657,7 @@ dialog#modal::backdrop {
     }
 }
 
-/* ============================================================
-   AUTH PAGES (login.html / register.html)
-   ============================================================ */
+/*  loging and register */
 
 .auth-shell {
     min-height: 100vh;
@@ -722,9 +715,7 @@ dialog#modal::backdrop {
     color: var(--text-muted);
 }
 
-/* ============================================================
-   DASHBOARD PANEL — hotel cards with live price / availability
-   ============================================================ */
+/*    dashboard panel */
 
 .stats-strip {
     display: grid;
@@ -855,7 +846,7 @@ dialog#modal::backdrop {
     color: var(--danger);
 }
 
-/* ---------- Photo gallery (hotel admin + hotel detail page) ---------- */
+/* ---------- Photo gallery  ---------- */
 
 .gallery-grid {
     display: grid;
@@ -906,9 +897,7 @@ dialog#modal::backdrop {
 }
 
 
-/* ============================================================
-   CONCIERGE CHAT WIDGET (floating button + panel)
-   ============================================================ */
+/* chat box*/
 
 .concierge-toggle {
     position: fixed;

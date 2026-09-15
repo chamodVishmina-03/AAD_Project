@@ -13,6 +13,8 @@ const PAYMENT_METHODS = ["CREDIT_CARD", "DEBIT_CARD", "CASH", "BANK_TRANSFER", "
     await loadMyBookings();
 })();
 
+
+
 async function loadMyBookings() {
     const tbody = document.getElementById("bookings-table-body");
     tbody.innerHTML = `<tr class="empty-row"><td colspan="8">Loading…</td></tr>`;
