@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,114 +30,136 @@ public class AiServiceImpl implements AiService {
                     "common positive and negative themes. Do not invent details that are not present in the reviews. " +
                     "Do not use markdown formatting.";
 
+
+    // call to API
     private final ChatClient aiClient;
     private final HotelRepository hotelRepository;
     private final ReviewRepository reviewRepository;
 
+
+
+    // store cache summery made by ai
     private final ConcurrentHashMap<Long, String> reviewSummaryCache = new ConcurrentHashMap<>();
+
+
 
     @Override
     public ReviewSummaryResponse summarizeHotelReviews(Long hotelId, boolean forceRegenerate) {
-        Hotel hotel = hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new ResourceNotFoundException("Hotel not found with id: " + hotelId));
 
+        // get hotels and reviews from db
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new ResourceNotFoundException("   Hotel not found with id:  " + hotelId));
         List<Review> reviews = reviewRepository.findByHotelId(hotelId);
 
         if (reviews.isEmpty()) {
-            return ReviewSummaryResponse.builder()
-                    .hotelId(hotelId)
-                    .summary("No reviews yet for this hotel.")
-                    .reviewCount(0)
-                    .cached(false)
-                    .build();
+            return buildResponse(hotelId, "  No reviews yet for this hotel.  ", 0, false);
         }
 
+
+
+
+        // check cache is it has a summery
         if (!forceRegenerate && reviewSummaryCache.containsKey(hotelId)) {
-            return ReviewSummaryResponse.builder()
-                    .hotelId(hotelId)
-                    .summary(reviewSummaryCache.get(hotelId))
-                    .reviewCount(reviews.size())
-                    .cached(true)
-                    .build();
+            return buildResponse(hotelId, reviewSummaryCache.get(hotelId), reviews.size(), true);
         }
 
-        String reviewLines = reviews.stream()
-                .map(r -> "- " + r.getRating() + "/5: " + (r.getComment() == null || r.getComment().isBlank() ? "(no comment)" : r.getComment()))
-                .collect(Collectors.joining("\n"));
 
-        String userPrompt = "Hotel: " + hotel.getName() + "\nGuest reviews:\n" + reviewLines;
 
+
+        // reviews convert to prompt
+        String userPrompt = buildReviewPrompt(hotel, reviews);
+
+
+
+
+        // call to AI and give summery
         String summary = aiClient.complete(REVIEW_SUMMARY_SYSTEM_PROMPT, userPrompt);
-        reviewSummaryCache.put(hotelId, summary);
-        log.info("Generated AI review summary for hotel id={} ({} reviews)", hotelId, reviews.size());
+        log.info("    Generated AI review summary for hotel id={} ({} reviews)  ", hotelId, reviews.size());
 
+
+
+
+        // return store in cache and it summery give to user
+        reviewSummaryCache.put(hotelId, summary);
+        return buildResponse(hotelId, summary, reviews.size(), false);
+    }
+
+
+
+    // reviews convert to promt
+    private String buildReviewPrompt(Hotel hotel, List<Review> reviews) {
+        String reviewLines = reviews.stream()
+                .map(r -> "- " + r.getRating() + "/5: " +
+                        (r.getComment() == null || r.getComment().isBlank() ? " (no comment) " : r.getComment()))
+                .collect(Collectors.joining("\n"));
+        return " Hotel: " + hotel.getName() + "\n Guest reviews: \n" + reviewLines;
+    }
+
+
+
+
+    // build response
+    private ReviewSummaryResponse buildResponse(Long hotelId, String summary, int count, boolean cached) {
         return ReviewSummaryResponse.builder()
                 .hotelId(hotelId)
                 .summary(summary)
-                .reviewCount(reviews.size())
-                .cached(false)
+                .reviewCount(count)
+                .cached(cached)
                 .build();
     }
 
+
+
+
+
+
+
     @Override
     public ChatResponse chat(String message) {
+
         String reply = buildRuleBasedReply(message);
-        log.info("Concierge chat reply generated ({} chars) via rule-based engine", reply.length());
         return ChatResponse.builder().reply(reply).build();
+
     }
 
-    private String buildRuleBasedReply(String message) {
-        String msg = message == null ? "" : message.toLowerCase();
+    private String buildRuleBasedReply(String rawMessage) {
+
+        String msg = rawMessage == null ? "" : rawMessage.toLowerCase();
 
         if (containsAny(msg, "hi", "hello", "hey")) {
-            return "Hello! I'm Concierge. Ask me about our hotels, rooms, prices, or how to make a booking.";
-
-        } else if (containsAny(msg, "bye", "goodbye", "see you")) {
-            return "Goodbye! Have a great stay with Just Click.";
-
-        } else if (containsAny(msg, "thank", "thanks")) {
-            return "You're welcome! Let me know if you need anything else.";
-
-        } else if (containsAny(msg, "hotel", "hotels")) {
-            List<Hotel> hotels = hotelRepository.findAll();
-            if (hotels.isEmpty()) {
-                return "We don't have any hotels listed right now — please check back later.";
-            }
-            String names = hotels.stream()
-                    .limit(5)
-                    .map(Hotel::getName)
-                    .collect(Collectors.joining(", "));
-            return "Here are some of our hotels: " + names + ". Open a hotel's page to see its rooms and availability.";
-
-        } else if (containsAny(msg, "price", "cost", "how much", "rate")) {
-            return "Room prices vary by hotel and room type. Open a hotel's page and check its room list to see the price per night.";
-
-        } else if (containsAny(msg, "book", "booking", "reserve")) {
-            return "To book a room: open a hotel's page, pick your check-in/check-out dates, click \"Check availability\", then choose a room to reserve it.";
-
-        } else if (containsAny(msg, "cancel")) {
-            return "You can cancel a booking from the \"My bookings\" page as long as it's still pending or confirmed.";
-
-        } else if (containsAny(msg, "room", "rooms")) {
-            return "Each hotel lists its rooms with room type, floor, price per night and amenities on the hotel's page.";
-
-        } else if (containsAny(msg, "review", "rating")) {
-            return "You can read guest reviews at the bottom of every hotel's page, and leave your own after checking availability there.";
-
-        } else if (containsAny(msg, "contact", "phone", "email", "support")) {
-            return "Each hotel's page lists its address, phone number and email under the \"About\" section.";
-
-        } else {
-            return "Sorry, I didn't quite get that. You can ask me about hotels, rooms, prices, bookings, or reviews.";
+            return "Hello! How can I help you with booking a hotel or room today?";
         }
+        if (containsAny(msg, "hotels")) {
+            return listHotelNames();
+        }
+        if (containsAny(msg, "book", "reserve")) {
+            return "To book a room: open a hotel's page, pick your check-in/check-out dates," +
+                    " click \"Check availability\", then choose a room to reserve it.";
+        }
+
+        return "Sorry, I didn't quite get that. You can ask me about hotels, rooms, prices, bookings, or reviews.";
+
+    }
+
+
+    private String listHotelNames() {
+
+        List<Hotel> hotels = hotelRepository.findAll();
+
+        if (hotels.isEmpty())
+            return "We don't have any hotels listed right now.";
+        String names = hotels.stream().limit(5).map(Hotel::getName).collect(Collectors.joining(", "));
+        return "Here are some of our hotels: " + names + ".";
+
+
     }
 
     private boolean containsAny(String message, String... keywords) {
+
         for (String keyword : keywords) {
-            if (message.contains(keyword)) {
-                return true;
-            }
+            if (message.contains(keyword)) return true;
         }
         return false;
     }
+
 }
