@@ -24,22 +24,18 @@ public class AiController {
     public CommonResponse reviewSummary(@PathVariable Long id,
                                         @RequestParam(defaultValue = "false") boolean force) {
 
-
-        aiService.summarizeHotelReviews(id,force);
-        return new CommonResponse(SUCCESS_MESSAGE, OPERATION_SUCCESS);
+        ReviewSummaryResponse summary = aiService.summarizeHotelReviews(id, force);
+        return new CommonResponse(OPERATION_SUCCESS, summary, SUCCESS_MESSAGE);
 
     }
 
 
     @PostMapping("/chat")
     public CommonResponse chat(@Valid @RequestBody ChatRequest request) {
-        ChatResponse response = aiService.chat(request.message());
-        return new CommonResponse(OPERATION_SUCCESS, response, SUCCESS_MESSAGE);
+        ChatResponse reply = aiService.chat(request.message());
+        return new CommonResponse(OPERATION_SUCCESS, reply, SUCCESS_MESSAGE);
+
     }
 
 
 }
-
-
-
-
