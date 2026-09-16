@@ -33,9 +33,8 @@ public class AiController {
 
     @PostMapping("/chat")
     public CommonResponse chat(@Valid @RequestBody ChatRequest request) {
-       aiService.chat(request.message());
-       return new CommonResponse(SUCCESS_MESSAGE,OPERATION_SUCCESS);
-
+        ChatResponse response = aiService.chat(request.message());
+        return new CommonResponse(OPERATION_SUCCESS, response, SUCCESS_MESSAGE);
     }
 
 
