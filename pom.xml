@@ -25,12 +25,12 @@
 	</properties>
 
 	<dependencies>
-		<!-- Email (SMTP) -->
+		<!-- PDF generation (invoices) -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
+			<groupId>com.github.librepdf</groupId>
+			<artifactId>openpdf</artifactId>
+			<version>1.3.42</version>
 		</dependency>
-
 		<!-- Spring Data JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

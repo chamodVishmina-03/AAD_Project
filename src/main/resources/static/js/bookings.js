@@ -127,9 +127,48 @@ async function openInvoiceModal(bookingId) {
             <div class="field-row"><span>Subtotal</span><span>${fmtLKR(inv.subTotal)}</span></div>
             <div class="field-row"><span>Tax</span><span>${fmtLKR(inv.taxAmount)}</span></div>
             <div class="field-row"><strong>Total</strong><strong>${fmtLKR(inv.totalAmount)}</strong></div>
+            <div id="invoice-download-error" class="text-muted" style="display:none;"></div>
+            <div style="margin-top:16px; text-align:right;">
+                <button class="btn btn-primary" id="download-invoice-pdf-btn" data-booking="${bookingId}">Download PDF</button>
+            </div>
         `;
+
+        const downloadBtn = document.getElementById("download-invoice-pdf-btn");
+        downloadBtn.addEventListener("click", () => downloadInvoicePdf(bookingId, downloadBtn));
     } catch (e) {
         document.getElementById("modal-body").innerHTML = `<p class="text-muted">${e.message}</p>`;
+    }
+}
+
+async function downloadInvoicePdf(bookingId, btn) {
+    const errorEl = document.getElementById("invoice-download-error");
+    btn.disabled = true;
+    btn.textContent = "Downloading…";
+    if (errorEl) errorEl.style.display = "none";
+
+    try {
+        const res = await authAjax(`/api/invoices/booking/${bookingId}/pdf`);
+        if (!res.ok) throw new Error(await errorMessage(res, "Could not download the invoice."));
+
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `invoice-${bookingId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (e) {
+        if (errorEl) {
+            errorEl.textContent = e.message;
+            errorEl.style.display = "block";
+        } else {
+            showToast(e.message);
+        }
+    } finally {
+        btn.disabled = false;
+        btn.textContent = "Download PDF";
     }
 }
 
